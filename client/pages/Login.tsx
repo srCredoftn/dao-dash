@@ -59,11 +59,6 @@ export default function Login() {
       email: "marie.dubois@2snd.fr",
       password: "marie123",
     },
-    {
-      role: "Visualiseur",
-      email: "sophie.laurent@2snd.fr",
-      password: "sophie123",
-    },
   ];
 
   const fillDemoCredentials = (email: string, password: string) => {
@@ -77,11 +72,11 @@ export default function Login() {
       <div className="w-full max-w-md space-y-6">
         {/* Header */}
         <div className="text-center">
-          <div className="flex justify-center mb-4">
+          <div className="flex justify-center mb-2">
             <img
               src="https://cdn.builder.io/api/v1/image/assets%2F376e9389c66d473f975258354bf70209%2F9d870cba39fd46d3bb0ed8d14c652440?format=webp&width=800"
               alt="2SND Technologies"
-              className="w-16 h-16 object-contain"
+              className="w-24 h-24 object-contain"
             />
           </div>
           <h1 className="text-2xl font-bold text-gray-900">Gestion des DAO</h1>

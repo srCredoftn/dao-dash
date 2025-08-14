@@ -95,7 +95,7 @@ export class AuthService {
 
   // Logout user
   static async logout(token: string): Promise<boolean> {
-    const deleted = sessions.delete(token);
+    const deleted = SessionStore.deleteSession(token);
     if (deleted) {
       console.log("👋 User logged out");
     }

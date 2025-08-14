@@ -84,7 +84,7 @@ export default function Login() {
               className="w-32 h-32 object-contain"
             />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 -mt-6">Gestion des DAO</h1>
+          <h1 className="text-2xl font-bold text-gray-900 -mt-10">Gestion des DAO</h1>
           <p className="text-gray-600">Connectez-vous à votre compte</p>
         </div>
 

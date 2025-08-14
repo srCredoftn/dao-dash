@@ -206,7 +206,7 @@ function DaoCard({ dao }: { dao: Dao }) {
               </div>
               <div>
                 <p className="text-xs font-medium text-muted-foreground">
-                  Chef d'équipe
+                  Chef d'��quipe
                 </p>
                 <p
                   className="text-sm font-medium text-foreground truncate"
@@ -338,6 +338,7 @@ function StatsCard({
           className={cn(
             "h-5 w-5 sm:h-6 sm:w-6 lg:h-7 lg:w-7",
             styles.iconClass.replace("h-7 w-7", ""),
+            variant === "urgent" ? "blink-attention" : "",
           )}
         />
       </CardHeader>
@@ -543,7 +544,7 @@ export default function Index() {
             variant="completed"
           />
           <StatsCard
-            title="�� risque"
+            title="À risque"
             value={stats.urgent}
             description="Échéance ≤ 3 jours"
             icon={AlertTriangle}
@@ -723,29 +724,34 @@ export default function Index() {
             </Card>
           )}
 
-          {loading && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
-              {[1, 2, 3].map((i) => (
-                <Card key={i} className="p-4 sm:p-6 animate-pulse">
-                  <div className="h-5 sm:h-6 bg-gray-200 rounded mb-3 sm:mb-4"></div>
-                  <div className="h-3 sm:h-4 bg-gray-200 rounded mb-2"></div>
-                  <div className="h-3 sm:h-4 bg-gray-200 rounded w-3/4"></div>
-                </Card>
-              ))}
-            </div>
-          )}
+          {/* Conteneur avec scroll pour éviter la pagination */}
+          <div className="max-h-[60vh] overflow-y-auto pr-2 space-y-3 sm:space-y-4">
+            {loading && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+                {[1, 2, 3].map((i) => (
+                  <Card key={i} className="p-4 sm:p-6 animate-pulse">
+                    <div className="h-5 sm:h-6 bg-gray-200 rounded mb-3 sm:mb-4"></div>
+                    <div className="h-3 sm:h-4 bg-gray-200 rounded mb-2"></div>
+                    <div className="h-3 sm:h-4 bg-gray-200 rounded w-3/4"></div>
+                  </Card>
+                ))}
+              </div>
+            )}
 
-          {!loading && !error && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
-              {filteredDaos.length > 0 ? (
-                filteredDaos.map((dao) => <DaoCard key={dao.id} dao={dao} />)
-              ) : (
-                <Card className="col-span-full p-6 text-center">
-                  <div className="text-muted-foreground">Aucun DAO trouvé</div>
-                </Card>
-              )}
-            </div>
-          )}
+            {!loading && !error && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+                {filteredDaos.length > 0 ? (
+                  filteredDaos.map((dao) => <DaoCard key={dao.id} dao={dao} />)
+                ) : (
+                  <Card className="col-span-full p-6 text-center">
+                    <div className="text-muted-foreground">
+                      Aucun DAO trouvé
+                    </div>
+                  </Card>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </main>
     </div>

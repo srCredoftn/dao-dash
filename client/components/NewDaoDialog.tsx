@@ -127,7 +127,7 @@ export default function NewDaoDialog({
 }: NewDaoDialogProps) {
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
-    numeroListe: generateDaoNumberFallback(existingDaos),
+    numeroListe: "",
     objetDossier: "",
     reference: "",
     autoriteContractante: "",
@@ -148,12 +148,14 @@ export default function NewDaoDialog({
             "Failed to fetch next DAO number from server, using fallback:",
             error,
           );
-          // Keep the fallback number that was already set
+          // Use fallback generation if server fails
+          const fallbackNumber = generateDaoNumberFallback(existingDaos);
+          setFormData((prev) => ({ ...prev, numeroListe: fallbackNumber }));
         }
       };
       fetchNextNumber();
     }
-  }, [open]);
+  }, [open, existingDaos]);
 
   // Reference-related state variables removed as we now use a simple input
 
@@ -246,7 +248,7 @@ export default function NewDaoDialog({
     setTimeout(() => validateField(fieldName, value), 300);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Validate all fields
@@ -267,51 +269,53 @@ export default function NewDaoDialog({
       return;
     }
 
-    const newDao: Omit<Dao, "id" | "createdAt" | "updatedAt"> = {
-      numeroListe: formData.numeroListe,
-      objetDossier: formData.objetDossier,
-      reference: formData.reference,
-      autoriteContractante: isCustomAuthority
-        ? customAuthority
-        : formData.autoriteContractante,
-      dateDepot: formData.dateDepot,
-      equipe: formData.teamLeader
-        ? [formData.teamLeader, ...formData.teamMembers]
-        : formData.teamMembers,
-      tasks: DEFAULT_TASKS.map((task) => ({
-        ...task,
-        progress: null,
-        comment: undefined,
-        assignedTo: undefined,
-      })),
-    };
+    try {
+      const newDao: Omit<Dao, "id" | "createdAt" | "updatedAt"> = {
+        numeroListe: formData.numeroListe,
+        objetDossier: formData.objetDossier,
+        reference: formData.reference,
+        autoriteContractante: isCustomAuthority
+          ? customAuthority
+          : formData.autoriteContractante,
+        dateDepot: formData.dateDepot,
+        equipe: formData.teamLeader
+          ? [formData.teamLeader, ...formData.teamMembers]
+          : formData.teamMembers,
+        tasks: DEFAULT_TASKS.map((task) => ({
+          ...task,
+          progress: null,
+          comment: undefined,
+          assignedTo: undefined,
+        })),
+      };
 
-    onCreateDao(newDao);
+      await onCreateDao(newDao);
 
-    // Reset form - the next number will be fetched when dialog reopens
-    setFormData({
-      numeroListe: generateDaoNumberFallback([
-        ...existingDaos,
-        { numeroListe: newDao.numeroListe } as Dao,
-      ]),
-      objetDossier: "",
-      reference: "",
-      autoriteContractante: "",
-      dateDepot: "",
-      teamLeader: null,
-      teamMembers: [],
-    });
-    setCustomAuthority("");
-    setIsCustomAuthority(false);
-    setErrors({
-      objetDossier: "",
-      reference: "",
-      autoriteContractante: "",
-      dateDepot: "",
-      teamLeader: "",
-      teamMembers: "",
-    });
-    setOpen(false);
+      // Reset form only after successful creation
+      setFormData({
+        numeroListe: "",
+        objetDossier: "",
+        reference: "",
+        autoriteContractante: "",
+        dateDepot: "",
+        teamLeader: null,
+        teamMembers: [],
+      });
+      setCustomAuthority("");
+      setIsCustomAuthority(false);
+      setErrors({
+        objetDossier: "",
+        reference: "",
+        autoriteContractante: "",
+        dateDepot: "",
+        teamLeader: "",
+        teamMembers: "",
+      });
+      setOpen(false);
+    } catch (error) {
+      console.error("Erreur lors de la création du DAO:", error);
+      // Ne pas fermer le dialogue en cas d'erreur
+    }
   };
 
   const setTeamLeader = (member: TeamMember | null) => {

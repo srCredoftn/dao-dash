@@ -26,6 +26,41 @@ router.get("/", authenticate, (req, res) => {
   }
 });
 
+// GET /api/dao/next-number - Get next DAO number (authenticated users only)
+// IMPORTANT: This route must be BEFORE /:id route to avoid conflicts
+router.get("/next-number", authenticate, (req, res) => {
+  try {
+    const year = new Date().getFullYear();
+
+    // Filter DAOs for current year
+    const currentYearDaos = memoryStorage.filter((dao) => {
+      const match = dao.numeroListe.match(/DAO-(\d{4})-\d{3}/);
+      return match && parseInt(match[1], 10) === year;
+    });
+
+    if (currentYearDaos.length === 0) {
+      return res.json({ nextNumber: `DAO-${year}-001` });
+    }
+
+    // Extract numbers and find the highest
+    const numbers = currentYearDaos
+      .map((dao) => {
+        const match = dao.numeroListe.match(/DAO-\d{4}-(\d{3})/);
+        return match ? parseInt(match[1], 10) : 0;
+      })
+      .filter((num) => !isNaN(num));
+
+    const nextNumber = numbers.length > 0 ? Math.max(...numbers) + 1 : 1;
+    const nextNumberString = `DAO-${year}-${nextNumber.toString().padStart(3, "0")}`;
+
+    console.log("🔢 Generated next DAO number:", nextNumberString);
+    res.json({ nextNumber: nextNumberString });
+  } catch (error) {
+    console.error("Error in GET /api/dao/next-number:", error);
+    res.status(500).json({ error: "Failed to generate next DAO number" });
+  }
+});
+
 // GET /api/dao/:id - Get DAO by ID (authenticated users only)
 router.get("/:id", authenticate, (req, res) => {
   try {

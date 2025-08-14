@@ -5,6 +5,7 @@ import type {
   AuthResponse,
   UserRole,
 } from "@shared/dao";
+import { SessionStore } from "../utils/sessionStore";
 
 // In-memory user storage (in production, this would be a database)
 let users: User[] = [
@@ -50,8 +51,7 @@ const passwords: Record<string, string> = {
   "sophie.laurent@2snd.fr": "sophie123",
 };
 
-// Active sessions (in production, use proper token management)
-const sessions = new Map<string, AuthUser>();
+// Sessions are now handled by SessionStore for persistence across restarts
 
 export class AuthService {
   // Login user
@@ -83,7 +83,7 @@ export class AuthService {
       role: user.role,
     };
 
-    sessions.set(token, authUser);
+    SessionStore.setSession(token, authUser);
 
     console.log("🔐 User logged in:", user.email, "Role:", user.role);
 
@@ -95,7 +95,7 @@ export class AuthService {
 
   // Logout user
   static async logout(token: string): Promise<boolean> {
-    const deleted = sessions.delete(token);
+    const deleted = SessionStore.deleteSession(token);
     if (deleted) {
       console.log("👋 User logged out");
     }
@@ -104,7 +104,11 @@ export class AuthService {
 
   // Verify token and get user
   static async verifyToken(token: string): Promise<AuthUser | null> {
-    return sessions.get(token) || null;
+    const user = SessionStore.getSession(token);
+    if (!user) {
+      console.log("🔒 Token verification failed - token not found in sessions");
+    }
+    return user || null;
   }
 
   // Get all users (admin only)
@@ -162,11 +166,7 @@ export class AuthService {
     user.isActive = false;
 
     // Remove from active sessions
-    for (const [token, sessionUser] of sessions.entries()) {
-      if (sessionUser.id === userId) {
-        sessions.delete(token);
-      }
-    }
+    SessionStore.deleteUserSessions(userId);
 
     console.log("🚫 User deactivated:", user.email);
     return true;

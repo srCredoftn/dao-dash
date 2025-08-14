@@ -55,19 +55,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
           setUser(currentUser);
           console.log("🔄 Auth restored from storage:", currentUser.email);
         } catch (error) {
-          console.warn("Auth verification failed, clearing stored data");
-          try {
-            await authService.logout();
-          } catch (logoutError) {
-            // If logout fails due to invalid token, clear auth data directly
-            console.warn("Logout failed, clearing auth data directly");
-            authService.clearAuth();
-          }
+          console.warn("Auth verification failed:", error);
+          // Clear auth data directly since token is invalid
+          authService.clearAuth();
           setUser(null);
         }
       }
     } catch (error) {
       console.error("Auth initialization failed:", error);
+      authService.clearAuth();
       setUser(null);
     } finally {
       setIsLoading(false);

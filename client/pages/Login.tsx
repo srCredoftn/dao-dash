@@ -81,10 +81,12 @@ export default function Login() {
             <img
               src="https://cdn.builder.io/api/v1/image/assets%2F376e9389c66d473f975258354bf70209%2F9d870cba39fd46d3bb0ed8d14c652440?format=webp&width=800"
               alt="2SND Technologies"
-              className="w-16 h-16 object-contain"
+              className="w-32 h-32 object-contain"
             />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Gestion des DAO</h1>
+          <h1 className="text-2xl font-bold text-gray-900 -mt-10">
+            Gestion des DAO
+          </h1>
           <p className="text-gray-600">Connectez-vous à votre compte</p>
         </div>
 

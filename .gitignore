@@ -25,3 +25,6 @@ dist-ssr
 
 .config/
 !.env
+
+# Development session storage
+.sessions.json

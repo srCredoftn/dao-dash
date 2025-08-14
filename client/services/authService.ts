@@ -40,16 +40,12 @@ class AuthApiService {
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
 
-        // If 401 and token-related error, clear local storage
-        if (
-          response.status === 401 &&
-          (errorData.error?.includes("token") ||
-            errorData.error?.includes("expired") ||
-            errorData.error?.includes("unauthorized"))
-        ) {
+        // If 401, clear local storage (invalid/expired token)
+        if (response.status === 401) {
           this.token = null;
           localStorage.removeItem("auth_token");
           localStorage.removeItem("auth_user");
+          console.log("🧹 Cleared invalid token from storage");
         }
 
         throw new Error(

@@ -51,8 +51,7 @@ const passwords: Record<string, string> = {
   "sophie.laurent@2snd.fr": "sophie123",
 };
 
-// Active sessions (in production, use proper token management)
-const sessions = new Map<string, AuthUser>();
+// Sessions are now handled by SessionStore for persistence across restarts
 
 export class AuthService {
   // Login user

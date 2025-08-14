@@ -127,7 +127,7 @@ export default function NewDaoDialog({
 }: NewDaoDialogProps) {
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
-    numeroListe: generateDaoNumberFallback(existingDaos),
+    numeroListe: "",
     objetDossier: "",
     reference: "",
     autoriteContractante: "",

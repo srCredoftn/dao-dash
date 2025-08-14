@@ -51,6 +51,18 @@ router.get("/", authenticate, (req, res) => {
   }
 });
 
+// GET /api/dao/next-number - Get next DAO number (authenticated users only)
+router.get("/next-number", authenticate, (req, res) => {
+  try {
+    const nextNumber = generateNextDaoNumber(memoryStorage);
+    console.log("🔢 Generated next DAO number:", nextNumber);
+    res.json({ nextNumber });
+  } catch (error) {
+    console.error("Error in GET /api/dao/next-number:", error);
+    res.status(500).json({ error: "Failed to generate next DAO number" });
+  }
+});
+
 // GET /api/dao/:id - Get DAO by ID (authenticated users only)
 router.get("/:id", authenticate, (req, res) => {
   try {

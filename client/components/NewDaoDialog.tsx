@@ -148,12 +148,14 @@ export default function NewDaoDialog({
             "Failed to fetch next DAO number from server, using fallback:",
             error,
           );
-          // Keep the fallback number that was already set
+          // Use fallback generation if server fails
+          const fallbackNumber = generateDaoNumberFallback(existingDaos);
+          setFormData((prev) => ({ ...prev, numeroListe: fallbackNumber }));
         }
       };
       fetchNextNumber();
     }
-  }, [open]);
+  }, [open, existingDaos]);
 
   // Reference-related state variables removed as we now use a simple input
 

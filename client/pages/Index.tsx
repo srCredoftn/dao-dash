@@ -338,6 +338,7 @@ function StatsCard({
           className={cn(
             "h-5 w-5 sm:h-6 sm:w-6 lg:h-7 lg:w-7",
             styles.iconClass.replace("h-7 w-7", ""),
+            variant === "urgent" ? "blink-attention" : "",
           )}
         />
       </CardHeader>

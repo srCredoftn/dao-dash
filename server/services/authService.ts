@@ -5,6 +5,7 @@ import type {
   AuthResponse,
   UserRole,
 } from "@shared/dao";
+import { SessionStore } from "../utils/sessionStore";
 
 // In-memory user storage (in production, this would be a database)
 let users: User[] = [
@@ -106,7 +107,7 @@ export class AuthService {
   static async verifyToken(token: string): Promise<AuthUser | null> {
     const user = sessions.get(token);
     if (!user) {
-      console.log("�� Token verification failed - token not found in sessions");
+      console.log("🔒 Token verification failed - token not found in sessions");
     }
     return user || null;
   }

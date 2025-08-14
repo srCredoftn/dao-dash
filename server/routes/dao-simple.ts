@@ -12,6 +12,31 @@ function generateId(): string {
   return Date.now().toString();
 }
 
+// Helper function to generate next DAO number
+function generateNextDaoNumber(existingDaos: any[]): string {
+  const year = new Date().getFullYear();
+
+  // Find existing DAO numbers for the current year
+  const currentYearDaos = existingDaos.filter(
+    (dao) => dao.numeroListe && dao.numeroListe.startsWith(`DAO-${year}-`),
+  );
+
+  if (currentYearDaos.length === 0) {
+    return `DAO-${year}-001`;
+  }
+
+  // Extract numbers and find the highest
+  const numbers = currentYearDaos
+    .map((dao) => {
+      const match = dao.numeroListe.match(/DAO-\d{4}-(\d{3})/);
+      return match ? parseInt(match[1], 10) : 0;
+    })
+    .filter((num) => !isNaN(num));
+
+  const nextNumber = numbers.length > 0 ? Math.max(...numbers) + 1 : 1;
+  return `DAO-${year}-${nextNumber.toString().padStart(3, "0")}`;
+}
+
 // GET /api/dao - Get all DAOs (authenticated users only)
 router.get("/", authenticate, (req, res) => {
   try {

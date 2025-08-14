@@ -11,7 +11,7 @@ export class SessionStore {
   // Load sessions from file
   static loadSessions(): void {
     if (this.loaded) return;
-    
+
     try {
       if (existsSync(SESSION_FILE)) {
         const data = readFileSync(SESSION_FILE, "utf8");

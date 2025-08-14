@@ -83,7 +83,7 @@ export class AuthService {
       role: user.role,
     };
 
-    sessions.set(token, authUser);
+    SessionStore.setSession(token, authUser);
 
     console.log("🔐 User logged in:", user.email, "Role:", user.role);
 

@@ -104,7 +104,7 @@ export class AuthService {
 
   // Verify token and get user
   static async verifyToken(token: string): Promise<AuthUser | null> {
-    const user = sessions.get(token);
+    const user = SessionStore.getSession(token);
     if (!user) {
       console.log("🔒 Token verification failed - token not found in sessions");
     }

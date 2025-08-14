@@ -206,7 +206,7 @@ function DaoCard({ dao }: { dao: Dao }) {
               </div>
               <div>
                 <p className="text-xs font-medium text-muted-foreground">
-                  Chef d'��quipe
+                  Chef d'équipe
                 </p>
                 <p
                   className="text-sm font-medium text-foreground truncate"

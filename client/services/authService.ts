@@ -1,0 +1,178 @@
+import type {
+  LoginCredentials,
+  AuthResponse,
+  AuthUser,
+  User,
+} from "@shared/dao";
+
+const API_BASE_URL = "/api/auth";
+
+class AuthApiService {
+  private token: string | null = null;
+
+  constructor() {
+    // Load token from localStorage on initialization
+    this.token = localStorage.getItem("auth_token");
+  }
+
+  private async request<T>(
+    endpoint: string,
+    options?: RequestInit,
+  ): Promise<T> {
+    const url = `${API_BASE_URL}${endpoint}`;
+
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      ...options?.headers,
+    };
+
+    // Add authorization header if token exists
+    if (this.token) {
+      headers.Authorization = `Bearer ${this.token}`;
+    }
+
+    try {
+      const response = await fetch(url, {
+        ...options,
+        headers,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+
+        // If 401 and token-related error, clear local storage
+        if (
+          response.status === 401 &&
+          (errorData.error?.includes("token") ||
+            errorData.error?.includes("expired") ||
+            errorData.error?.includes("unauthorized"))
+        ) {
+          this.token = null;
+          localStorage.removeItem("auth_token");
+          localStorage.removeItem("auth_user");
+        }
+
+        throw new Error(
+          errorData.error || `HTTP error! status: ${response.status}`,
+        );
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error(`Auth API request failed for ${endpoint}:`, error);
+      throw error;
+    }
+  }
+
+  // Login user
+  async login(credentials: LoginCredentials): Promise<AuthResponse> {
+    try {
+      const response = await this.request<AuthResponse>("/login", {
+        method: "POST",
+        body: JSON.stringify(credentials),
+      });
+
+      // Store token in localStorage and memory
+      this.token = response.token;
+      localStorage.setItem("auth_token", response.token);
+      localStorage.setItem("auth_user", JSON.stringify(response.user));
+
+      console.log("🔐 User logged in:", response.user.email);
+      return response;
+    } catch (error) {
+      console.error("Login failed:", error);
+      throw error;
+    }
+  }
+
+  // Logout user
+  async logout(): Promise<void> {
+    try {
+      if (this.token) {
+        await this.request<void>("/logout", {
+          method: "POST",
+        });
+      }
+    } catch (error) {
+      console.error("Logout API call failed:", error);
+      // Continue with local logout even if API call fails
+    } finally {
+      // Clear local storage and memory
+      this.token = null;
+      localStorage.removeItem("auth_token");
+      localStorage.removeItem("auth_user");
+      console.log("👋 User logged out");
+    }
+  }
+
+  // Get current user info
+  async getCurrentUser(): Promise<AuthUser> {
+    return this.request<{ user: AuthUser }>("/me").then((res) => res.user);
+  }
+
+  // Get stored user from localStorage
+  getStoredUser(): AuthUser | null {
+    try {
+      const userData = localStorage.getItem("auth_user");
+      return userData ? JSON.parse(userData) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  // Check if user is authenticated
+  isAuthenticated(): boolean {
+    return !!this.token && !!this.getStoredUser();
+  }
+
+  // Get current token
+  getToken(): string | null {
+    return this.token;
+  }
+
+  // Admin operations
+  async getAllUsers(): Promise<User[]> {
+    return this.request<User[]>("/users");
+  }
+
+  async createUser(userData: {
+    name: string;
+    email: string;
+    role: string;
+  }): Promise<User> {
+    return this.request<User>("/users", {
+      method: "POST",
+      body: JSON.stringify(userData),
+    });
+  }
+
+  async updateUserRole(userId: string, role: string): Promise<User> {
+    return this.request<User>(`/users/${userId}/role`, {
+      method: "PUT",
+      body: JSON.stringify({ role }),
+    });
+  }
+
+  async deactivateUser(userId: string): Promise<void> {
+    return this.request<void>(`/users/${userId}`, {
+      method: "DELETE",
+    });
+  }
+
+  async changePassword(newPassword: string): Promise<void> {
+    return this.request<void>("/change-password", {
+      method: "POST",
+      body: JSON.stringify({ newPassword }),
+    });
+  }
+
+  // Clear authentication data (useful for expired tokens)
+  clearAuth(): void {
+    this.token = null;
+    localStorage.removeItem("auth_token");
+    localStorage.removeItem("auth_user");
+    console.log("🧹 Authentication data cleared");
+  }
+}
+
+export const authService = new AuthApiService();

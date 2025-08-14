@@ -744,7 +744,9 @@ export default function Index() {
                   filteredDaos.map((dao) => <DaoCard key={dao.id} dao={dao} />)
                 ) : (
                   <Card className="col-span-full p-6 text-center">
-                    <div className="text-muted-foreground">Aucun DAO trouvé</div>
+                    <div className="text-muted-foreground">
+                      Aucun DAO trouvé
+                    </div>
                   </Card>
                 )}
               </div>

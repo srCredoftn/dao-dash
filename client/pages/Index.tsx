@@ -543,7 +543,7 @@ export default function Index() {
             variant="completed"
           />
           <StatsCard
-            title="�� risque"
+            title="À risque"
             value={stats.urgent}
             description="Échéance ≤ 3 jours"
             icon={AlertTriangle}

@@ -104,7 +104,11 @@ export class AuthService {
 
   // Verify token and get user
   static async verifyToken(token: string): Promise<AuthUser | null> {
-    return sessions.get(token) || null;
+    const user = sessions.get(token);
+    if (!user) {
+      console.log("�� Token verification failed - token not found in sessions");
+    }
+    return user || null;
   }
 
   // Get all users (admin only)

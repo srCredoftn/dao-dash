@@ -166,11 +166,7 @@ export class AuthService {
     user.isActive = false;
 
     // Remove from active sessions
-    for (const [token, sessionUser] of sessions.entries()) {
-      if (sessionUser.id === userId) {
-        sessions.delete(token);
-      }
-    }
+    SessionStore.deleteUserSessions(userId);
 
     console.log("🚫 User deactivated:", user.email);
     return true;

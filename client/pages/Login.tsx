@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -60,9 +60,9 @@ export default function Login() {
       password: "marie123",
     },
     {
-      role: "Visualiseur",
-      email: "sophie.laurent@2snd.fr",
-      password: "sophie123",
+      role: "Utilisateur",
+      email: "pierre.martin@2snd.fr",
+      password: "pierre123",
     },
   ];
 
@@ -150,7 +150,7 @@ export default function Login() {
               </div>
             </CardContent>
 
-            <CardFooter>
+            <CardFooter className="flex flex-col space-y-4">
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? (
                   <>
@@ -161,6 +161,15 @@ export default function Login() {
                   "Se connecter"
                 )}
               </Button>
+
+              <div className="text-center">
+                <Link
+                  to="/forgot-password"
+                  className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
+                >
+                  Mot de passe oublié ?
+                </Link>
+              </div>
             </CardFooter>
           </form>
         </Card>

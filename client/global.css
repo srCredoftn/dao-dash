@@ -162,3 +162,33 @@
 .blink-attention {
   animation: blink-attention 1.5s infinite;
 }
+
+/* Animations pour le menu mobile */
+@keyframes slide-in-from-top {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-in {
+  animation-fill-mode: both;
+}
+
+.slide-in-from-top-2 {
+  animation: slide-in-from-top 0.2s ease-out;
+}
+
+.duration-200 {
+  animation-duration: 200ms;
+}
+
+/* Animation du hamburger menu */
+.hamburger-line {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}

@@ -12,6 +12,8 @@ import Index from "./pages/Index";
 import DaoDetail from "./pages/DaoDetail";
 import Login from "./pages/Login";
 import AdminUsers from "./pages/AdminUsers";
+import Profile from "./pages/Profile";
+import UserManagement from "./pages/UserManagement";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

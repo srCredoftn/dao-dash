@@ -18,7 +18,7 @@ export default function ResetPassword() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [searchParams] = useSearchParams();
-  
+
   const [formData, setFormData] = useState({
     email: "",
     token: "",
@@ -34,7 +34,7 @@ export default function ResetPassword() {
   useEffect(() => {
     const emailFromUrl = searchParams.get("email");
     if (emailFromUrl) {
-      setFormData(prev => ({ ...prev, email: emailFromUrl }));
+      setFormData((prev) => ({ ...prev, email: emailFromUrl }));
     }
   }, [searchParams]);
 
@@ -56,7 +56,8 @@ export default function ResetPassword() {
     if (!formData.newPassword) {
       newErrors.newPassword = "Le nouveau mot de passe est requis";
     } else if (formData.newPassword.length < 6) {
-      newErrors.newPassword = "Le mot de passe doit contenir au moins 6 caractères";
+      newErrors.newPassword =
+        "Le mot de passe doit contenir au moins 6 caractères";
     }
 
     if (formData.newPassword !== formData.confirmPassword) {
@@ -84,26 +85,33 @@ export default function ResetPassword() {
 
       if (response.ok) {
         setIsTokenVerified(true);
-        setErrors(prev => ({ ...prev, token: "" }));
+        setErrors((prev) => ({ ...prev, token: "" }));
         toast({
           title: "Code vérifié",
-          description: "Vous pouvez maintenant définir votre nouveau mot de passe.",
+          description:
+            "Vous pouvez maintenant définir votre nouveau mot de passe.",
         });
       } else {
         const data = await response.json();
-        setErrors(prev => ({ ...prev, token: data.error || "Code invalide" }));
+        setErrors((prev) => ({
+          ...prev,
+          token: data.error || "Code invalide",
+        }));
       }
     } catch (error) {
-      setErrors(prev => ({ ...prev, token: "Erreur de vérification du code" }));
+      setErrors((prev) => ({
+        ...prev,
+        token: "Erreur de vérification du code",
+      }));
     }
   };
 
   const handleTokenChange = (value: string) => {
     // Only allow numbers and limit to 6 digits
     const numericValue = value.replace(/\D/g, "").slice(0, 6);
-    setFormData(prev => ({ ...prev, token: numericValue }));
+    setFormData((prev) => ({ ...prev, token: numericValue }));
     setIsTokenVerified(false);
-    
+
     // Auto-verify when 6 digits are entered
     if (numericValue.length === 6) {
       setTimeout(() => verifyToken(), 500);
@@ -112,7 +120,7 @@ export default function ResetPassword() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
 
     setIsLoading(true);
@@ -137,16 +145,19 @@ export default function ResetPassword() {
 
       toast({
         title: "Mot de passe réinitialisé",
-        description: "Votre mot de passe a été modifié avec succès. Vous pouvez maintenant vous connecter.",
+        description:
+          "Votre mot de passe a été modifié avec succès. Vous pouvez maintenant vous connecter.",
       });
 
       // Redirect to login page
       setTimeout(() => {
         navigate("/login");
       }, 2000);
-
     } catch (error) {
-      setErrors({ submit: error instanceof Error ? error.message : "Une erreur est survenue" });
+      setErrors({
+        submit:
+          error instanceof Error ? error.message : "Une erreur est survenue",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -171,7 +182,7 @@ export default function ResetPassword() {
             Entrez le code reçu par email et votre nouveau mot de passe
           </CardDescription>
         </CardHeader>
-        
+
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             {errors.submit && (
@@ -187,7 +198,9 @@ export default function ResetPassword() {
                 id="email"
                 type="email"
                 value={formData.email}
-                onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, email: e.target.value }))
+                }
                 placeholder="votre.email@exemple.com"
                 disabled={isLoading}
                 className={errors.email ? "border-red-500" : ""}
@@ -199,7 +212,9 @@ export default function ResetPassword() {
 
             {/* Token Field */}
             <div className="space-y-2">
-              <Label htmlFor="token">Code de réinitialisation (6 chiffres)</Label>
+              <Label htmlFor="token">
+                Code de réinitialisation (6 chiffres)
+              </Label>
               <div className="relative">
                 <Input
                   id="token"
@@ -209,8 +224,11 @@ export default function ResetPassword() {
                   placeholder="123456"
                   disabled={isLoading}
                   className={`text-center text-lg font-mono tracking-wider ${
-                    errors.token ? "border-red-500" : 
-                    isTokenVerified ? "border-green-500 bg-green-50" : ""
+                    errors.token
+                      ? "border-red-500"
+                      : isTokenVerified
+                        ? "border-green-500 bg-green-50"
+                        : ""
                   }`}
                   maxLength={6}
                 />
@@ -224,7 +242,9 @@ export default function ResetPassword() {
                 <p className="text-sm text-red-600">{errors.token}</p>
               )}
               {isTokenVerified && (
-                <p className="text-sm text-green-600">✓ Code vérifié avec succès</p>
+                <p className="text-sm text-green-600">
+                  ✓ Code vérifié avec succès
+                </p>
               )}
             </div>
 
@@ -236,7 +256,12 @@ export default function ResetPassword() {
                   id="newPassword"
                   type={showPassword ? "text" : "password"}
                   value={formData.newPassword}
-                  onChange={(e) => setFormData(prev => ({ ...prev, newPassword: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      newPassword: e.target.value,
+                    }))
+                  }
                   placeholder="Entrez votre nouveau mot de passe"
                   disabled={isLoading || !isTokenVerified}
                   className={errors.newPassword ? "border-red-500" : ""}
@@ -249,7 +274,11 @@ export default function ResetPassword() {
                   onClick={() => setShowPassword(!showPassword)}
                   disabled={!isTokenVerified}
                 >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
                 </Button>
               </div>
               {errors.newPassword && (
@@ -259,13 +288,20 @@ export default function ResetPassword() {
 
             {/* Confirm Password Field */}
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirmer le nouveau mot de passe</Label>
+              <Label htmlFor="confirmPassword">
+                Confirmer le nouveau mot de passe
+              </Label>
               <div className="relative">
                 <Input
                   id="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
                   value={formData.confirmPassword}
-                  onChange={(e) => setFormData(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      confirmPassword: e.target.value,
+                    }))
+                  }
                   placeholder="Confirmez votre nouveau mot de passe"
                   disabled={isLoading || !isTokenVerified}
                   className={errors.confirmPassword ? "border-red-500" : ""}
@@ -278,7 +314,11 @@ export default function ResetPassword() {
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   disabled={!isTokenVerified}
                 >
-                  {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showConfirmPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
                 </Button>
               </div>
               {errors.confirmPassword && (
@@ -286,22 +326,22 @@ export default function ResetPassword() {
               )}
             </div>
 
-            <Button 
-              type="submit" 
-              disabled={isLoading || !isTokenVerified} 
+            <Button
+              type="submit"
+              disabled={isLoading || !isTokenVerified}
               className="w-full"
             >
               <Lock className="h-4 w-4 mr-2" />
-              {isLoading ? "Réinitialisation..." : "Réinitialiser le mot de passe"}
+              {isLoading
+                ? "Réinitialisation..."
+                : "Réinitialiser le mot de passe"}
             </Button>
 
             <div className="text-center space-y-2">
               <Button variant="ghost" asChild>
-                <Link to="/forgot-password">
-                  Renvoyer un code
-                </Link>
+                <Link to="/forgot-password">Renvoyer un code</Link>
               </Button>
-              
+
               <div>
                 <Button variant="ghost" asChild>
                   <Link to="/login">

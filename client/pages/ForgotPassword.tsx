@@ -17,7 +17,7 @@ import { useToast } from "@/hooks/use-toast";
 export default function ForgotPassword() {
   const navigate = useNavigate();
   const { toast } = useToast();
-  
+
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
@@ -58,7 +58,7 @@ export default function ForgotPassword() {
       }
 
       setEmailSent(true);
-      
+
       // For development - show the token
       if (data.developmentToken) {
         toast({
@@ -70,16 +70,18 @@ export default function ForgotPassword() {
 
       toast({
         title: "Email envoyé",
-        description: "Vérifiez votre boîte email pour le code de réinitialisation.",
+        description:
+          "Vérifiez votre boîte email pour le code de réinitialisation.",
       });
 
       // Redirect to reset password page with email
       setTimeout(() => {
         navigate(`/reset-password?email=${encodeURIComponent(email)}`);
       }, 2000);
-
     } catch (error) {
-      setError(error instanceof Error ? error.message : "Une erreur est survenue");
+      setError(
+        error instanceof Error ? error.message : "Une erreur est survenue",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -104,7 +106,7 @@ export default function ForgotPassword() {
             Entrez votre adresse email pour recevoir un code de réinitialisation
           </CardDescription>
         </CardHeader>
-        
+
         <CardContent>
           {emailSent ? (
             <div className="text-center space-y-4">
@@ -114,19 +116,24 @@ export default function ForgotPassword() {
               <div className="space-y-2">
                 <h3 className="font-medium">Email envoyé !</h3>
                 <p className="text-sm text-muted-foreground">
-                  Un code de réinitialisation a été envoyé à <strong>{email}</strong>.
-                  Vérifiez votre boîte email et suivez les instructions.
+                  Un code de réinitialisation a été envoyé à{" "}
+                  <strong>{email}</strong>. Vérifiez votre boîte email et suivez
+                  les instructions.
                 </p>
               </div>
               <div className="flex flex-col gap-2">
-                <Button 
-                  onClick={() => navigate(`/reset-password?email=${encodeURIComponent(email)}`)}
+                <Button
+                  onClick={() =>
+                    navigate(
+                      `/reset-password?email=${encodeURIComponent(email)}`,
+                    )
+                  }
                   className="w-full"
                 >
                   Saisir le code reçu
                 </Button>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={() => setEmailSent(false)}
                   className="w-full"
                 >

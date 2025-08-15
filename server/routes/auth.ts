@@ -215,7 +215,8 @@ router.post("/forgot-password", async (req, res) => {
     if (!token) {
       // Don't reveal if email exists or not for security
       return res.json({
-        message: "Si cet email existe, un code de réinitialisation a été envoyé."
+        message:
+          "Si cet email existe, un code de réinitialisation a été envoyé.",
       });
     }
 
@@ -224,9 +225,10 @@ router.post("/forgot-password", async (req, res) => {
     console.log(`📧 Password reset code for ${email}: ${token}`);
 
     res.json({
-      message: "Un code de réinitialisation a été envoyé à votre adresse email.",
+      message:
+        "Un code de réinitialisation a été envoyé à votre adresse email.",
       // Remove this in production - only for development
-      developmentToken: token
+      developmentToken: token,
     });
   } catch (error) {
     console.error("Forgot password error:", error);
@@ -263,17 +265,21 @@ router.post("/reset-password", async (req, res) => {
 
     if (!email || !token || !newPassword) {
       return res.status(400).json({
-        error: "Email, token, and new password are required"
+        error: "Email, token, and new password are required",
       });
     }
 
     if (newPassword.length < 6) {
       return res.status(400).json({
-        error: "Le mot de passe doit contenir au moins 6 caractères"
+        error: "Le mot de passe doit contenir au moins 6 caractères",
       });
     }
 
-    const success = await AuthService.resetPasswordWithToken(token, email, newPassword);
+    const success = await AuthService.resetPasswordWithToken(
+      token,
+      email,
+      newPassword,
+    );
 
     if (!success) {
       return res.status(400).json({ error: "Code invalide ou expiré" });

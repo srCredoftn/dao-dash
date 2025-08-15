@@ -17,6 +17,7 @@ project/
 ## Imports recommandés
 
 ### React Components
+
 ```typescript
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -25,6 +26,7 @@ import type { User } from "@shared/dao";
 ```
 
 ### API Routes
+
 ```typescript
 import express from "express";
 import { AuthService } from "../services/authService";
@@ -34,6 +36,7 @@ import type { LoginCredentials } from "@shared/dao";
 ## Patterns courants
 
 ### Composant React avec props typées
+
 ```typescript
 interface ComponentProps {
   title: string;
@@ -43,7 +46,7 @@ interface ComponentProps {
 
 export default function MyComponent({ title, user, onSave }: ComponentProps) {
   const [loading, setLoading] = useState(false);
-  
+
   return (
     <div className="p-4">
       <h1>{title}</h1>
@@ -54,11 +57,12 @@ export default function MyComponent({ title, user, onSave }: ComponentProps) {
 ```
 
 ### Hook personnalisé
+
 ```typescript
 export function useUserData(userId: string) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  
+
   useEffect(() => {
     async function loadUser() {
       try {
@@ -70,24 +74,25 @@ export function useUserData(userId: string) {
         setLoading(false);
       }
     }
-    
+
     loadUser();
   }, [userId]);
-  
+
   return { user, loading };
 }
 ```
 
 ### Route API avec gestion d'erreurs
+
 ```typescript
 router.post("/users", authenticate, async (req, res) => {
   try {
     const userData = req.body;
-    
+
     if (!userData.email) {
       return res.status(400).json({ error: "Email is required" });
     }
-    
+
     const newUser = await UserService.create(userData);
     res.status(201).json(newUser);
   } catch (error) {
@@ -98,20 +103,21 @@ router.post("/users", authenticate, async (req, res) => {
 ```
 
 ### Service avec types
+
 ```typescript
 class ApiService {
   private baseUrl = "/api";
-  
+
   async getUsers(): Promise<User[]> {
     const response = await fetch(`${this.baseUrl}/users`);
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     return response.json();
   }
-  
+
   async createUser(userData: CreateUserRequest): Promise<User> {
     const response = await fetch(`${this.baseUrl}/users`, {
       method: "POST",
@@ -120,12 +126,12 @@ class ApiService {
       },
       body: JSON.stringify(userData),
     });
-    
+
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.message || "Failed to create user");
     }
-    
+
     return response.json();
   }
 }

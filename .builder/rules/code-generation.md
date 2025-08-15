@@ -1,16 +1,19 @@
 # ⚡️ Règles de génération de code pour Builder.io
 
 ## Objectif
+
 Générer du code propre, maintenable, et toujours valide, en respectant la structure du projet et les standards de développement professionnels.
 
 ## Règles générales
 
 ### 1. Validité du code
+
 - Le code doit être 100% valide, sans erreurs de syntaxe
 - Toujours tester la compilation avant de livrer
 - Aucun warning TypeScript non résolu
 
 ### 2. Format JSON (RFC 8259)
+
 - Toutes les clés entre guillemets doubles
 - Toutes les valeurs texte entre guillemets doubles
 - Pas de `REDACTED` ni de valeurs masquées, remplacer par chaîne vide ou placeholder
@@ -18,6 +21,7 @@ Générer du code propre, maintenable, et toujours valide, en respectant la stru
 - Indentation cohérente (2 espaces)
 
 ### 3. JavaScript/TypeScript
+
 - Utiliser l'ESM (`import` / `export`) et non `require`
 - Constantes en `const`, variables modifiables en `let`, jamais `var`
 - Pas de code mort ni de variables inutilisées
@@ -25,6 +29,7 @@ Générer du code propre, maintenable, et toujours valide, en respectant la stru
 - Destructuring pour les imports multiples
 
 ### 4. Organisation des fichiers
+
 ```
 project/
 ├��─ client/           → code front-end React
@@ -35,6 +40,7 @@ project/
 ```
 
 ### 5. Conventions de nommage
+
 - Fichiers et dossiers : `kebab-case` (`ma-fonction.ts`, `mon-composant.tsx`)
 - Composants React : `PascalCase` (`UserProfile.tsx`)
 - Variables et fonctions : `camelCase` (`getUserData`, `isLoading`)
@@ -42,12 +48,14 @@ project/
 - Types et interfaces : `PascalCase` (`UserData`, `ApiResponse`)
 
 ### 6. Structure modulaire
+
 - Chaque composant ou service dans un fichier séparé
 - Index files pour les exports (`index.ts`)
 - Séparation claire des responsabilités
 - Réutilisabilité maximale
 
 ### 7. Documentation
+
 - Commentaires clairs et concis pour expliquer les parties complexes
 - JSDoc pour les fonctions publiques
 - README pour chaque module important
@@ -56,6 +64,7 @@ project/
 ## Standards spécifiques au projet
 
 ### Architecture React
+
 ```typescript
 // ✅ Bon
 import { useState, useEffect } from "react";
@@ -63,11 +72,11 @@ import type { User } from "@shared/types";
 
 export default function UserProfile({ userId }: { userId: string }) {
   const [user, setUser] = useState<User | null>(null);
-  
+
   useEffect(() => {
     loadUser(userId);
   }, [userId]);
-  
+
   return <div>{user?.name}</div>;
 }
 
@@ -80,6 +89,7 @@ var UserProfile = function(props) {
 ```
 
 ### API Routes Express
+
 ```typescript
 // ✅ Bon
 import express from "express";
@@ -101,6 +111,7 @@ export default router;
 ```
 
 ### Types partagés
+
 ```typescript
 // shared/types.ts
 export interface User {
@@ -118,11 +129,13 @@ export type UserRole = "admin" | "user";
 ## Exigences de sortie
 
 ### Format de réponse
+
 - Si un fichier est du JSON → produire uniquement le JSON valide, rien d'autre
 - Si un fichier est du code → produire un code entièrement prêt à exécuter, formaté
 - Toujours indiquer le chemin du fichier en commentaire
 
 ### Exemple de format attendu
+
 ```typescript
 // code/client/components/UserCard.tsx
 import type { User } from "@shared/dao";

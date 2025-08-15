@@ -36,7 +36,7 @@ export default {
     "prefer-const": "error",
     "no-unused-vars": "off", // Géré par TypeScript
     "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
-    
+
     // ESM obligatoire
     "no-restricted-syntax": [
       "error",
@@ -45,9 +45,9 @@ export default {
         message: "Use ES6 imports instead of require()",
       },
     ],
-    
+
     // Nommage
-    "camelcase": ["error", { properties: "never" }],
+    camelcase: ["error", { properties: "never" }],
     "@typescript-eslint/naming-convention": [
       "error",
       {
@@ -63,14 +63,14 @@ export default {
         format: ["camelCase", "snake_case", "PascalCase"],
       },
     ],
-    
+
     // TypeScript strict
     "@typescript-eslint/no-explicit-any": "error",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/prefer-nullish-coalescing": "error",
     "@typescript-eslint/prefer-optional-chain": "error",
-    
+
     // React
     "react/react-in-jsx-scope": "off", // React 17+
     "react/prop-types": "off", // TypeScript handles this
@@ -78,11 +78,11 @@ export default {
     "react/jsx-uses-vars": "error",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    
+
     // Accessibilité
     "jsx-a11y/alt-text": "error",
     "jsx-a11y/anchor-is-valid": "error",
-    
+
     // Import/Export
     "import/no-default-export": "off",
     "import/prefer-default-export": "off",

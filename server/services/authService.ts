@@ -232,7 +232,7 @@ export class AuthService {
     expiresAt.setMinutes(expiresAt.getMinutes() + 15); // 15 minutes expiration
 
     // Remove any existing tokens for this email
-    const existingIndex = resetTokens.findIndex(t => t.email === email);
+    const existingIndex = resetTokens.findIndex((t) => t.email === email);
     if (existingIndex !== -1) {
       resetTokens.splice(existingIndex, 1);
     }
@@ -245,14 +245,22 @@ export class AuthService {
       used: false,
     });
 
-    console.log("🔑 Password reset token generated for:", email, "Token:", token);
+    console.log(
+      "🔑 Password reset token generated for:",
+      email,
+      "Token:",
+      token,
+    );
     return token;
   }
 
   // Verify reset token
-  static async verifyResetToken(token: string, email: string): Promise<boolean> {
+  static async verifyResetToken(
+    token: string,
+    email: string,
+  ): Promise<boolean> {
     const resetToken = resetTokens.find(
-      (t) => t.token === token && t.email === email && !t.used
+      (t) => t.token === token && t.email === email && !t.used,
     );
 
     if (!resetToken) {
@@ -273,10 +281,10 @@ export class AuthService {
   static async resetPasswordWithToken(
     token: string,
     email: string,
-    newPassword: string
+    newPassword: string,
   ): Promise<boolean> {
     const resetToken = resetTokens.find(
-      (t) => t.token === token && t.email === email && !t.used
+      (t) => t.token === token && t.email === email && !t.used,
     );
 
     if (!resetToken || new Date() > resetToken.expiresAt) {
@@ -305,7 +313,7 @@ export class AuthService {
   // Clean expired tokens (call periodically)
   static cleanExpiredTokens(): void {
     const now = new Date();
-    const validTokens = resetTokens.filter(t => t.expiresAt > now);
+    const validTokens = resetTokens.filter((t) => t.expiresAt > now);
     resetTokens.length = 0;
     resetTokens.push(...validTokens);
   }

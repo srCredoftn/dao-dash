@@ -33,14 +33,6 @@ let users: User[] = [
     createdAt: new Date().toISOString(),
     isActive: true,
   },
-  {
-    id: "4",
-    name: "Sophie Laurent",
-    email: "sophie.laurent@2snd.fr",
-    role: "viewer",
-    createdAt: new Date().toISOString(),
-    isActive: true,
-  },
 ];
 
 // Simple password storage (in production, use proper hashing)
@@ -48,7 +40,6 @@ const passwords: Record<string, string> = {
   "admin@2snd.fr": "admin123",
   "marie.dubois@2snd.fr": "marie123",
   "pierre.martin@2snd.fr": "pierre123",
-  "sophie.laurent@2snd.fr": "sophie123",
 };
 
 // Sessions are now handled by SessionStore for persistence across restarts

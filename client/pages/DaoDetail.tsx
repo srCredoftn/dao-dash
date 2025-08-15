@@ -128,7 +128,12 @@ function TaskRow({
     return (
       <div className="bg-white rounded-lg border p-4">
         <div className="flex items-center justify-between">
-          <h4 className="font-medium text-sm">{task.name}</h4>
+          <h4 className="font-medium text-sm">
+            <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full mr-2">
+              {taskIndex}
+            </span>
+            {task.name}
+          </h4>
           <div className="flex items-center gap-2">
             <span className="text-xs text-muted-foreground">Applicable:</span>
             {isAdmin() ? (
@@ -153,7 +158,12 @@ function TaskRow({
   return (
     <div className="bg-white rounded-lg border p-4 space-y-3">
       <div className="flex items-center justify-between">
-        <h4 className="font-medium text-sm">{task.name}</h4>
+        <h4 className="font-medium text-sm">
+          <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full mr-2">
+            {taskIndex}
+          </span>
+          {task.name}
+        </h4>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
             <span className="text-xs text-muted-foreground">Applicable:</span>

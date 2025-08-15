@@ -84,7 +84,9 @@ export function AppHeader({ title, children }: AppHeaderProps) {
 
           {/* Center - Custom content (Desktop only) */}
           {children && (
-            <div className="hidden lg:flex flex-1 justify-center">{children}</div>
+            <div className="hidden lg:flex flex-1 justify-center">
+              {children}
+            </div>
           )}
 
           {/* Right side - Always on one line */}
@@ -176,9 +178,7 @@ export function AppHeader({ title, children }: AppHeaderProps) {
                       <div className="relative w-4 h-4">
                         <span
                           className={`absolute h-0.5 w-4 bg-current transition-all duration-300 ease-in-out ${
-                            isMobileMenuOpen
-                              ? "top-1.5 rotate-45"
-                              : "top-0.5"
+                            isMobileMenuOpen ? "top-1.5 rotate-45" : "top-0.5"
                           }`}
                         />
                         <span
@@ -188,9 +188,7 @@ export function AppHeader({ title, children }: AppHeaderProps) {
                         />
                         <span
                           className={`absolute h-0.5 w-4 bg-current transition-all duration-300 ease-in-out ${
-                            isMobileMenuOpen
-                              ? "top-1.5 -rotate-45"
-                              : "top-2.5"
+                            isMobileMenuOpen ? "top-1.5 -rotate-45" : "top-2.5"
                           }`}
                         />
                       </div>
@@ -212,7 +210,9 @@ export function AppHeader({ title, children }: AppHeaderProps) {
               </div>
               <div className="flex-1">
                 <div className="font-medium text-sm">{user?.name}</div>
-                <div className="text-xs text-muted-foreground">{user?.email}</div>
+                <div className="text-xs text-muted-foreground">
+                  {user?.email}
+                </div>
                 <Badge
                   variant={getRoleBadgeVariant(user?.role || "")}
                   className="mt-1 text-xs"

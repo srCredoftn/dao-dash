@@ -839,7 +839,7 @@ ${dao?.tasks
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {dao.tasks.map((task) => (
+              {dao.tasks.map((task, index) => (
                 <TaskRow
                   key={task.id}
                   task={task}
@@ -850,6 +850,7 @@ ${dao?.tasks
                   onAssignmentChange={handleTaskAssignmentChange}
                   availableMembers={dao.equipe}
                   daysDiff={dateInfo.daysDiff}
+                  taskIndex={index + 1}
                 />
               ))}
             </div>

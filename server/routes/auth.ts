@@ -197,4 +197,93 @@ router.put("/profile", authenticate, async (req, res) => {
   }
 });
 
+// POST /api/auth/forgot-password - Request password reset
+router.post("/forgot-password", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ error: "Email is required" });
+    }
+
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      return res.status(400).json({ error: "Invalid email format" });
+    }
+
+    const token = await AuthService.generateResetToken(email);
+
+    if (!token) {
+      // Don't reveal if email exists or not for security
+      return res.json({
+        message: "Si cet email existe, un code de réinitialisation a été envoyé."
+      });
+    }
+
+    // In production, send email here
+    // For development, we'll return the token in the response
+    console.log(`📧 Password reset code for ${email}: ${token}`);
+
+    res.json({
+      message: "Un code de réinitialisation a été envoyé à votre adresse email.",
+      // Remove this in production - only for development
+      developmentToken: token
+    });
+  } catch (error) {
+    console.error("Forgot password error:", error);
+    res.status(500).json({ error: "Failed to process password reset request" });
+  }
+});
+
+// POST /api/auth/verify-reset-token - Verify reset token
+router.post("/verify-reset-token", async (req, res) => {
+  try {
+    const { email, token } = req.body;
+
+    if (!email || !token) {
+      return res.status(400).json({ error: "Email and token are required" });
+    }
+
+    const isValid = await AuthService.verifyResetToken(token, email);
+
+    if (!isValid) {
+      return res.status(400).json({ error: "Code invalide ou expiré" });
+    }
+
+    res.json({ message: "Code vérifié avec succès" });
+  } catch (error) {
+    console.error("Verify reset token error:", error);
+    res.status(500).json({ error: "Failed to verify reset token" });
+  }
+});
+
+// POST /api/auth/reset-password - Reset password with token
+router.post("/reset-password", async (req, res) => {
+  try {
+    const { email, token, newPassword } = req.body;
+
+    if (!email || !token || !newPassword) {
+      return res.status(400).json({
+        error: "Email, token, and new password are required"
+      });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({
+        error: "Le mot de passe doit contenir au moins 6 caractères"
+      });
+    }
+
+    const success = await AuthService.resetPasswordWithToken(token, email, newPassword);
+
+    if (!success) {
+      return res.status(400).json({ error: "Code invalide ou expiré" });
+    }
+
+    res.json({ message: "Mot de passe réinitialisé avec succès" });
+  } catch (error) {
+    console.error("Reset password error:", error);
+    res.status(500).json({ error: "Failed to reset password" });
+  }
+});
+
 export default router;

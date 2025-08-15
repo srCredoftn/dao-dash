@@ -42,6 +42,16 @@ const passwords: Record<string, string> = {
   "pierre.martin@2snd.fr": "pierre123",
 };
 
+// Password reset tokens storage
+interface ResetToken {
+  token: string;
+  email: string;
+  expiresAt: Date;
+  used: boolean;
+}
+
+const resetTokens: ResetToken[] = [];
+
 // Sessions are now handled by SessionStore for persistence across restarts
 
 export class AuthService {
@@ -207,5 +217,96 @@ export class AuthService {
 
     console.log("👤 Profile updated for:", user.email);
     return user;
+  }
+
+  // Generate password reset token
+  static async generateResetToken(email: string): Promise<string | null> {
+    const user = users.find((u) => u.email === email && u.isActive);
+    if (!user) {
+      return null;
+    }
+
+    // Generate 6-digit code
+    const token = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiresAt = new Date();
+    expiresAt.setMinutes(expiresAt.getMinutes() + 15); // 15 minutes expiration
+
+    // Remove any existing tokens for this email
+    const existingIndex = resetTokens.findIndex(t => t.email === email);
+    if (existingIndex !== -1) {
+      resetTokens.splice(existingIndex, 1);
+    }
+
+    // Store new token
+    resetTokens.push({
+      token,
+      email,
+      expiresAt,
+      used: false,
+    });
+
+    console.log("🔑 Password reset token generated for:", email, "Token:", token);
+    return token;
+  }
+
+  // Verify reset token
+  static async verifyResetToken(token: string, email: string): Promise<boolean> {
+    const resetToken = resetTokens.find(
+      (t) => t.token === token && t.email === email && !t.used
+    );
+
+    if (!resetToken) {
+      return false;
+    }
+
+    if (new Date() > resetToken.expiresAt) {
+      // Remove expired token
+      const index = resetTokens.indexOf(resetToken);
+      resetTokens.splice(index, 1);
+      return false;
+    }
+
+    return true;
+  }
+
+  // Reset password with token
+  static async resetPasswordWithToken(
+    token: string,
+    email: string,
+    newPassword: string
+  ): Promise<boolean> {
+    const resetToken = resetTokens.find(
+      (t) => t.token === token && t.email === email && !t.used
+    );
+
+    if (!resetToken || new Date() > resetToken.expiresAt) {
+      return false;
+    }
+
+    const user = users.find((u) => u.email === email && u.isActive);
+    if (!user) {
+      return false;
+    }
+
+    // Mark token as used
+    resetToken.used = true;
+
+    // Update password
+    passwords[email] = newPassword;
+
+    // Remove used token after successful reset
+    const index = resetTokens.indexOf(resetToken);
+    resetTokens.splice(index, 1);
+
+    console.log("🔑 Password reset successful for:", email);
+    return true;
+  }
+
+  // Clean expired tokens (call periodically)
+  static cleanExpiredTokens(): void {
+    const now = new Date();
+    const validTokens = resetTokens.filter(t => t.expiresAt > now);
+    resetTokens.length = 0;
+    resetTokens.push(...validTokens);
   }
 }

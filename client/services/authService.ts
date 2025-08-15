@@ -162,6 +162,16 @@ class AuthApiService {
     });
   }
 
+  async updateProfile(profileData: {
+    name: string;
+    email: string;
+  }): Promise<AuthUser> {
+    return this.request<AuthUser>("/profile", {
+      method: "PUT",
+      body: JSON.stringify(profileData),
+    });
+  }
+
   // Clear authentication data (useful for expired tokens)
   clearAuth(): void {
     this.token = null;

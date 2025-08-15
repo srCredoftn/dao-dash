@@ -67,6 +67,7 @@ function TaskRow({
   onAssignmentChange,
   availableMembers,
   daysDiff,
+  taskIndex,
 }: {
   task: DaoTask;
   daoId: string;
@@ -76,6 +77,7 @@ function TaskRow({
   onAssignmentChange: (taskId: number, memberId?: string) => void;
   availableMembers: TeamMember[];
   daysDiff: number;
+  taskIndex: number;
 }) {
   const { user, isAdmin } = useAuth();
   const [isEditing, setIsEditing] = useState(false);

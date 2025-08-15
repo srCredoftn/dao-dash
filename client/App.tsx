@@ -51,6 +51,22 @@ const App = () => (
                 </AuthenticatedRoute>
               }
             />
+            <Route
+              path="/profile"
+              element={
+                <AuthenticatedRoute>
+                  <Profile />
+                </AuthenticatedRoute>
+              }
+            />
+            <Route
+              path="/user-management"
+              element={
+                <AuthenticatedRoute requiredRoles={["admin"]}>
+                  <UserManagement />
+                </AuthenticatedRoute>
+              }
+            />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

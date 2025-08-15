@@ -177,4 +177,33 @@ export class AuthService {
     console.log("🔑 Password changed for:", user.email);
     return true;
   }
+
+  // Update user profile
+  static async updateProfile(
+    userId: string,
+    profileData: { name: string; email: string },
+  ): Promise<User | null> {
+    const user = users.find((u) => u.id === userId);
+    if (!user) {
+      return null;
+    }
+
+    // Check if new email already exists (only if different from current)
+    if (profileData.email !== user.email) {
+      const existingUser = users.find((u) => u.email === profileData.email && u.id !== userId);
+      if (existingUser) {
+        throw new Error("Email already exists");
+      }
+      // Update password mapping
+      const currentPassword = passwords[user.email];
+      delete passwords[user.email];
+      passwords[profileData.email] = currentPassword;
+    }
+
+    user.name = profileData.name;
+    user.email = profileData.email;
+
+    console.log("👤 Profile updated for:", user.email);
+    return user;
+  }
 }

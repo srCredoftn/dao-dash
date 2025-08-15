@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { 
-  ArrowLeft, 
-  Users, 
-  Plus, 
-  Edit, 
-  Trash2, 
-  Mail, 
+import {
+  ArrowLeft,
+  Users,
+  Plus,
+  Edit,
+  Trash2,
+  Mail,
   Calendar,
   Shield,
   AlertCircle,
   Eye,
-  EyeOff
+  EyeOff,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -65,20 +65,20 @@ export default function UserManagement() {
   const navigate = useNavigate();
   const { user, isAdmin } = useAuth();
   const { toast } = useToast();
-  
+
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  
+
   const [newUserForm, setNewUserForm] = useState<NewUserForm>({
     name: "",
     email: "",
     role: "user",
     password: "",
   });
-  
+
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
@@ -106,7 +106,8 @@ export default function UserManagement() {
   };
 
   const generatePassword = () => {
-    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+    const charset =
+      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
     let password = "";
     for (let i = 0; i < 12; i++) {
       password += charset.charAt(Math.floor(Math.random() * charset.length));
@@ -130,11 +131,12 @@ export default function UserManagement() {
     if (!newUserForm.password) {
       newErrors.password = "Le mot de passe est requis";
     } else if (newUserForm.password.length < 6) {
-      newErrors.password = "Le mot de passe doit contenir au moins 6 caractères";
+      newErrors.password =
+        "Le mot de passe doit contenir au moins 6 caractères";
     }
 
     // Check if email already exists
-    if (users.some(u => u.email === newUserForm.email)) {
+    if (users.some((u) => u.email === newUserForm.email)) {
       newErrors.email = "Cet email est déjà utilisé";
     }
 
@@ -181,10 +183,14 @@ export default function UserManagement() {
       return;
     }
 
-    if (window.confirm(`Êtes-vous sûr de vouloir supprimer l'utilisateur "${userName}" ?`)) {
+    if (
+      window.confirm(
+        `Êtes-vous sûr de vouloir supprimer l'utilisateur "${userName}" ?`,
+      )
+    ) {
       try {
         await authService.deactivateUser(userId);
-        setUsers(users.filter(u => u.id !== userId));
+        setUsers(users.filter((u) => u.id !== userId));
         toast({
           title: "Utilisateur supprimé",
           description: `L'utilisateur ${userName} a été supprimé.`,
@@ -262,13 +268,15 @@ export default function UserManagement() {
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Retour au tableau de bord
               </Button>
-              
+
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                   <Users className="h-5 w-5 text-blue-600" />
                 </div>
                 <div>
-                  <h1 className="text-xl font-bold">Gestion des utilisateurs</h1>
+                  <h1 className="text-xl font-bold">
+                    Gestion des utilisateurs
+                  </h1>
                   <p className="text-sm text-muted-foreground">
                     Gérez les comptes utilisateurs de l'application
                   </p>
@@ -276,7 +284,10 @@ export default function UserManagement() {
               </div>
             </div>
 
-            <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+            <Dialog
+              open={isCreateDialogOpen}
+              onOpenChange={setIsCreateDialogOpen}
+            >
               <DialogTrigger asChild>
                 <Button>
                   <Plus className="h-4 w-4 mr-2" />
@@ -287,17 +298,20 @@ export default function UserManagement() {
                 <DialogHeader>
                   <DialogTitle>Créer un nouvel utilisateur</DialogTitle>
                   <DialogDescription>
-                    Ajoutez un nouveau membre à l'équipe avec les informations ci-dessous.
+                    Ajoutez un nouveau membre à l'équipe avec les informations
+                    ci-dessous.
                   </DialogDescription>
                 </DialogHeader>
-                
+
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Nom complet</Label>
                     <Input
                       id="name"
                       value={newUserForm.name}
-                      onChange={(e) => setNewUserForm({ ...newUserForm, name: e.target.value })}
+                      onChange={(e) =>
+                        setNewUserForm({ ...newUserForm, name: e.target.value })
+                      }
                       className={errors.name ? "border-red-500" : ""}
                     />
                     {errors.name && (
@@ -311,7 +325,12 @@ export default function UserManagement() {
                       id="email"
                       type="email"
                       value={newUserForm.email}
-                      onChange={(e) => setNewUserForm({ ...newUserForm, email: e.target.value })}
+                      onChange={(e) =>
+                        setNewUserForm({
+                          ...newUserForm,
+                          email: e.target.value,
+                        })
+                      }
                       className={errors.email ? "border-red-500" : ""}
                     />
                     {errors.email && (
@@ -323,7 +342,9 @@ export default function UserManagement() {
                     <Label htmlFor="role">Rôle</Label>
                     <Select
                       value={newUserForm.role}
-                      onValueChange={(value: UserRole) => setNewUserForm({ ...newUserForm, role: value })}
+                      onValueChange={(value: UserRole) =>
+                        setNewUserForm({ ...newUserForm, role: value })
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -352,7 +373,12 @@ export default function UserManagement() {
                         id="password"
                         type={showPassword ? "text" : "password"}
                         value={newUserForm.password}
-                        onChange={(e) => setNewUserForm({ ...newUserForm, password: e.target.value })}
+                        onChange={(e) =>
+                          setNewUserForm({
+                            ...newUserForm,
+                            password: e.target.value,
+                          })
+                        }
                         className={errors.password ? "border-red-500" : ""}
                       />
                       <Button
@@ -377,7 +403,8 @@ export default function UserManagement() {
                   <Alert>
                     <AlertCircle className="h-4 w-4" />
                     <AlertDescription>
-                      L'utilisateur devra changer son mot de passe lors de sa première connexion.
+                      L'utilisateur devra changer son mot de passe lors de sa
+                      première connexion.
                     </AlertDescription>
                   </Alert>
                 </div>
@@ -470,7 +497,9 @@ export default function UserManagement() {
                             variant="ghost"
                             size="sm"
                             disabled={userData.id === user?.id}
-                            onClick={() => handleDeleteUser(userData.id, userData.name)}
+                            onClick={() =>
+                              handleDeleteUser(userData.id, userData.name)
+                            }
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>

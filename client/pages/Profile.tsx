@@ -22,7 +22,7 @@ export default function Profile() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { toast } = useToast();
-  
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -72,7 +72,8 @@ export default function Profile() {
     if (!passwordData.newPassword) {
       newErrors.newPassword = "Le nouveau mot de passe est requis";
     } else if (passwordData.newPassword.length < 6) {
-      newErrors.newPassword = "Le mot de passe doit contenir au moins 6 caractères";
+      newErrors.newPassword =
+        "Le mot de passe doit contenir au moins 6 caractères";
     }
 
     if (passwordData.newPassword !== passwordData.confirmPassword) {
@@ -85,7 +86,7 @@ export default function Profile() {
 
   const handleProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateProfileForm()) return;
 
     setIsUpdatingProfile(true);
@@ -108,7 +109,7 @@ export default function Profile() {
 
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validatePasswordForm()) return;
 
     setIsChangingPassword(true);
@@ -184,7 +185,7 @@ export default function Profile() {
               <ArrowLeft className="h-4 w-4 mr-2" />
               Retour au tableau de bord
             </Button>
-            
+
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                 <User className="h-5 w-5 text-blue-600" />
@@ -202,7 +203,6 @@ export default function Profile() {
 
       <main className="container mx-auto px-4 py-6">
         <div className="max-w-2xl mx-auto space-y-6">
-          
           {/* User Info Card */}
           <Card>
             <CardHeader>
@@ -238,7 +238,9 @@ export default function Profile() {
                     id="name"
                     type="text"
                     value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
                     className={errors.name ? "border-red-500" : ""}
                   />
                   {errors.name && (
@@ -252,7 +254,9 @@ export default function Profile() {
                     id="email"
                     type="email"
                     value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, email: e.target.value })
+                    }
                     className={errors.email ? "border-red-500" : ""}
                   />
                   {errors.email && (
@@ -260,13 +264,15 @@ export default function Profile() {
                   )}
                 </div>
 
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   disabled={isUpdatingProfile}
                   className="w-full"
                 >
                   <Save className="h-4 w-4 mr-2" />
-                  {isUpdatingProfile ? "Mise à jour..." : "Mettre à jour le profil"}
+                  {isUpdatingProfile
+                    ? "Mise à jour..."
+                    : "Mettre à jour le profil"}
                 </Button>
               </form>
             </CardContent>
@@ -298,11 +304,18 @@ export default function Profile() {
                     id="currentPassword"
                     type="password"
                     value={passwordData.currentPassword}
-                    onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
+                    onChange={(e) =>
+                      setPasswordData({
+                        ...passwordData,
+                        currentPassword: e.target.value,
+                      })
+                    }
                     className={errors.currentPassword ? "border-red-500" : ""}
                   />
                   {errors.currentPassword && (
-                    <p className="text-sm text-red-600">{errors.currentPassword}</p>
+                    <p className="text-sm text-red-600">
+                      {errors.currentPassword}
+                    </p>
                   )}
                 </div>
 
@@ -312,7 +325,12 @@ export default function Profile() {
                     id="newPassword"
                     type="password"
                     value={passwordData.newPassword}
-                    onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
+                    onChange={(e) =>
+                      setPasswordData({
+                        ...passwordData,
+                        newPassword: e.target.value,
+                      })
+                    }
                     className={errors.newPassword ? "border-red-500" : ""}
                   />
                   {errors.newPassword && (
@@ -321,26 +339,37 @@ export default function Profile() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="confirmPassword">Confirmer le nouveau mot de passe</Label>
+                  <Label htmlFor="confirmPassword">
+                    Confirmer le nouveau mot de passe
+                  </Label>
                   <Input
                     id="confirmPassword"
                     type="password"
                     value={passwordData.confirmPassword}
-                    onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
+                    onChange={(e) =>
+                      setPasswordData({
+                        ...passwordData,
+                        confirmPassword: e.target.value,
+                      })
+                    }
                     className={errors.confirmPassword ? "border-red-500" : ""}
                   />
                   {errors.confirmPassword && (
-                    <p className="text-sm text-red-600">{errors.confirmPassword}</p>
+                    <p className="text-sm text-red-600">
+                      {errors.confirmPassword}
+                    </p>
                   )}
                 </div>
 
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   disabled={isChangingPassword}
                   className="w-full"
                 >
                   <Lock className="h-4 w-4 mr-2" />
-                  {isChangingPassword ? "Modification..." : "Changer le mot de passe"}
+                  {isChangingPassword
+                    ? "Modification..."
+                    : "Changer le mot de passe"}
                 </Button>
               </form>
             </CardContent>

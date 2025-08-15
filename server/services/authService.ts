@@ -190,7 +190,9 @@ export class AuthService {
 
     // Check if new email already exists (only if different from current)
     if (profileData.email !== user.email) {
-      const existingUser = users.find((u) => u.email === profileData.email && u.id !== userId);
+      const existingUser = users.find(
+        (u) => u.email === profileData.email && u.id !== userId,
+      );
       if (existingUser) {
         throw new Error("Email already exists");
       }

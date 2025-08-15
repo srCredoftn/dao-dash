@@ -171,7 +171,10 @@ router.put("/profile", authenticate, async (req, res) => {
       return res.status(400).json({ error: "Invalid email format" });
     }
 
-    const updatedUser = await AuthService.updateProfile(req.user!.id, { name, email });
+    const updatedUser = await AuthService.updateProfile(req.user!.id, {
+      name,
+      email,
+    });
     if (!updatedUser) {
       return res.status(404).json({ error: "User not found" });
     }

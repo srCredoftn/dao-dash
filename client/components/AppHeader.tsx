@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
-import { User, LogOut, Settings, Shield } from "lucide-react";
+import { User, LogOut, Settings, Shield, Users } from "lucide-react";
 import NotificationCenter from "./NotificationCenter";
 
 interface AppHeaderProps {
@@ -33,14 +33,20 @@ export function AppHeader({ title, children }: AppHeaderProps) {
     navigate("/admin/users");
   };
 
+  const handleUserManagementClick = () => {
+    navigate("/user-management");
+  };
+
+  const handleProfileClick = () => {
+    navigate("/profile");
+  };
+
   const getRoleBadgeVariant = (role: string) => {
     switch (role) {
       case "admin":
         return "destructive";
       case "user":
         return "default";
-      case "viewer":
-        return "secondary";
       default:
         return "outline";
     }
@@ -52,8 +58,6 @@ export function AppHeader({ title, children }: AppHeaderProps) {
         return "Administrateur";
       case "user":
         return "Utilisateur";
-      case "viewer":
-        return "Visualiseur";
       default:
         return role;
     }
@@ -134,15 +138,25 @@ export function AppHeader({ title, children }: AppHeaderProps) {
                     </div>
                     <DropdownMenuSeparator />
 
+                    <DropdownMenuItem onClick={handleProfileClick}>
+                      <User className="mr-2 h-4 w-4" />
+                      Mon profil
+                    </DropdownMenuItem>
+
                     {isAdmin() && (
                       <>
+                        <DropdownMenuItem onClick={handleUserManagementClick}>
+                          <Users className="mr-2 h-4 w-4" />
+                          Gestion des utilisateurs
+                        </DropdownMenuItem>
                         <DropdownMenuItem onClick={handleAdminClick}>
                           <Settings className="mr-2 h-4 w-4" />
                           Administration
                         </DropdownMenuItem>
-                        <DropdownMenuSeparator />
                       </>
                     )}
+
+                    <DropdownMenuSeparator />
 
                     <DropdownMenuItem
                       onClick={handleLogout}

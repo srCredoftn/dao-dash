@@ -158,4 +158,40 @@ router.post("/change-password", authenticate, async (req, res) => {
   }
 });
 
+// PUT /api/auth/profile - Update user profile
+router.put("/profile", authenticate, async (req, res) => {
+  try {
+    const { name, email } = req.body;
+
+    if (!name || !email) {
+      return res.status(400).json({ error: "Name and email are required" });
+    }
+
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      return res.status(400).json({ error: "Invalid email format" });
+    }
+
+    const updatedUser = await AuthService.updateProfile(req.user!.id, { name, email });
+    if (!updatedUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Return updated auth user
+    const authUser = {
+      id: updatedUser.id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      role: updatedUser.role,
+    };
+
+    res.json(authUser);
+  } catch (error) {
+    console.error("Update profile error:", error);
+    if (error.message === "Email already exists") {
+      return res.status(400).json({ error: "Email already exists" });
+    }
+    res.status(500).json({ error: "Failed to update profile" });
+  }
+});
+
 export default router;

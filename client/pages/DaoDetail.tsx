@@ -443,12 +443,6 @@ export default function DaoDetail() {
         return;
       }
 
-      // Check if user is authenticated
-      if (!user) {
-        setError("Vous devez être connecté pour accéder à cette page");
-        setLoading(false);
-        return;
-      }
 
       try {
         setLoading(true);

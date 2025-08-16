@@ -11,6 +11,7 @@ import {
   User,
   ChevronDown,
   ChevronUp,
+  Download,
 } from "lucide-react";
 import NewDaoDialog from "@/components/NewDaoDialog";
 import FilterDialog from "@/components/FilterDialog";

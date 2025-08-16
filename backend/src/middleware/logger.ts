@@ -1,137 +1,94 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from 'express';
 
-// Simple request logger middleware
-export const logger = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): void => {
-  const start = Date.now();
+interface LogData {
+  method: string;
+  url: string;
+  status?: number;
+  responseTime?: number;
+  ip: string;
+  userAgent?: string;
+  userId?: string;
+  timestamp: string;
+}
 
-  // Store original end method
-  const originalEnd = res.end;
-
-  // Override end method to log response
-  res.end = function (chunk?: any, encoding?: any) {
-    const duration = Date.now() - start;
-    const statusCode = res.statusCode;
-    const method = req.method;
-    const url = req.originalUrl;
-    const userAgent = req.get("User-Agent") || "Unknown";
-    const ip = req.ip || req.connection.remoteAddress || "Unknown";
-
-    // Log color based on status code
-    let statusColor = "\x1b[32m"; // Green for 2xx
-    if (statusCode >= 300 && statusCode < 400) statusColor = "\x1b[33m"; // Yellow for 3xx
-    if (statusCode >= 400 && statusCode < 500) statusColor = "\x1b[31m"; // Red for 4xx
-    if (statusCode >= 500) statusColor = "\x1b[35m"; // Magenta for 5xx
-
-    // Method color
-    const methodColor =
-      method === "GET"
-        ? "\x1b[36m"
-        : method === "POST"
-          ? "\x1b[32m"
-          : method === "PUT"
-            ? "\x1b[33m"
-            : method === "DELETE"
-              ? "\x1b[31m"
-              : "\x1b[37m";
-
-    const timestamp = new Date().toISOString();
-
-    console.log(
-      `${timestamp} ${methodColor}${method}\x1b[0m ${url} ${statusColor}${statusCode}\x1b[0m ${duration}ms - ${ip}`,
-    );
-
-    // Log errors with more detail
-    if (statusCode >= 400) {
-      console.log(`  ↳ User-Agent: ${userAgent}`);
-      if (req.body && Object.keys(req.body).length > 0) {
-        console.log(`  ↳ Body:`, JSON.stringify(req.body, null, 2));
-      }
-    }
-
-    // Call original end method
-    originalEnd.call(this, chunk, encoding);
-  };
-
-  next();
-};
-
-// Enhanced logger for development
-export const devLogger = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): void => {
-  const start = Date.now();
+export const logger = (req: Request, res: Response, next: NextFunction): void => {
+  const startTime = Date.now();
   const timestamp = new Date().toISOString();
 
-  console.log(`\n📥 ${timestamp}`);
-  console.log(`${req.method} ${req.originalUrl}`);
-  console.log(`IP: ${req.ip || req.connection.remoteAddress}`);
-  console.log(`User-Agent: ${req.get("User-Agent")}`);
+  // Store original res.end function
+  const originalEnd = res.end;
 
-  if (req.headers.authorization) {
-    console.log(`Auth: Bearer ***${req.headers.authorization.slice(-10)}`);
-  }
+  // Override res.end to capture response time and status
+  res.end = function (this: Response, ...args: any[]) {
+    const responseTime = Date.now() - startTime;
+    
+    const logData: LogData = {
+      method: req.method,
+      url: req.originalUrl || req.url,
+      status: res.statusCode,
+      responseTime,
+      ip: req.ip || req.connection.remoteAddress || 'unknown',
+      userAgent: req.get('User-Agent'),
+      userId: (req as any).user?.id,
+      timestamp,
+    };
 
-  if (req.body && Object.keys(req.body).length > 0) {
-    console.log(`Body:`, JSON.stringify(req.body, null, 2));
-  }
+    // Color coding for different status codes
+    let statusColor = '';
+    if (res.statusCode >= 500) {
+      statusColor = '\x1b[31m'; // Red
+    } else if (res.statusCode >= 400) {
+      statusColor = '\x1b[33m'; // Yellow
+    } else if (res.statusCode >= 300) {
+      statusColor = '\x1b[36m'; // Cyan
+    } else {
+      statusColor = '\x1b[32m'; // Green
+    }
 
-  if (req.query && Object.keys(req.query).length > 0) {
-    console.log(`Query:`, req.query);
-  }
+    const resetColor = '\x1b[0m';
 
-  // Store original methods
-  const originalJson = res.json;
-  const originalSend = res.send;
+    // Log format: METHOD URL STATUS RESPONSE_TIME USER_ID
+    const logMessage = [
+      `${statusColor}${logData.method}${resetColor}`,
+      logData.url,
+      `${statusColor}${logData.status}${resetColor}`,
+      `${logData.responseTime}ms`,
+      logData.userId ? `[${logData.userId}]` : '[anonymous]',
+    ].join(' ');
 
-  // Override json method
-  res.json = function (body) {
-    const duration = Date.now() - start;
-    console.log(`📤 Response (${duration}ms):`, JSON.stringify(body, null, 2));
-    return originalJson.call(this, body);
-  };
+    console.log(`🌐 ${logMessage}`);
 
-  // Override send method
-  res.send = function (body) {
-    const duration = Date.now() - start;
-    console.log(`📤 Response (${duration}ms):`, body);
-    return originalSend.call(this, body);
+    // Call original end function
+    originalEnd.apply(this, args);
   };
 
   next();
 };
 
-// API metrics logger
-export const metricsLogger = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): void => {
-  const start = process.hrtime();
-
-  res.on("finish", () => {
-    const diff = process.hrtime(start);
-    const duration = diff[0] * 1e3 + diff[1] * 1e-6; // Convert to milliseconds
-
-    // Log metrics in JSON format for easy parsing
-    const logData = {
-      timestamp: new Date().toISOString(),
-      method: req.method,
-      url: req.originalUrl,
-      statusCode: res.statusCode,
-      duration: Math.round(duration * 100) / 100,
-      userAgent: req.get("User-Agent"),
-      ip: req.ip || req.connection.remoteAddress,
-      contentLength: res.get("content-length") || 0,
-    };
-
-    console.log("METRICS:", JSON.stringify(logData));
-  });
-
+// Request ID middleware for tracing
+export const requestId = (req: Request, res: Response, next: NextFunction): void => {
+  const id = Math.random().toString(36).substring(2, 15);
+  (req as any).requestId = id;
+  res.setHeader('X-Request-ID', id);
   next();
+};
+
+// Security logging for sensitive operations
+export const securityLogger = (operation: string) => {
+  return (req: Request, res: Response, next: NextFunction): void => {
+    const user = (req as any).user;
+    const ip = req.ip || req.connection.remoteAddress;
+    
+    console.log(`🔒 Security Event: ${operation}`, {
+      userId: user?.id,
+      userEmail: user?.email,
+      userRole: user?.role,
+      ip,
+      userAgent: req.get('User-Agent'),
+      timestamp: new Date().toISOString(),
+      requestId: (req as any).requestId,
+    });
+
+    next();
+  };
 };

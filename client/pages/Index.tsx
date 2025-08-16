@@ -196,7 +196,9 @@ function DaoCard({ dao }: { dao: Dao }) {
           {/* Reference Section */}
           <div className="space-y-3">
             <div className="text-sm">
-              <span className="text-muted-foreground block mb-1">Référence:</span>
+              <span className="text-muted-foreground block mb-1">
+                Référence:
+              </span>
               <p className="font-medium break-words" title={dao.reference}>
                 {dao.reference}
               </p>

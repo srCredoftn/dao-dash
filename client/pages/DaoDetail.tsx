@@ -338,16 +338,6 @@ function TaskRow({
         </div>
       )}
 
-      {/* Comments section - always show when not editing */}
-      {!isEditing && (
-        <TaskComments
-          daoId={daoId}
-          taskId={task.id}
-          taskName={task.name}
-          availableMembers={availableMembers}
-        />
-      )}
-
       {/* Assignment Section - Visible for applicable tasks (Admin can edit, others just view) */}
       {task.isApplicable && !isEditing && (
         <div className="pt-3 border-t border-gray-100">
@@ -416,6 +406,16 @@ function TaskRow({
             />
           </div>
         </div>
+      )}
+
+      {/* Comments section - always show when not editing, now after progress bar */}
+      {!isEditing && (
+        <TaskComments
+          daoId={daoId}
+          taskId={task.id}
+          taskName={task.name}
+          availableMembers={availableMembers}
+        />
       )}
     </div>
   );

@@ -83,14 +83,14 @@ className={cn(
 - `GET /api/demo` - Demo endpoint  
 
 ### Shared Types
-Import consistent types in both client and server:
+Import consistent types in both frontend and backend:
 ```typescript
 import { DemoResponse } from '@shared/api';
 ```
 
 Path aliases:
 - `@shared/*` - Shared folder
-- `@/*` - Client folder
+- `@/*` - Frontend folder
 
 ## Development Commands
 

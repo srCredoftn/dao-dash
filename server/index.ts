@@ -4,8 +4,8 @@ import cors from "cors";
 import mongoose from "mongoose";
 import { handleDemo } from "./routes/demo";
 import daoRoutes from "./routes/dao-simple";
-// Use MongoDB backend routes instead of in-memory routes
-// import authRoutes from "./routes/auth";
+import authRoutes from "./routes/auth"; // In-memory fallback
+import authMongoRoutes from "./routes/auth-mongodb"; // MongoDB routes
 import commentRoutes from "./routes/comments";
 
 export function createServer() {

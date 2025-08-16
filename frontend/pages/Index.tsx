@@ -79,7 +79,7 @@ function getStatusLabel(status: DaoStatus): string {
     case "completed":
       return "Terminé";
     case "urgent":
-      return "Urgent";
+      return "À risque";
     case "safe":
       return "En avance";
     case "default":

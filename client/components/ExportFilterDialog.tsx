@@ -51,7 +51,9 @@ export default function ExportFilterDialog({
   const completedTasks = tasks.filter(task => task.isApplicable && (task.progress || 0) >= 100);
   const notApplicableTasks = tasks.filter(task => !task.isApplicable);
 
-  const handleExport = () => {
+  const handleExport = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     onExport(options);
     setIsOpen(false);
   };

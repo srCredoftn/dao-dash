@@ -9,6 +9,10 @@ import {
   Shield,
   Eye,
   User,
+  Copy,
+  CheckCircle,
+  AlertCircle,
+  Key,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {

@@ -13,7 +13,11 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { type Dao, calculateDaoStatus, calculateDaoProgress } from "@shared/dao";
+import {
+  type Dao,
+  calculateDaoStatus,
+  calculateDaoProgress,
+} from "@shared/dao";
 import jsPDF from "jspdf";
 
 type ExportFormat = "PDF" | "CSV";
@@ -30,32 +34,32 @@ interface GlobalExportDialogProps {
   children: React.ReactNode;
 }
 
-export default function GlobalExportDialog({ 
-  daos, 
-  children 
+export default function GlobalExportDialog({
+  daos,
+  children,
 }: GlobalExportDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [options, setOptions] = useState<GlobalExportOptions>({
     includeCompleted: true,
     includeInProgress: true,
     includeAtRisk: true,
-    format: "PDF"
+    format: "PDF",
   });
 
   // Calculer les statistiques des DAOs
-  const completedDaos = daos.filter(dao => {
+  const completedDaos = daos.filter((dao) => {
     const progress = calculateDaoProgress(dao.tasks);
     const status = calculateDaoStatus(dao.dateDepot, progress);
     return status === "completed";
   });
 
-  const inProgressDaos = daos.filter(dao => {
+  const inProgressDaos = daos.filter((dao) => {
     const progress = calculateDaoProgress(dao.tasks);
     const status = calculateDaoStatus(dao.dateDepot, progress);
     return status === "safe" || status === "default";
   });
 
-  const atRiskDaos = daos.filter(dao => {
+  const atRiskDaos = daos.filter((dao) => {
     const progress = calculateDaoProgress(dao.tasks);
     const status = calculateDaoStatus(dao.dateDepot, progress);
     return status === "urgent";
@@ -64,15 +68,19 @@ export default function GlobalExportDialog({
   const handleExport = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
-    const filteredDaos = daos.filter(dao => {
+
+    const filteredDaos = daos.filter((dao) => {
       const progress = calculateDaoProgress(dao.tasks);
       const status = calculateDaoStatus(dao.dateDepot, progress);
-      
+
       if (status === "completed" && !options.includeCompleted) return false;
       if (status === "urgent" && !options.includeAtRisk) return false;
-      if ((status === "safe" || status === "default") && !options.includeInProgress) return false;
-      
+      if (
+        (status === "safe" || status === "default") &&
+        !options.includeInProgress
+      )
+        return false;
+
       return true;
     });
 
@@ -81,7 +89,7 @@ export default function GlobalExportDialog({
     } else {
       exportToCSV(filteredDaos);
     }
-    
+
     setIsOpen(false);
   };
 
@@ -90,74 +98,91 @@ export default function GlobalExportDialog({
     const pageWidth = pdf.internal.pageSize.getWidth();
     const margin = 20;
     let yPosition = margin;
-    
+
     // Configuration des polices
     pdf.setFont("helvetica", "bold");
     pdf.setFontSize(18);
-    
+
     // Titre principal
     pdf.text("Export Global des DAOs", margin, yPosition);
     yPosition += 15;
-    
+
     // Date d'export
     pdf.setFontSize(12);
     pdf.setFont("helvetica", "normal");
-    pdf.text(`Date d'export: ${new Date().toLocaleDateString("fr-FR")}`, margin, yPosition);
+    pdf.text(
+      `Date d'export: ${new Date().toLocaleDateString("fr-FR")}`,
+      margin,
+      yPosition,
+    );
     yPosition += 10;
-    
+
     // Statistiques
     pdf.setFont("helvetica", "bold");
     pdf.text("Statistiques:", margin, yPosition);
     yPosition += 8;
-    
+
     pdf.setFont("helvetica", "normal");
     const stats = [
       `• Total de DAOs exportés: ${filteredDaos.length}`,
-      `• DAOs terminés: ${filteredDaos.filter(d => calculateDaoStatus(d.dateDepot, calculateDaoProgress(d.tasks)) === "completed").length}`,
-      `• DAOs en cours: ${filteredDaos.filter(d => {
-        const status = calculateDaoStatus(d.dateDepot, calculateDaoProgress(d.tasks));
-        return status === "safe" || status === "default";
-      }).length}`,
-      `• DAOs à risque: ${filteredDaos.filter(d => calculateDaoStatus(d.dateDepot, calculateDaoProgress(d.tasks)) === "urgent").length}`
+      `• DAOs terminés: ${filteredDaos.filter((d) => calculateDaoStatus(d.dateDepot, calculateDaoProgress(d.tasks)) === "completed").length}`,
+      `• DAOs en cours: ${
+        filteredDaos.filter((d) => {
+          const status = calculateDaoStatus(
+            d.dateDepot,
+            calculateDaoProgress(d.tasks),
+          );
+          return status === "safe" || status === "default";
+        }).length
+      }`,
+      `• DAOs à risque: ${filteredDaos.filter((d) => calculateDaoStatus(d.dateDepot, calculateDaoProgress(d.tasks)) === "urgent").length}`,
     ];
-    
-    stats.forEach(stat => {
+
+    stats.forEach((stat) => {
       pdf.text(stat, margin + 5, yPosition);
       yPosition += 7;
     });
-    
+
     yPosition += 10;
-    
+
     // Liste des DAOs
     pdf.setFont("helvetica", "bold");
     pdf.text("Liste des DAOs:", margin, yPosition);
     yPosition += 10;
-    
+
     filteredDaos.forEach((dao, index) => {
       if (yPosition > 250) {
         pdf.addPage();
         yPosition = margin;
       }
-      
+
       const progress = calculateDaoProgress(dao.tasks);
       const status = calculateDaoStatus(dao.dateDepot, progress);
-      
+
       let statusText = "";
       switch (status) {
-        case "completed": statusText = "Terminé"; break;
-        case "urgent": statusText = "À risque"; break;
-        case "safe": statusText = "En cours (sûr)"; break;
-        case "default": statusText = "En cours"; break;
+        case "completed":
+          statusText = "Terminé";
+          break;
+        case "urgent":
+          statusText = "À risque";
+          break;
+        case "safe":
+          statusText = "En cours (sûr)";
+          break;
+        case "default":
+          statusText = "En cours";
+          break;
       }
-      
+
       pdf.setFont("helvetica", "bold");
       pdf.setFontSize(12);
       pdf.text(`${index + 1}. ${dao.numeroListe}`, margin, yPosition);
       yPosition += 7;
-      
+
       pdf.setFont("helvetica", "normal");
       pdf.setFontSize(10);
-      
+
       const daoLines = [
         `   Objet: ${dao.objetDossier}`,
         `   Référence: ${dao.reference}`,
@@ -165,11 +190,14 @@ export default function GlobalExportDialog({
         `   Date de dépôt: ${dao.dateDepot}`,
         `   Statut: ${statusText}`,
         `   Progression: ${progress}%`,
-        `   Chef d'équipe: ${dao.equipe.find(m => m.role === "chef_equipe")?.name || "Non assigné"}`
+        `   Chef d'équipe: ${dao.equipe.find((m) => m.role === "chef_equipe")?.name || "Non assigné"}`,
       ];
-      
-      daoLines.forEach(line => {
-        const splitLines = pdf.splitTextToSize(line, pageWidth - 2 * margin - 10);
+
+      daoLines.forEach((line) => {
+        const splitLines = pdf.splitTextToSize(
+          line,
+          pageWidth - 2 * margin - 10,
+        );
         splitLines.forEach((splitLine: string) => {
           if (yPosition > 280) {
             pdf.addPage();
@@ -179,32 +207,55 @@ export default function GlobalExportDialog({
           yPosition += 6;
         });
       });
-      
+
       yPosition += 8;
     });
-    
+
     // Sauvegarder le PDF
-    pdf.save(`export_daos_${new Date().toISOString().split('T')[0]}.pdf`);
+    pdf.save(`export_daos_${new Date().toISOString().split("T")[0]}.pdf`);
   };
 
   const exportToCSV = (filteredDaos: Dao[]) => {
     const csvContent = [
-      ["Numéro DAO", "Objet", "Référence", "Autorité", "Date de dépôt", "Statut", "Progression (%)", "Chef d'équipe", "Membres d'équipe"],
+      [
+        "Numéro DAO",
+        "Objet",
+        "Référence",
+        "Autorité",
+        "Date de dépôt",
+        "Statut",
+        "Progression (%)",
+        "Chef d'équipe",
+        "Membres d'équipe",
+      ],
       ...filteredDaos.map((dao) => {
         const progress = calculateDaoProgress(dao.tasks);
         const status = calculateDaoStatus(dao.dateDepot, progress);
-        
+
         let statusText = "";
         switch (status) {
-          case "completed": statusText = "Terminé"; break;
-          case "urgent": statusText = "À risque"; break;
-          case "safe": statusText = "En cours (sûr)"; break;
-          case "default": statusText = "En cours"; break;
+          case "completed":
+            statusText = "Terminé";
+            break;
+          case "urgent":
+            statusText = "À risque";
+            break;
+          case "safe":
+            statusText = "En cours (sûr)";
+            break;
+          case "default":
+            statusText = "En cours";
+            break;
         }
-        
-        const chef = dao.equipe.find(m => m.role === "chef_equipe")?.name || "Non assigné";
-        const membres = dao.equipe.filter(m => m.role === "membre_equipe").map(m => m.name).join("; ");
-        
+
+        const chef =
+          dao.equipe.find((m) => m.role === "chef_equipe")?.name ||
+          "Non assigné";
+        const membres = dao.equipe
+          .filter((m) => m.role === "membre_equipe")
+          .map((m) => m.name)
+          .join("; ");
+
         return [
           dao.numeroListe,
           dao.objetDossier,
@@ -214,7 +265,7 @@ export default function GlobalExportDialog({
           statusText,
           progress.toString(),
           chef,
-          membres
+          membres,
         ];
       }),
     ]
@@ -225,13 +276,13 @@ export default function GlobalExportDialog({
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `export_daos_${new Date().toISOString().split('T')[0]}.csv`;
+    a.download = `export_daos_${new Date().toISOString().split("T")[0]}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };
 
   const handleFormatChange = (format: ExportFormat) => {
-    setOptions(prev => ({ ...prev, format }));
+    setOptions((prev) => ({ ...prev, format }));
   };
 
   const handleOpenChange = (open: boolean) => {
@@ -248,9 +299,7 @@ export default function GlobalExportDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>
-        {children}
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
@@ -293,7 +342,7 @@ export default function GlobalExportDialog({
           {/* Status Filters */}
           <div className="space-y-4">
             <h4 className="text-sm font-medium">Statut des DAOs à inclure</h4>
-            
+
             <div className="space-y-3">
               {/* Termin��s */}
               <div className="flex items-center justify-between">
@@ -302,7 +351,10 @@ export default function GlobalExportDialog({
                     id="completed"
                     checked={options.includeCompleted}
                     onCheckedChange={(checked) =>
-                      setOptions(prev => ({ ...prev, includeCompleted: checked as boolean }))
+                      setOptions((prev) => ({
+                        ...prev,
+                        includeCompleted: checked as boolean,
+                      }))
                     }
                   />
                   <label
@@ -312,7 +364,10 @@ export default function GlobalExportDialog({
                     Terminés
                   </label>
                 </div>
-                <Badge variant="secondary" className="text-xs bg-dao-completed text-white">
+                <Badge
+                  variant="secondary"
+                  className="text-xs bg-dao-completed text-white"
+                >
                   {completedDaos.length}
                 </Badge>
               </div>
@@ -324,7 +379,10 @@ export default function GlobalExportDialog({
                     id="inprogress"
                     checked={options.includeInProgress}
                     onCheckedChange={(checked) =>
-                      setOptions(prev => ({ ...prev, includeInProgress: checked as boolean }))
+                      setOptions((prev) => ({
+                        ...prev,
+                        includeInProgress: checked as boolean,
+                      }))
                     }
                   />
                   <label
@@ -334,7 +392,10 @@ export default function GlobalExportDialog({
                     En cours
                   </label>
                 </div>
-                <Badge variant="secondary" className="text-xs bg-dao-safe text-white">
+                <Badge
+                  variant="secondary"
+                  className="text-xs bg-dao-safe text-white"
+                >
                   {inProgressDaos.length}
                 </Badge>
               </div>
@@ -346,7 +407,10 @@ export default function GlobalExportDialog({
                     id="atrisk"
                     checked={options.includeAtRisk}
                     onCheckedChange={(checked) =>
-                      setOptions(prev => ({ ...prev, includeAtRisk: checked as boolean }))
+                      setOptions((prev) => ({
+                        ...prev,
+                        includeAtRisk: checked as boolean,
+                      }))
                     }
                   />
                   <label
@@ -356,7 +420,10 @@ export default function GlobalExportDialog({
                     À risque
                   </label>
                 </div>
-                <Badge variant="secondary" className="text-xs bg-dao-urgent text-white">
+                <Badge
+                  variant="secondary"
+                  className="text-xs bg-dao-urgent text-white"
+                >
                   {atRiskDaos.length}
                 </Badge>
               </div>
@@ -369,14 +436,16 @@ export default function GlobalExportDialog({
           <div className="bg-gray-50 p-3 rounded-lg">
             <div className="flex items-center justify-between text-sm">
               <span className="text-muted-foreground">DAOs sélectionnés:</span>
-              <span className="font-medium">{getSelectedDaosCount()} / {daos.length}</span>
+              <span className="font-medium">
+                {getSelectedDaosCount()} / {daos.length}
+              </span>
             </div>
           </div>
         </div>
 
         <DialogFooter>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -385,8 +454,8 @@ export default function GlobalExportDialog({
           >
             Annuler
           </Button>
-          <Button 
-            onClick={handleExport} 
+          <Button
+            onClick={handleExport}
             disabled={getSelectedDaosCount() === 0}
           >
             <Download className="h-4 w-4 mr-2" />

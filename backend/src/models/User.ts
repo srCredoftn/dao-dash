@@ -67,6 +67,15 @@ const userSchema = new Schema<UserDocument>(
       type: Date,
       default: null,
     },
+    // Temporary password fields
+    isTemporaryPassword: {
+      type: Boolean,
+      default: false,
+    },
+    temporaryPasswordExpires: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: false, // We handle timestamps manually

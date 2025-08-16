@@ -1,8 +1,6 @@
-import { useState, useMemo, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
-  Plus,
-  Filter,
   Search,
   Calendar,
   Users,
@@ -10,7 +8,6 @@ import {
   Clock,
   CheckCircle2,
   AlertTriangle,
-  ExternalLink,
   User,
   ChevronDown,
   ChevronUp,
@@ -18,7 +15,10 @@ import {
 import NewDaoDialog from "@/components/NewDaoDialog";
 import FilterDialog from "@/components/FilterDialog";
 import { AppHeader } from "@/components/AppHeader";
+import { StatsCard } from "@/components/StatsCard";
 import { useAuth } from "@/contexts/AuthContext";
+import { useDaoStats } from "@/hooks/use-dao-stats";
+import { useDaoFilters } from "@/hooks/use-dao-filters";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -260,102 +260,6 @@ function DaoCard({ dao }: { dao: Dao }) {
   );
 }
 
-function StatsCard({
-  title,
-  value,
-  description,
-  icon: Icon,
-  variant = "default",
-}: {
-  title: string;
-  value: string | number;
-  description: string;
-  icon: any;
-  variant?: "total" | "active" | "completed" | "urgent" | "default";
-}) {
-  const getVariantStyles = () => {
-    switch (variant) {
-      case "total":
-        return {
-          cardClass: "bg-green-50/80 border-green-200/60 backdrop-blur-sm",
-          titleClass: "text-green-700 font-medium text-sm",
-          valueClass: "text-green-800",
-          descriptionClass: "text-green-600/80 text-xs",
-          iconClass:
-            "h-7 w-7 bg-green-500 text-white rounded-lg p-1.5 shadow-sm",
-        };
-      case "active":
-        return {
-          cardClass: "bg-orange-50/80 border-orange-200/60 backdrop-blur-sm",
-          titleClass: "text-orange-700 font-medium text-sm",
-          valueClass: "text-orange-800",
-          descriptionClass: "text-orange-600/80 text-xs",
-          iconClass:
-            "h-7 w-7 bg-orange-500 text-white rounded-lg p-1.5 shadow-sm",
-        };
-      case "completed":
-        return {
-          cardClass: "bg-gray-50/80 border-gray-200/60 backdrop-blur-sm",
-          titleClass: "text-gray-700 font-medium text-sm",
-          valueClass: "text-gray-800",
-          descriptionClass: "text-gray-600/80 text-xs",
-          iconClass:
-            "h-7 w-7 bg-gray-500 text-white rounded-lg p-1.5 shadow-sm",
-        };
-      case "urgent":
-        return {
-          cardClass: "bg-red-50/80 border-red-200/60 backdrop-blur-sm",
-          titleClass: "text-red-700 font-medium text-sm",
-          valueClass: "text-red-800",
-          descriptionClass: "text-red-600/80 text-xs",
-          iconClass: "h-7 w-7 bg-red-500 text-white rounded-lg p-1.5 shadow-sm",
-        };
-      default:
-        return {
-          cardClass: "",
-          titleClass: "text-sm font-medium",
-          valueClass: "text-2xl font-bold",
-          descriptionClass: "text-xs text-muted-foreground",
-          iconClass: "h-4 w-4 text-muted-foreground",
-        };
-    }
-  };
-
-  const styles = getVariantStyles();
-
-  return (
-    <Card
-      className={cn(
-        "hover:shadow-lg transition-all duration-200 border-0 shadow-sm hover:-translate-y-0.5",
-        styles.cardClass,
-      )}
-    >
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 sm:pb-3 px-3 sm:px-4 pt-3 sm:pt-4">
-        <CardTitle className={cn("text-xs sm:text-sm", styles.titleClass)}>
-          {title}
-        </CardTitle>
-        <Icon
-          className={cn(
-            "h-5 w-5 sm:h-6 sm:w-6 lg:h-7 lg:w-7",
-            styles.iconClass.replace("h-7 w-7", ""),
-            variant === "urgent" ? "blink-attention" : "",
-          )}
-        />
-      </CardHeader>
-      <CardContent className="px-3 sm:px-4 pb-3 sm:pb-4">
-        <div
-          className={cn(
-            "text-xl sm:text-2xl font-bold mb-0.5",
-            styles.valueClass,
-          )}
-        >
-          {value}
-        </div>
-        <p className={cn("text-xs", styles.descriptionClass)}>{description}</p>
-      </CardContent>
-    </Card>
-  );
-}
 
 export default function Index() {
   const [searchTerm, setSearchTerm] = useState("");

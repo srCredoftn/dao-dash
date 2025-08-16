@@ -517,6 +517,78 @@ export default function AdminUsers() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+
+        {/* Password Display Dialog */}
+        <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5 text-green-600" />
+                Utilisateur créé avec succès !
+              </DialogTitle>
+              <DialogDescription>
+                L'utilisateur a été créé et un mot de passe temporaire a été généré.
+              </DialogDescription>
+            </DialogHeader>
+
+            {createdUserInfo && (
+              <div className="space-y-4">
+                <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                  <div className="flex items-center gap-2 mb-2">
+                    <User className="h-4 w-4 text-green-600" />
+                    <span className="font-medium text-green-800">
+                      {createdUserInfo.user.name}
+                    </span>
+                  </div>
+                  <p className="text-sm text-green-700">
+                    {createdUserInfo.user.email}
+                  </p>
+                </div>
+
+                <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Key className="h-4 w-4 text-blue-600" />
+                    <span className="font-medium text-blue-800">
+                      Mot de passe temporaire
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <code className="flex-1 px-3 py-2 bg-blue-100 text-blue-900 rounded border font-mono text-sm">
+                      {createdUserInfo.temporaryPassword}
+                    </code>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => copyToClipboard(createdUserInfo.temporaryPassword)}
+                    >
+                      <Copy className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                  <div className="flex items-start gap-2">
+                    <AlertCircle className="h-4 w-4 text-yellow-600 mt-0.5 flex-shrink-0" />
+                    <div className="text-sm text-yellow-800">
+                      <p className="font-medium mb-1">Important :</p>
+                      <ul className="list-disc list-inside space-y-1 text-xs">
+                        <li>Ce mot de passe expire dans 24 heures</li>
+                        <li>L'utilisateur doit le changer lors de sa première connexion</li>
+                        <li>Un email a été envoyé avec ces informations</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <DialogFooter>
+              <Button onClick={() => setShowPasswordDialog(false)} className="w-full">
+                Compris
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </main>
     </div>
   );

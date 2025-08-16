@@ -824,7 +824,7 @@ ${dao?.tasks
                 )}
               />
 
-              <div className="grid grid-cols-3 gap-2 md:gap-4 text-center">
+              <div className="grid grid-cols-3 gap-2 sm:gap-4 text-center">
                 <div>
                   <div className="text-xl md:text-2xl font-bold text-green-600">
                     {completedTasks}

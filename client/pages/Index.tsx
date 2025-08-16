@@ -595,7 +595,7 @@ export default function Index() {
             </CardDescription>
           </CardHeader>
           <CardContent className="pt-0">
-            <div className="flex flex-col lg:flex-row gap-3 lg:gap-4 lg:items-center">
+            <div className="flex flex-col md:flex-row gap-3 md:gap-4 md:items-center">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input

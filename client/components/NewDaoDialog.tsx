@@ -707,7 +707,7 @@ export default function NewDaoDialog({
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={addNewMember}
+                  onClick={(e) => addNewMember(e)}
                   disabled={!newMemberName.trim()}
                   className="flex-1"
                 >

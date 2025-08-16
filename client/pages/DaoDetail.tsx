@@ -198,9 +198,33 @@ function TaskRow({
           <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full flex-shrink-0">
             {taskIndex}
           </span>
-          <h4 className="font-medium text-sm flex-1 min-w-0 break-words">
-            {task.name}
-          </h4>
+          <div className="flex-1 min-w-0">
+            <h4 className="font-medium text-sm break-words mb-2">
+              {task.name}
+            </h4>
+
+            {/* Progress Bar - Mobile */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-muted-foreground font-medium">Progression</span>
+                <span className="text-sm font-bold text-primary">
+                  {isEditing ? tempProgress : task.progress || 0}%
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2.5">
+                <div
+                  className={cn(
+                    "h-2.5 rounded-full transition-all duration-300",
+                    getProgressColor(isEditing ? tempProgress : task.progress || 0),
+                  )}
+                  style={{
+                    width: `${isEditing ? tempProgress : task.progress || 0}%`,
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+
           {isAdmin() && (
             <Button
               size="sm"
@@ -235,13 +259,37 @@ function TaskRow({
       {/* Desktop: Horizontal layout */}
       <div className="hidden sm:block">
         <div className="flex items-center justify-between mb-3">
-          <h4 className="font-medium text-sm">
-            <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full mr-2">
-              {taskIndex}
-            </span>
-            {task.name}
-          </h4>
-          <div className="flex items-center gap-3">
+          <div className="flex-1 min-w-0">
+            <h4 className="font-medium text-sm mb-2">
+              <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full mr-2">
+                {taskIndex}
+              </span>
+              {task.name}
+            </h4>
+
+            {/* Progress Bar - Desktop */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-muted-foreground font-medium">Progression</span>
+                <span className="text-sm font-bold text-primary">
+                  {isEditing ? tempProgress : task.progress || 0}%
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2.5">
+                <div
+                  className={cn(
+                    "h-2.5 rounded-full transition-all duration-300",
+                    getProgressColor(isEditing ? tempProgress : task.progress || 0),
+                  )}
+                  style={{
+                    width: `${isEditing ? tempProgress : task.progress || 0}%`,
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 ml-4">
             <div className="flex items-center gap-2">
               <span className="text-xs text-muted-foreground">Applicable:</span>
               {isAdmin() ? (
@@ -268,27 +316,6 @@ function TaskRow({
               </Button>
             )}
           </div>
-        </div>
-      </div>
-
-      {/* Progress Bar */}
-      <div className="space-y-2 pt-3 sm:pt-0">
-        <div className="flex items-center justify-between">
-          <span className="text-xs text-muted-foreground font-medium">Progression</span>
-          <span className="text-sm font-bold text-primary">
-            {isEditing ? tempProgress : task.progress || 0}%
-          </span>
-        </div>
-        <div className="w-full bg-gray-200 rounded-full h-2.5">
-          <div
-            className={cn(
-              "h-2.5 rounded-full transition-all duration-300",
-              getProgressColor(isEditing ? tempProgress : task.progress || 0),
-            )}
-            style={{
-              width: `${isEditing ? tempProgress : task.progress || 0}%`,
-            }}
-          />
         </div>
       </div>
 

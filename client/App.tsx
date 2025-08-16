@@ -50,7 +50,7 @@ const App = () => (
             <Route
               path="/admin/users"
               element={
-                <AuthenticatedRoute requiredRoles={["admin"]}>
+                <AuthenticatedRoute requireRoles={["admin"]}>
                   <AdminUsers />
                 </AuthenticatedRoute>
               }
@@ -66,7 +66,7 @@ const App = () => (
             <Route
               path="/user-management"
               element={
-                <AuthenticatedRoute requiredRoles={["admin"]}>
+                <AuthenticatedRoute requireRoles={["admin"]}>
                   <UserManagement />
                 </AuthenticatedRoute>
               }

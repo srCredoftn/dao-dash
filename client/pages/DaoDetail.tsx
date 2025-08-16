@@ -204,46 +204,9 @@ function TaskRow({
             {taskIndex}
           </span>
           <div className="flex-1 min-w-0">
-            <h4 className="font-medium text-sm break-words mb-2">
+            <h4 className="font-medium text-sm break-words">
               {task.name}
             </h4>
-
-            {/* Progress Bar - Mobile */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-muted-foreground font-medium">
-                  Progression
-                </span>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-bold text-primary">
-                    {isEditing ? tempProgress : task.progress || 0}%
-                  </span>
-                  {isAdmin() && (
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => setIsEditing(!isEditing)}
-                      className="h-6 w-6 p-0 flex-shrink-0"
-                    >
-                      <Edit3 className="h-3 w-3" />
-                    </Button>
-                  )}
-                </div>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2.5">
-                <div
-                  className={cn(
-                    "h-2.5 rounded-full transition-all duration-300",
-                    getProgressColor(
-                      isEditing ? tempProgress : task.progress || 0,
-                    ),
-                  )}
-                  style={{
-                    width: `${isEditing ? tempProgress : task.progress || 0}%`,
-                  }}
-                />
-              </div>
-            </div>
           </div>
         </div>
 

@@ -118,7 +118,7 @@ function TaskRow({
   const getSliderColor = (progress: number): string => {
     // Même logique que getProgressColor mais retourne des codes couleur hex
     if (progress === 100) return "#9ca3af"; // gris
-    if (daysDiff < 0) return "#ef4444"; // rouge pour dates dépassées
+    if (daysDiff < 0) return "#ef4444"; // rouge pour dates d��passées
     if (daysDiff >= 5) return "#10b981"; // vert
     if (daysDiff <= 3) return "#ef4444"; // rouge
     return "#3b82f6"; // bleu
@@ -450,7 +450,8 @@ export default function DaoDetail() {
         setDao(fetchedDao);
       } catch (err) {
         console.error("Error loading DAO:", err);
-        setError("Failed to load DAO");
+        const errorMessage = err instanceof Error ? err.message : "Échec du chargement du DAO";
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }

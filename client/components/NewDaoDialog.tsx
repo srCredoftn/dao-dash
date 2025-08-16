@@ -344,7 +344,11 @@ export default function NewDaoDialog({
     }
   };
 
-  const removeTeamMember = (memberId: string) => {
+  const removeTeamMember = (memberId: string, e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     const updatedMembers = formData.teamMembers.filter(
       (m) => m.id !== memberId,
     );
@@ -356,7 +360,11 @@ export default function NewDaoDialog({
     setTimeout(() => validateField("teamMembers", updatedMembers), 100);
   };
 
-  const addNewMember = () => {
+  const addNewMember = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     if (newMemberName.trim()) {
       const newMember: TeamMember = {
         id: Date.now().toString(),

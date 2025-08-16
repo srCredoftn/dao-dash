@@ -207,9 +207,21 @@ function TaskRow({
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs text-muted-foreground font-medium">Progression</span>
-                <span className="text-sm font-bold text-primary">
-                  {isEditing ? tempProgress : task.progress || 0}%
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-bold text-primary">
+                    {isEditing ? tempProgress : task.progress || 0}%
+                  </span>
+                  {isAdmin() && (
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => setIsEditing(!isEditing)}
+                      className="h-6 w-6 p-0 flex-shrink-0"
+                    >
+                      <Edit3 className="h-3 w-3" />
+                    </Button>
+                  )}
+                </div>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2.5">
                 <div
@@ -224,17 +236,6 @@ function TaskRow({
               </div>
             </div>
           </div>
-
-          {isAdmin() && (
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => setIsEditing(!isEditing)}
-              className="h-6 w-6 p-0 flex-shrink-0"
-            >
-              <Edit3 className="h-3 w-3" />
-            </Button>
-          )}
         </div>
 
         <div className="flex items-center justify-between pt-2 border-t border-gray-100">
@@ -271,9 +272,21 @@ function TaskRow({
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs text-muted-foreground font-medium">Progression</span>
-                <span className="text-sm font-bold text-primary">
-                  {isEditing ? tempProgress : task.progress || 0}%
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-bold text-primary">
+                    {isEditing ? tempProgress : task.progress || 0}%
+                  </span>
+                  {isAdmin() && (
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => setIsEditing(!isEditing)}
+                      className="h-6 w-6 p-0"
+                    >
+                      <Edit3 className="h-3 w-3" />
+                    </Button>
+                  )}
+                </div>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2.5">
                 <div
@@ -305,16 +318,6 @@ function TaskRow({
                 </span>
               )}
             </div>
-            {isAdmin() && (
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => setIsEditing(!isEditing)}
-                className="h-6 w-6 p-0"
-              >
-                <Edit3 className="h-3 w-3" />
-              </Button>
-            )}
           </div>
         </div>
       </div>

@@ -294,67 +294,80 @@ function TaskRow({
 
       {/* Edit Mode with Slider */}
       {isEditing && (
-        <div className="space-y-4 pt-3 border-t">
-          <div className="space-y-2">
-            <label className="text-xs text-muted-foreground">
+        <div className="space-y-4 pt-4 border-t border-gray-200">
+          {/* Progress Slider Section */}
+          <div className="space-y-3">
+            <label className="text-xs font-medium text-muted-foreground block">
               Ajuster le pourcentage:
             </label>
-            <div className="px-3">
+            <div className="px-2 sm:px-4">
               <input
                 type="range"
                 min="0"
                 max="100"
                 value={tempProgress}
                 onChange={(e) => setTempProgress(Number(e.target.value))}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                className="w-full h-2.5 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
                 style={{
                   background: `linear-gradient(to right, ${getSliderColor(tempProgress)} 0%, ${getSliderColor(tempProgress)} ${tempProgress}%, #e5e7eb ${tempProgress}%, #e5e7eb 100%)`,
                 }}
               />
-              <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                <span>0%</span>
-                <span className="font-medium">{tempProgress}%</span>
-                <span>100%</span>
+              <div className="flex justify-between text-xs text-muted-foreground mt-2">
+                <span className="font-medium">0%</span>
+                <span className="font-bold text-primary">{tempProgress}%</span>
+                <span className="font-medium">100%</span>
               </div>
             </div>
           </div>
 
-          <div className="space-y-2">
-            <label className="text-xs text-muted-foreground">
+          {/* Comment Section */}
+          <div className="space-y-3">
+            <label className="text-xs font-medium text-muted-foreground block">
               Commentaire/Observation:
             </label>
             <Textarea
               value={tempComment}
               onChange={(e) => setTempComment(e.target.value)}
-              placeholder="Ajouter un commentaire..."
-              className="text-xs resize-none"
+              placeholder="Ajouter un commentaire ou une observation..."
+              className="text-sm resize-none min-h-[80px] border-gray-300 focus:border-primary"
               rows={3}
             />
           </div>
 
-          <div className="flex justify-end">
-            <Button
-              onClick={handleSave}
-              size="sm"
-              className="bg-green-600 hover:bg-green-700 text-white"
-            >
-              Sauvegarder
-            </Button>
-          </div>
-
-          {/* Task Assignment - Admin only */}
-          {isAdmin() && (
-            <div className="flex justify-start">
-              <TaskAssignmentDialog
-                currentAssignedTo={task.assignedTo}
-                availableMembers={availableMembers}
-                onAssignmentChange={(memberId) =>
-                  onAssignmentChange(task.id, memberId)
-                }
-                taskName={task.name}
-              />
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-3 pt-2">
+            <div className="flex gap-2 order-2 sm:order-1">
+              {/* Task Assignment - Admin only */}
+              {isAdmin() && (
+                <TaskAssignmentDialog
+                  currentAssignedTo={task.assignedTo}
+                  availableMembers={availableMembers}
+                  onAssignmentChange={(memberId) =>
+                    onAssignmentChange(task.id, memberId)
+                  }
+                  taskName={task.name}
+                />
+              )}
             </div>
-          )}
+
+            <div className="flex gap-2 ml-auto order-1 sm:order-2">
+              <Button
+                variant="outline"
+                onClick={handleCancel}
+                size="sm"
+                className="flex-1 sm:flex-none"
+              >
+                Annuler
+              </Button>
+              <Button
+                onClick={handleSave}
+                size="sm"
+                className="bg-green-600 hover:bg-green-700 text-white flex-1 sm:flex-none"
+              >
+                Sauvegarder
+              </Button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -368,26 +381,30 @@ function TaskRow({
         />
       )}
 
-      {/* Assignment Badge - Visible for applicable tasks (Admin can edit, others just view) */}
+      {/* Assignment Section - Visible for applicable tasks (Admin can edit, others just view) */}
       {task.isApplicable && !isEditing && (
-        <div className="flex justify-start">
+        <div className="pt-3 border-t border-gray-100">
           {isAdmin() ? (
-            <TaskAssignmentDialog
-              currentAssignedTo={task.assignedTo}
-              availableMembers={availableMembers}
-              onAssignmentChange={(memberId) =>
-                onAssignmentChange(task.id, memberId)
-              }
-              taskName={task.name}
-            />
-          ) : task.assignedTo ? (
-            <div className="text-xs text-muted-foreground">
-              Assigné à:{" "}
-              {availableMembers.find((m) => m.id === task.assignedTo)?.name ||
-                "Utilisateur inconnu"}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+              <span className="text-xs font-medium text-muted-foreground">Assignation:</span>
+              <TaskAssignmentDialog
+                currentAssignedTo={task.assignedTo}
+                availableMembers={availableMembers}
+                onAssignmentChange={(memberId) =>
+                  onAssignmentChange(task.id, memberId)
+                }
+                taskName={task.name}
+              />
             </div>
           ) : (
-            <div className="text-xs text-muted-foreground">Non assigné</div>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+              <span className="text-xs font-medium text-muted-foreground">Assigné à:</span>
+              <span className="text-xs font-medium">
+                {task.assignedTo
+                  ? availableMembers.find((m) => m.id === task.assignedTo)?.name || "Utilisateur inconnu"
+                  : "Non assigné"}
+              </span>
+            </div>
           )}
         </div>
       )}

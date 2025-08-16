@@ -719,7 +719,7 @@ export default function Index() {
           {/* Conteneur avec scroll pour éviter la pagination */}
           <div className="max-h-[60vh] overflow-y-auto pr-2 space-y-3 sm:space-y-4">
             {loading && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
                 {[1, 2, 3].map((i) => (
                   <Card key={i} className="p-4 sm:p-6 animate-pulse">
                     <div className="h-5 sm:h-6 bg-gray-200 rounded mb-3 sm:mb-4"></div>
@@ -731,7 +731,7 @@ export default function Index() {
             )}
 
             {!loading && !error && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
                 {filteredDaos.length > 0 ? (
                   filteredDaos.map((dao) => <DaoCard key={dao.id} dao={dao} />)
                 ) : (

@@ -5,8 +5,9 @@ import mongoose from "mongoose";
 import { handleDemo } from "./routes/demo";
 import daoRoutes from "./routes/dao-simple";
 import authRoutes from "./routes/auth"; // In-memory fallback
-import authMongoRoutes from "./routes/auth-mongodb"; // MongoDB routes
+import authMongoRoutes from "./routes/auth-mongo"; // MongoDB routes (corrected import)
 import commentRoutes from "./routes/comments";
+import { AuthServiceMongo } from "./services/authServiceMongo";
 
 export function createServer() {
   const app = express();

@@ -271,26 +271,6 @@ function TaskRow({
         </div>
       </div>
 
-      {/* Progress Bar */}
-      <div className="space-y-2 pt-3 sm:pt-0">
-        <div className="flex items-center justify-between">
-          <span className="text-xs text-muted-foreground font-medium">Progression</span>
-          <span className="text-sm font-bold text-primary">
-            {isEditing ? tempProgress : task.progress || 0}%
-          </span>
-        </div>
-        <div className="w-full bg-gray-200 rounded-full h-2.5">
-          <div
-            className={cn(
-              "h-2.5 rounded-full transition-all duration-300",
-              getProgressColor(isEditing ? tempProgress : task.progress || 0),
-            )}
-            style={{
-              width: `${isEditing ? tempProgress : task.progress || 0}%`,
-            }}
-          />
-        </div>
-      </div>
 
       {/* Edit Mode with Slider */}
       {isEditing && (
@@ -406,6 +386,29 @@ function TaskRow({
               </span>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Progress Bar - Always at the bottom */}
+      {task.isApplicable && !isEditing && (
+        <div className="space-y-2 pt-3 border-t border-gray-100">
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-muted-foreground font-medium">Progression</span>
+            <span className="text-sm font-bold text-primary">
+              {task.progress || 0}%
+            </span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2.5">
+            <div
+              className={cn(
+                "h-2.5 rounded-full transition-all duration-300",
+                getProgressColor(task.progress || 0),
+              )}
+              style={{
+                width: `${task.progress || 0}%`,
+              }}
+            />
+          </div>
         </div>
       )}
     </div>

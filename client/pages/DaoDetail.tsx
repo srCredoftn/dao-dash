@@ -204,9 +204,7 @@ function TaskRow({
             {taskIndex}
           </span>
           <div className="flex-1 min-w-0">
-            <h4 className="font-medium text-sm break-words">
-              {task.name}
-            </h4>
+            <h4 className="font-medium text-sm break-words">{task.name}</h4>
           </div>
         </div>
 
@@ -443,7 +441,6 @@ export default function DaoDetail() {
         return;
       }
 
-
       try {
         setLoading(true);
         setError(null);
@@ -451,7 +448,8 @@ export default function DaoDetail() {
         setDao(fetchedDao);
       } catch (err) {
         console.error("Error loading DAO:", err);
-        const errorMessage = err instanceof Error ? err.message : "Échec du chargement du DAO";
+        const errorMessage =
+          err instanceof Error ? err.message : "Échec du chargement du DAO";
         setError(errorMessage);
       } finally {
         setLoading(false);

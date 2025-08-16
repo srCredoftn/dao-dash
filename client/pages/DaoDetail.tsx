@@ -997,8 +997,8 @@ ${dao?.tasks
               </span>
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
+          <CardContent className="px-3 sm:px-6">
+            <div className="space-y-3 sm:space-y-4">
               {dao.tasks.map((task, index) => (
                 <TaskRow
                   key={task.id}

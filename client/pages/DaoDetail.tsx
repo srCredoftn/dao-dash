@@ -672,7 +672,7 @@ ${dao?.tasks
           </div>
 
           {/* Desktop Layout */}
-          <div className="hidden sm:flex items-center justify-between">
+          <div className="hidden lg:flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <Button variant="ghost" size="sm" asChild>
                 <Link to="/">

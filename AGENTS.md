@@ -130,7 +130,7 @@ export const handleMyRoute: RequestHandler = (req, res) => {
 };
 ```
 
-3. Register the route in `server/index.ts`:
+3. Register the route in `backend-express/index.ts`:
 ```typescript
 import { handleMyRoute } from "./routes/my-route";
 

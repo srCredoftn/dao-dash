@@ -66,7 +66,8 @@ export default function Profile() {
   const validatePasswordForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
-    if (!passwordData.currentPassword) {
+    // For temporary passwords, we don't require current password
+    if (!hasTemporaryPassword && !passwordData.currentPassword) {
       newErrors.currentPassword = "Le mot de passe actuel est requis";
     }
 

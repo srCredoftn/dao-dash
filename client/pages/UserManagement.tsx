@@ -292,17 +292,13 @@ export default function UserManagement() {
 
             {/* Second Row: Action button for mobile */}
             <div className="flex justify-center">
-              <Dialog
-                open={isCreateDialogOpen}
-                onOpenChange={setIsCreateDialogOpen}
+              <Button
+                className="w-full sm:w-auto"
+                onClick={() => setIsCreateDialogOpen(true)}
               >
-                <DialogTrigger asChild>
-                  <Button className="w-full sm:w-auto">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Nouvel utilisateur
-                  </Button>
-                </DialogTrigger>
-              </Dialog>
+                <Plus className="h-4 w-4 mr-2" />
+                Nouvel utilisateur
+              </Button>
             </div>
           </div>
 

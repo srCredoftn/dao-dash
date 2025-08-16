@@ -12,17 +12,29 @@ import { AuthServiceMongo } from "./services/authServiceMongo";
 export function createServer() {
   const app = express();
 
-  // Connect to MongoDB
+  // Connect to MongoDB with timeout
   const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/dao-management';
-  mongoose.connect(mongoUri)
+
+  // Set connection options
+  const mongoOptions = {
+    serverSelectionTimeoutMS: 5000, // 5 seconds timeout
+    connectTimeoutMS: 5000,
+  };
+
+  console.log('🔄 Attempting MongoDB connection...');
+  mongoose.connect(mongoUri, mongoOptions)
     .then(async () => {
-      console.log('📊 Connected to MongoDB');
-      // Initialize admin user
-      await AuthServiceMongo.initializeAdminUser();
+      console.log('📊 Connected to MongoDB at', mongoUri);
+      try {
+        // Initialize admin user
+        await AuthServiceMongo.initializeAdminUser();
+      } catch (error) {
+        console.error('❌ Error initializing admin user:', error);
+      }
     })
     .catch(err => {
-      console.error('❌ MongoDB connection error:', err);
-      console.log('🔄 Falling back to in-memory authentication');
+      console.error('❌ MongoDB connection failed:', err.message);
+      console.log('🔄 Continuing with in-memory authentication');
     });
 
   // Middleware

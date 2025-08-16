@@ -15,17 +15,22 @@ While the starter comes with a express server, only create endpoint when strictl
 ## Project Structure
 
 ```
-client/                   # React SPA frontend
+frontend/                 # React SPA frontend (renamed from client/)
 ├── pages/                # Route components (Index.tsx = home)
 ├── components/ui/        # Pre-built UI component library
-├── App.tsx                # App entry point and with SPA routing setup
+├── App.tsx               # App entry point and with SPA routing setup
 └── global.css            # TailwindCSS 3 theming and global styles
 
-server/                   # Express API backend
+backend-express/          # Express API backend (renamed from server/)
 ├── index.ts              # Main server setup (express config + routes)
 └── routes/               # API handlers
 
-shared/                   # Types used by both client & server
+backend-mongodb/          # Alternative MongoDB backend (standalone)
+├── src/                  # Source code
+├── models/               # Mongoose models
+└── routes/               # API routes with MongoDB
+
+shared/                   # Types used by both frontend & backend
 └── api.ts                # Example of how to share api interfaces
 ```
 

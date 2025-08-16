@@ -100,6 +100,26 @@ export interface AuthResponse {
   token: string;
 }
 
+export interface CreateUserResponse {
+  user: User;
+  temporaryPassword: string;
+  message: string;
+}
+
+export interface PasswordChangeRequest {
+  newPassword: string;
+}
+
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ResetPasswordRequest {
+  email: string;
+  token: string;
+  newPassword: string;
+}
+
 export const DEFAULT_TASKS: Omit<
   DaoTask,
   "progress" | "comment" | "assignedTo"

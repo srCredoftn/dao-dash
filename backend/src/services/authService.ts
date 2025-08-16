@@ -243,6 +243,9 @@ export class AuthService {
       (user as any).temporaryPasswordExpires = null;
       await user.save();
 
+      // Send confirmation email
+      await EmailService.sendPasswordChangeConfirmation(user.email, user.name);
+
       console.log('🔑 Password changed for:', user.email);
       return true;
     } catch (error) {

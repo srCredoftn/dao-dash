@@ -440,6 +440,14 @@ export default function Index() {
                     ]}
                   />
                 </div>
+                <div className="flex-1 xs:flex-none md:flex-none">
+                  <GlobalExportDialog daos={daos}>
+                    <Button variant="outline" className="w-full">
+                      <Download className="h-4 w-4 mr-2" />
+                      Exporter
+                    </Button>
+                  </GlobalExportDialog>
+                </div>
                 {user && isAdmin() && (
                   <div className="flex-1 xs:flex-none md:flex-none">
                     <NewDaoDialog

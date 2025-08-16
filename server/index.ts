@@ -11,6 +11,12 @@ import commentRoutes from "./routes/comments";
 export function createServer() {
   const app = express();
 
+  // Connect to MongoDB
+  const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/dao-management';
+  mongoose.connect(mongoUri)
+    .then(() => console.log('📊 Connected to MongoDB'))
+    .catch(err => console.error('❌ MongoDB connection error:', err));
+
   // Middleware
   app.use(cors());
   app.use(express.json());

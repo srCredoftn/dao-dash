@@ -5,6 +5,7 @@
 **Dossier :** `backend-express/`
 
 ### Caractéristiques :
+
 - ✅ **Intégré avec Vite** : Développement unifié sur port 8080
 - ✅ **Hot reload complet** : Frontend + Backend simultané
 - ✅ **Types partagés** : Synchronisation automatique via `shared/`
@@ -13,17 +14,20 @@
 - ✅ **Authentification** : Système de login/logout fonctionnel
 
 ### Technologies :
+
 - Express.js
 - TypeScript
 - Sessions en mémoire
 - CORS configuré
 
 ### Utilisation :
+
 ```bash
 pnpm dev  # Lance frontend + backend ensemble
 ```
 
 ### Endpoints disponibles :
+
 - `GET /api/dao` - Liste des DAOs
 - `POST /api/dao` - Créer un DAO
 - `PUT /api/dao/:id` - Modifier un DAO
@@ -39,6 +43,7 @@ pnpm dev  # Lance frontend + backend ensemble
 **Dossier :** `backend-mongodb/`
 
 ### Caractéristiques :
+
 - 🔶 **Standalone** : Serveur indépendant sur port 5000
 - 🔶 **MongoDB + Mongoose** : Base de données persistante
 - 🔶 **Sécurité avancée** : Helmet, rate limiting, compression
@@ -46,6 +51,7 @@ pnpm dev  # Lance frontend + backend ensemble
 - 🔶 **Production ready** : Logging, gestion d'erreurs
 
 ### Technologies :
+
 - Express.js
 - MongoDB + Mongoose
 - JWT Authentication
@@ -54,6 +60,7 @@ pnpm dev  # Lance frontend + backend ensemble
 - Helmet (sécurité)
 
 ### Configuration nécessaire :
+
 1. Installer MongoDB
 2. Configurer `.env` :
    ```
@@ -63,6 +70,7 @@ pnpm dev  # Lance frontend + backend ensemble
    ```
 
 ### Utilisation :
+
 ```bash
 cd backend-mongodb
 pnpm install
@@ -70,8 +78,9 @@ pnpm dev  # Lance sur port 5000
 ```
 
 ### Endpoints disponibles :
+
 - `GET /api/dao` - Liste des DAOs
-- `POST /api/dao` - Créer un DAO  
+- `POST /api/dao` - Créer un DAO
 - `PUT /api/dao/:id` - Modifier un DAO
 - `DELETE /api/dao/:id` - Supprimer un DAO
 - `POST /api/auth/register` - Inscription
@@ -83,12 +92,14 @@ pnpm dev  # Lance sur port 5000
 ## 🎯 Recommandation
 
 **Utilisez `backend-express/`** pour :
+
 - ✅ Développement rapide
 - ✅ Prototypage
 - ✅ Applications petites/moyennes
 - ✅ Quand vous voulez tout en un
 
 **Utilisez `backend-mongodb/`** pour :
+
 - 🔶 Applications en production
 - 🔶 Données persistantes critiques
 - 🔶 Authentification robuste
@@ -101,6 +112,7 @@ pnpm dev  # Lance sur port 5000
 Pour migrer du backend Express vers MongoDB :
 
 1. **Démarrer MongoDB :**
+
    ```bash
    cd backend-mongodb
    pnpm install

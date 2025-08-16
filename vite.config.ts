@@ -10,7 +10,14 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
     fs: {
       allow: ["./frontend", "./shared"],
-      deny: [".env", ".env.*", "*.{crt,pem}", "**/.git/**", "backend-express/**", "backend-mongodb/**"],
+      deny: [
+        ".env",
+        ".env.*",
+        "*.{crt,pem}",
+        "**/.git/**",
+        "backend-express/**",
+        "backend-mongodb/**",
+      ],
     },
   },
   build: {

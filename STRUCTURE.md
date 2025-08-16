@@ -24,6 +24,7 @@ Le projet utilise actuellement une architecture **monorepo intégrée** avec Vit
 ```
 
 ### ✅ Avantages de cette structure :
+
 - **Développement unifié** : Un seul serveur sur le port 8080
 - **Hot reload complet** : Frontend ET backend
 - **Types partagés** : Synchronisation automatique
@@ -49,6 +50,7 @@ Il existe aussi un backend MongoDB séparé dans `backend/` :
 ## 🎯 Recommandation
 
 **Continuer avec la structure actuelle** (`client/` + `server/`) car :
+
 1. ✅ Fonctionne parfaitement
 2. ✅ Plus simple à maintenir
 3. ✅ Meilleure expérience développeur
@@ -58,6 +60,7 @@ Il existe aussi un backend MongoDB séparé dans `backend/` :
 ## 🧹 Nettoyage Nécessaire
 
 Pour clarifier la structure, il faut :
+
 1. 🗑️ Supprimer le dossier `frontend/` vide
 2. 📝 Documenter l'utilisation du backend MongoDB si nécessaire
 3. 🏷️ Renommer `client/` → `frontend/` si souhaité

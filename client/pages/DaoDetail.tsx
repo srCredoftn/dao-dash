@@ -118,7 +118,7 @@ function TaskRow({
   const getSliderColor = (progress: number): string => {
     // Même logique que getProgressColor mais retourne des codes couleur hex
     if (progress === 100) return "#9ca3af"; // gris
-    if (daysDiff < 0) return "#ef4444"; // rouge pour dates d��passées
+    if (daysDiff < 0) return "#ef4444"; // rouge pour dates dépassées
     if (daysDiff >= 5) return "#10b981"; // vert
     if (daysDiff <= 3) return "#ef4444"; // rouge
     return "#3b82f6"; // bleu
@@ -443,6 +443,13 @@ export default function DaoDetail() {
         return;
       }
 
+      // Check if user is authenticated
+      if (!user) {
+        setError("Vous devez être connecté pour accéder à cette page");
+        setLoading(false);
+        return;
+      }
+
       try {
         setLoading(true);
         setError(null);
@@ -458,7 +465,7 @@ export default function DaoDetail() {
     };
 
     loadDao();
-  }, [id]);
+  }, [id, user]);
 
   // Loading state
   if (loading) {

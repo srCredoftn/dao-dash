@@ -188,29 +188,46 @@ function DaoCard({ dao }: { dao: Dao }) {
         {/* Collapsible content for mobile / Always visible on desktop */}
         <div
           className={cn(
-            "space-y-4",
+            "space-y-3 sm:space-y-4",
             "md:block", // Always visible on desktop
             isExpanded ? "block" : "hidden", // Conditional on mobile
           )}
         >
-          {/* Reference and Team Leader - First row */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-            <div>
-              <span className="text-muted-foreground">Référence:</span>
-              <p className="font-medium truncate" title={dao.reference}>
+          {/* Reference Section */}
+          <div className="space-y-3">
+            <div className="text-sm">
+              <span className="text-muted-foreground block mb-1">Référence:</span>
+              <p className="font-medium break-words" title={dao.reference}>
                 {dao.reference}
               </p>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+
+            <div className="text-sm">
+              <span className="text-muted-foreground block mb-1">
+                Autorité Contractante:
+              </span>
+              <p
+                className="font-medium break-words"
+                title={dao.autoriteContractante}
+              >
+                {dao.autoriteContractante}
+              </p>
+            </div>
+          </div>
+
+          {/* Team Section */}
+          <div className="space-y-3 pt-3 border-t border-border">
+            {/* Team Leader */}
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
                 <User className="h-4 w-4 text-gray-600" />
               </div>
-              <div>
-                <p className="text-xs font-medium text-muted-foreground">
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium text-muted-foreground mb-0.5">
                   Chef d'équipe
                 </p>
                 <p
-                  className="text-sm font-medium text-foreground truncate"
+                  className="text-sm font-medium text-foreground break-words"
                   title={
                     dao.equipe.find((m) => m.role === "chef_equipe")?.name ||
                     "Non assigné"
@@ -221,27 +238,14 @@ function DaoCard({ dao }: { dao: Dao }) {
                 </p>
               </div>
             </div>
-          </div>
 
-          {/* Authority and Team Members - Second row */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-            <div>
-              <span className="text-muted-foreground">
-                Autorité Contractante:
-              </span>
-              <p
-                className="font-medium truncate"
-                title={dao.autoriteContractante}
-              >
-                {dao.autoriteContractante}
-              </p>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+            {/* Team Members */}
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
                 <Users className="h-4 w-4 text-gray-600" />
               </div>
-              <div>
-                <p className="text-xs font-medium text-muted-foreground">
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium text-muted-foreground mb-0.5">
                   Membres d'équipe
                 </p>
                 <p className="text-sm font-medium text-foreground">
@@ -329,7 +333,7 @@ export default function Index() {
     <div className="min-h-screen bg-background">
       <AppHeader />
 
-      <main className="container mx-auto px-2 sm:px-4 py-4 sm:py-6">
+      <main className="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
         {/* Stats Overview */}
         <div className={cn(GRID_CLASSES.stats, "gap-3 sm:gap-4 mb-6 sm:mb-8")}>
           <StatsCard

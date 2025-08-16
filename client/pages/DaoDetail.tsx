@@ -45,6 +45,7 @@ import {
 import TeamEditDialog from "@/components/TeamEditDialog";
 import TaskAssignmentDialog from "@/components/TaskAssignmentDialog";
 import TaskComments from "@/components/TaskComments";
+import ExportFilterDialog, { type ExportOptions } from "@/components/ExportFilterDialog";
 import { useAuth } from "@/contexts/AuthContext";
 
 function getStatusColor(status: DaoStatus): string {

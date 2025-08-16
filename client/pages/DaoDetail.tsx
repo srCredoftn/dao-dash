@@ -410,12 +410,14 @@ function TaskRow({
 
       {/* Comments section - always show when not editing, now after progress bar */}
       {!isEditing && (
-        <TaskComments
-          daoId={daoId}
-          taskId={task.id}
-          taskName={task.name}
-          availableMembers={availableMembers}
-        />
+        <div className="pt-3">
+          <TaskComments
+            daoId={daoId}
+            taskId={task.id}
+            taskName={task.name}
+            availableMembers={availableMembers}
+          />
+        </div>
       )}
     </div>
   );

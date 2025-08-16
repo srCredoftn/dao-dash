@@ -8,6 +8,7 @@ import type { UserRole } from "@shared/dao";
 interface ProtectedRouteProps {
   children: ReactNode;
   requireRoles?: UserRole[];
+  requiredRoles?: UserRole[]; // Alternative prop name for backwards compatibility
   fallback?: ReactNode;
 }
 

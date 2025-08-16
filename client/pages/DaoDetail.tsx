@@ -459,7 +459,7 @@ export default function DaoDetail() {
     };
 
     loadDao();
-  }, [id, user]);
+  }, [id]);
 
   // Loading state
   if (loading) {

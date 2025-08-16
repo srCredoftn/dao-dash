@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
-import mongoose from 'mongoose';
+import { Request, Response, NextFunction } from "express";
+import mongoose from "mongoose";
 
 interface CustomError extends Error {
   statusCode?: number;
@@ -35,22 +35,24 @@ const handleDuplicateFieldsDB = (err: CustomError): AppError => {
   return new AppError(message, 400);
 };
 
-const handleValidationErrorDB = (err: mongoose.Error.ValidationError): AppError => {
-  const errors = Object.values(err.errors).map(el => el.message);
-  const message = `Invalid input data: ${errors.join('. ')}`;
+const handleValidationErrorDB = (
+  err: mongoose.Error.ValidationError,
+): AppError => {
+  const errors = Object.values(err.errors).map((el) => el.message);
+  const message = `Invalid input data: ${errors.join(". ")}`;
   return new AppError(message, 400);
 };
 
 const handleJWTError = (): AppError =>
-  new AppError('Invalid token. Please log in again.', 401);
+  new AppError("Invalid token. Please log in again.", 401);
 
 const handleJWTExpiredError = (): AppError =>
-  new AppError('Your token has expired. Please log in again.', 401);
+  new AppError("Your token has expired. Please log in again.", 401);
 
 // Send error response for development
 const sendErrorDev = (err: CustomError, res: Response): void => {
   res.status(err.statusCode || 500).json({
-    status: 'error',
+    status: "error",
     error: err,
     message: err.message,
     stack: err.stack,
@@ -62,16 +64,16 @@ const sendErrorProd = (err: CustomError, res: Response): void => {
   // Operational, trusted error: send message to client
   if (err.isOperational) {
     res.status(err.statusCode || 500).json({
-      status: 'error',
+      status: "error",
       message: err.message,
     });
   } else {
     // Programming or other unknown error: don't leak error details
-    console.error('ERROR 💥:', err);
-    
+    console.error("ERROR 💥:", err);
+
     res.status(500).json({
-      status: 'error',
-      message: 'Something went wrong!',
+      status: "error",
+      message: "Something went wrong!",
     });
   }
 };
@@ -81,34 +83,34 @@ export const errorHandler = (
   err: CustomError,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): void => {
   err.statusCode = err.statusCode || 500;
 
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === "development") {
     sendErrorDev(err, res);
   } else {
     let error = { ...err };
     error.message = err.message;
 
     // Handle specific error types
-    if (err.name === 'CastError') {
+    if (err.name === "CastError") {
       error = handleCastErrorDB(err as mongoose.Error.CastError);
     }
-    
+
     if (err.code === 11000) {
       error = handleDuplicateFieldsDB(err);
     }
-    
-    if (err.name === 'ValidationError') {
+
+    if (err.name === "ValidationError") {
       error = handleValidationErrorDB(err as mongoose.Error.ValidationError);
     }
-    
-    if (err.name === 'JsonWebTokenError') {
+
+    if (err.name === "JsonWebTokenError") {
       error = handleJWTError();
     }
-    
-    if (err.name === 'TokenExpiredError') {
+
+    if (err.name === "TokenExpiredError") {
       error = handleJWTExpiredError();
     }
 
@@ -124,15 +126,15 @@ export const catchAsync = (fn: Function) => {
 };
 
 // Handle uncaught exceptions
-process.on('uncaughtException', (err: Error) => {
-  console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
+process.on("uncaughtException", (err: Error) => {
+  console.log("UNCAUGHT EXCEPTION! 💥 Shutting down...");
   console.log(err.name, err.message);
   process.exit(1);
 });
 
 // Handle unhandled promise rejections
-process.on('unhandledRejection', (err: Error) => {
-  console.log('UNHANDLED REJECTION! 💥 Shutting down...');
+process.on("unhandledRejection", (err: Error) => {
+  console.log("UNHANDLED REJECTION! 💥 Shutting down...");
   console.log(err.name, err.message);
   process.exit(1);
 });

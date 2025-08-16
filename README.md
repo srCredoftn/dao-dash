@@ -15,19 +15,22 @@ dao-management/
 ## 🚀 Démarrage Rapide
 
 ### Prérequis
-- Node.js 18+ 
+
+- Node.js 18+
 - MongoDB 6.0+
 - pnpm (recommandé) ou npm
 
 ### Installation
 
 1. **Cloner le repository**
+
 ```bash
 git clone <repository-url>
 cd dao-management
 ```
 
 2. **Installer les dépendances**
+
 ```bash
 # Frontend
 cd frontend
@@ -39,6 +42,7 @@ pnpm install
 ```
 
 3. **Configuration**
+
 ```bash
 # Backend - créer .env
 cd backend
@@ -47,6 +51,7 @@ cp .env.example .env
 ```
 
 4. **Démarrer les services**
+
 ```bash
 # Terminal 1 - Backend (port 5000)
 cd backend
@@ -60,6 +65,7 @@ pnpm dev
 ## 🏛️ Architecture
 
 ### Frontend (`/frontend`)
+
 - **Framework**: React 18 + TypeScript
 - **Routing**: React Router 6 (SPA)
 - **UI**: Radix UI + TailwindCSS
@@ -67,6 +73,7 @@ pnpm dev
 - **Build**: Vite
 
 ### Backend (`/backend`)
+
 - **Framework**: Express.js + TypeScript
 - **Database**: MongoDB + Mongoose
 - **Auth**: JWT + bcrypt
@@ -74,6 +81,7 @@ pnpm dev
 - **API**: RESTful JSON API
 
 ### Shared (`/shared`)
+
 - **Types TypeScript** partagés entre frontend/backend
 - **Validations Zod** communes
 - **Utilitaires** de calcul métier
@@ -81,11 +89,13 @@ pnpm dev
 ## 📊 Base de Données MongoDB
 
 ### Collections
+
 - `users` - Utilisateurs et authentification
 - `daos` - Dossiers d'appel d'offres
 - `sessions` - Sessions utilisateur (optionnel)
 
 ### Modèles
+
 - **User**: Gestion utilisateurs avec rôles (admin/user)
 - **DAO**: Dossiers avec tâches, équipes, et progression
 - **Indexes**: Optimisés pour recherche et performance
@@ -102,6 +112,7 @@ pnpm dev
 ### Scripts Disponibles
 
 **Frontend:**
+
 ```bash
 pnpm dev          # Serveur développement (port 3000)
 pnpm build        # Build production
@@ -110,6 +121,7 @@ pnpm typecheck    # Vérification TypeScript
 ```
 
 **Backend:**
+
 ```bash
 pnpm dev          # Serveur développement avec auto-reload
 pnpm build        # Build TypeScript vers JavaScript
@@ -118,6 +130,7 @@ pnpm typecheck    # Vérification TypeScript
 ```
 
 ### Structure Frontend
+
 ```
 frontend/src/
 ├── components/     # Composants React réutilisables
@@ -130,6 +143,7 @@ frontend/src/
 ```
 
 ### Structure Backend
+
 ```
 backend/src/
 ├── models/         # Modèles MongoDB/Mongoose
@@ -143,6 +157,7 @@ backend/src/
 ## 🌐 API Endpoints
 
 ### Authentication
+
 - `POST /api/auth/login` - Connexion utilisateur
 - `POST /api/auth/logout` - Déconnexion
 - `GET /api/auth/me` - Profil utilisateur actuel
@@ -150,6 +165,7 @@ backend/src/
 - `POST /api/auth/change-password` - Changement mot de passe
 
 ### DAO Management
+
 - `GET /api/dao` - Liste des DAOs
 - `GET /api/dao/:id` - Détail d'un DAO
 - `POST /api/dao` - Créer un DAO
@@ -157,6 +173,7 @@ backend/src/
 - `DELETE /api/dao/:id` - Supprimer un DAO
 
 ### User Management (Admin)
+
 - `GET /api/users` - Liste utilisateurs
 - `POST /api/users` - Créer utilisateur
 - `PUT /api/users/:id` - Mettre à jour utilisateur
@@ -191,6 +208,7 @@ SMTP_PASS=your-app-password
 ## 🚀 Déploiement
 
 ### Production Build
+
 ```bash
 # Frontend
 cd frontend
@@ -204,6 +222,7 @@ pnpm build
 ```
 
 ### Docker (optionnel)
+
 ```bash
 # Frontend
 docker build -t dao-frontend ./frontend
@@ -215,6 +234,7 @@ docker build -t dao-backend ./backend
 ## 📱 Fonctionnalités
 
 ### ✅ Implémentées
+
 - Interface responsive mobile/desktop
 - Authentification complète JWT
 - Gestion des DAOs avec progression
@@ -227,6 +247,7 @@ docker build -t dao-backend ./backend
 - Profils utilisateur
 
 ### 🔄 En Cours
+
 - Améliorations responsivité mobile
 - Optimisations performance
 - Tests unitaires

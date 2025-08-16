@@ -266,7 +266,12 @@ export default function UserManagement() {
           <div className="block sm:hidden">
             {/* First Row: Back button and title */}
             <div className="flex items-center space-x-2 mb-3">
-              <Button variant="ghost" size="sm" onClick={() => navigate("/")} className="flex-shrink-0">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate("/")}
+                className="flex-shrink-0"
+              >
                 <ArrowLeft className="h-4 w-4" />
                 <span className="ml-1 text-sm">Retour</span>
               </Button>

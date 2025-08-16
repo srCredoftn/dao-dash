@@ -603,7 +603,12 @@ ${dao?.tasks
             {/* First Row: Back button and title */}
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center space-x-2 flex-1 min-w-0">
-                <Button variant="ghost" size="sm" asChild className="flex-shrink-0">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  asChild
+                  className="flex-shrink-0"
+                >
                   <Link to="/">
                     <ArrowLeft className="h-4 w-4" />
                     <span className="ml-1 text-sm">Retour</span>
@@ -614,7 +619,9 @@ ${dao?.tasks
                     <FileText className="h-4 w-4 text-blue-600" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <h1 className="text-base font-bold truncate">Détails DAO</h1>
+                    <h1 className="text-base font-bold truncate">
+                      Détails DAO
+                    </h1>
                     <p className="text-xs text-muted-foreground truncate">
                       {dao.numeroListe} • {dao.reference}
                     </p>
@@ -633,11 +640,7 @@ ${dao?.tasks
             <div className="flex gap-2">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex-1"
-                  >
+                  <Button variant="outline" size="sm" className="flex-1">
                     <Download className="h-4 w-4 mr-1" />
                     <span className="text-sm">Export</span>
                   </Button>
@@ -661,7 +664,9 @@ ${dao?.tasks
                 className="flex-1"
               >
                 <Trash2 className="h-4 w-4 mr-1" />
-                <span className="text-sm">{isDeleting ? "Suppression..." : "Supprimer"}</span>
+                <span className="text-sm">
+                  {isDeleting ? "Suppression..." : "Supprimer"}
+                </span>
               </Button>
             </div>
           </div>
@@ -692,10 +697,7 @@ ${dao?.tasks
             <div className="flex items-center gap-3">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                  >
+                  <Button variant="outline" size="sm">
                     <Download className="h-4 w-4 mr-2" />
                     Exporter ce DAO
                   </Button>
@@ -720,10 +722,7 @@ ${dao?.tasks
                 <Trash2 className="h-4 w-4 mr-2" />
                 {isDeleting ? "Suppression..." : "Supprimer"}
               </Button>
-              <Badge
-                variant="secondary"
-                className="text-sm font-bold"
-              >
+              <Badge variant="secondary" className="text-sm font-bold">
                 {progress}% terminé
               </Badge>
             </div>

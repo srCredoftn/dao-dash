@@ -730,16 +730,16 @@ ${dao?.tasks
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-6">
+      <main className="container mx-auto px-2 sm:px-4 py-4 sm:py-6">
         {/* DAO Information */}
-        <Card className="mb-6 md:mb-8">
+        <Card className="mb-6 sm:mb-8">
           <CardHeader>
             <CardTitle className="text-lg md:text-xl">
               {dao.objetDossier}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               <div className="space-y-2">
                 <Label className="text-sm text-muted-foreground">
                   Référence

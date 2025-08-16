@@ -75,13 +75,18 @@ export class AuthService {
       const { email, password } = credentials;
 
       // Find user by email
-      const user = await UserModel.findOne({ 
-        email: email.toLowerCase(), 
-        isActive: true 
+      const user = await UserModel.findOne({
+        email: email.toLowerCase(),
+        isActive: true
       });
 
       if (!user) {
         throw new Error('Invalid credentials');
+      }
+
+      // Check if temporary password has expired
+      if ((user as any).isTemporaryPasswordExpired()) {
+        throw new Error('Temporary password has expired. Please request a password reset.');
       }
 
       // Check password
@@ -100,6 +105,11 @@ export class AuthService {
       const authResponse: AuthResponse = {
         user: this.toAuthUserFormat(user),
         token,
+        // Include information about temporary password
+        ...(((user as any).isTemporaryPassword) && {
+          requiresPasswordChange: true,
+          message: 'Please change your temporary password'
+        })
       };
 
       console.log('🔐 User logged in:', user.email, 'Role:', user.role);

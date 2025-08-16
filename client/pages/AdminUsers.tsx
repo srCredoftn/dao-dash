@@ -162,6 +162,27 @@ export default function AdminUsers() {
     setIsEditDialogOpen(true);
   };
 
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      alert("Mot de passe copié dans le presse-papiers !");
+    } catch (error) {
+      // Fallback pour les navigateurs plus anciens
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand("copy");
+        alert("Mot de passe copié dans le presse-papiers !");
+      } catch (fallbackError) {
+        alert("Impossible de copier automatiquement. Mot de passe: " + text);
+      }
+      document.body.removeChild(textArea);
+    }
+  };
+
   const getRoleIcon = (role: UserRole) => {
     switch (role) {
       case "admin":

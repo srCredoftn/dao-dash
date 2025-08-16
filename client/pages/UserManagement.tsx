@@ -314,9 +314,10 @@ export default function UserManagement() {
               onOpenChange={setIsCreateDialogOpen}
             >
               <DialogTrigger asChild>
-                <Button>
+                <Button className="w-full sm:w-auto">
                   <Plus className="h-4 w-4 mr-2" />
-                  Nouvel utilisateur
+                  <span className="hidden sm:inline">Nouvel utilisateur</span>
+                  <span className="sm:hidden">Nouveau</span>
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-md">

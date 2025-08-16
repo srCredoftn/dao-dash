@@ -126,47 +126,96 @@ function TaskRow({
   // If not applicable, show simple layout
   if (!task.isApplicable) {
     return (
-      <div className="bg-white rounded-lg border p-4">
-        <div className="flex items-center justify-between">
-          <h4 className="font-medium text-sm">
-            <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full mr-2">
+      <div className="bg-white rounded-lg border p-3 sm:p-4">
+        {/* Mobile: Vertical layout */}
+        <div className="block sm:hidden space-y-3">
+          <div className="flex items-start gap-2">
+            <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full flex-shrink-0">
               {taskIndex}
             </span>
-            {task.name}
-          </h4>
-          <div className="flex items-center gap-2">
+            <h4 className="font-medium text-sm flex-1 min-w-0 break-words">
+              {task.name}
+            </h4>
+          </div>
+
+          <div className="flex items-center justify-between pt-2 border-t border-gray-100">
             <span className="text-xs text-muted-foreground">Applicable:</span>
-            {isAdmin() ? (
-              <Switch
-                checked={false}
-                onCheckedChange={(checked) =>
-                  onApplicableChange(task.id, checked)
-                }
-              />
-            ) : (
-              <span className="text-xs font-medium">Non</span>
-            )}
+            <div className="flex items-center gap-2">
+              {isAdmin() ? (
+                <Switch
+                  checked={false}
+                  onCheckedChange={(checked) =>
+                    onApplicableChange(task.id, checked)
+                  }
+                />
+              ) : (
+                <span className="text-xs font-medium">Non</span>
+              )}
+            </div>
+          </div>
+
+          <div className="text-center py-2">
+            <span className="text-sm text-muted-foreground italic">Non applicable</span>
           </div>
         </div>
-        <div className="mt-4 text-center">
-          <span className="text-sm text-muted-foreground">Non applicable</span>
+
+        {/* Desktop: Horizontal layout */}
+        <div className="hidden sm:block">
+          <div className="flex items-center justify-between">
+            <h4 className="font-medium text-sm">
+              <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full mr-2">
+                {taskIndex}
+              </span>
+              {task.name}
+            </h4>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground">Applicable:</span>
+              {isAdmin() ? (
+                <Switch
+                  checked={false}
+                  onCheckedChange={(checked) =>
+                    onApplicableChange(task.id, checked)
+                  }
+                />
+              ) : (
+                <span className="text-xs font-medium">Non</span>
+              )}
+            </div>
+          </div>
+          <div className="mt-4 text-center">
+            <span className="text-sm text-muted-foreground">Non applicable</span>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-lg border p-4 space-y-3">
-      <div className="flex items-center justify-between">
-        <h4 className="font-medium text-sm">
-          <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full mr-2">
+    <div className="bg-white rounded-lg border p-3 sm:p-4">
+      {/* Mobile: Vertical layout */}
+      <div className="block sm:hidden space-y-3">
+        <div className="flex items-start gap-2">
+          <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full flex-shrink-0">
             {taskIndex}
           </span>
-          {task.name}
-        </h4>
-        <div className="flex items-center gap-3">
+          <h4 className="font-medium text-sm flex-1 min-w-0 break-words">
+            {task.name}
+          </h4>
+          {isAdmin() && (
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => setIsEditing(!isEditing)}
+              className="h-6 w-6 p-0 flex-shrink-0"
+            >
+              <Edit3 className="h-3 w-3" />
+            </Button>
+          )}
+        </div>
+
+        <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+          <span className="text-xs text-muted-foreground">Applicable:</span>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground">Applicable:</span>
             {isAdmin() ? (
               <Switch
                 checked={task.isApplicable}
@@ -180,31 +229,60 @@ function TaskRow({
               </span>
             )}
           </div>
-          {isAdmin() && (
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => setIsEditing(!isEditing)}
-              className="h-6 w-6 p-0"
-            >
-              <Edit3 className="h-3 w-3" />
-            </Button>
-          )}
+        </div>
+      </div>
+
+      {/* Desktop: Horizontal layout */}
+      <div className="hidden sm:block">
+        <div className="flex items-center justify-between mb-3">
+          <h4 className="font-medium text-sm">
+            <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full mr-2">
+              {taskIndex}
+            </span>
+            {task.name}
+          </h4>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground">Applicable:</span>
+              {isAdmin() ? (
+                <Switch
+                  checked={task.isApplicable}
+                  onCheckedChange={(checked) =>
+                    onApplicableChange(task.id, checked)
+                  }
+                />
+              ) : (
+                <span className="text-xs font-medium">
+                  {task.isApplicable ? "Oui" : "Non"}
+                </span>
+              )}
+            </div>
+            {isAdmin() && (
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => setIsEditing(!isEditing)}
+                className="h-6 w-6 p-0"
+              >
+                <Edit3 className="h-3 w-3" />
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 
       {/* Progress Bar */}
-      <div className="space-y-2">
+      <div className="space-y-2 pt-3 sm:pt-0">
         <div className="flex items-center justify-between">
-          <span className="text-xs text-muted-foreground">Progression</span>
-          <span className="text-sm font-medium">
+          <span className="text-xs text-muted-foreground font-medium">Progression</span>
+          <span className="text-sm font-bold text-primary">
             {isEditing ? tempProgress : task.progress || 0}%
           </span>
         </div>
-        <div className="w-full bg-gray-200 rounded-full h-2">
+        <div className="w-full bg-gray-200 rounded-full h-2.5">
           <div
             className={cn(
-              "h-2 rounded-full transition-all",
+              "h-2.5 rounded-full transition-all duration-300",
               getProgressColor(isEditing ? tempProgress : task.progress || 0),
             )}
             style={{

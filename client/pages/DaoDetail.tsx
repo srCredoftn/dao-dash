@@ -11,6 +11,7 @@ import {
   Building2,
   FileSpreadsheet,
 } from "lucide-react";
+import jsPDF from "jspdf";
 import { Button } from "@/components/ui/button";
 import {
   Card,

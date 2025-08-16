@@ -226,7 +226,14 @@ export default function ExportFilterDialog({
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => setIsOpen(false)}>
+          <Button
+            variant="outline"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsOpen(false);
+            }}
+          >
             Annuler
           </Button>
           <Button 

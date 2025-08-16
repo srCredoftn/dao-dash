@@ -1,9 +1,11 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import mongoose from "mongoose";
 import { handleDemo } from "./routes/demo";
 import daoRoutes from "./routes/dao-simple";
-import authRoutes from "./routes/auth";
+// Use MongoDB backend routes instead of in-memory routes
+// import authRoutes from "./routes/auth";
 import commentRoutes from "./routes/comments";
 
 export function createServer() {

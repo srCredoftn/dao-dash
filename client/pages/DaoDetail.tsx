@@ -597,40 +597,49 @@ ${dao?.tasks
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white border-b">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-            <div className="flex items-center space-x-4 w-full lg:w-auto">
-              <Button variant="ghost" size="sm" asChild>
-                <Link to="/">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Retour
-                </Link>
-              </Button>
-
-              <div className="flex items-center space-x-3 flex-1 lg:flex-initial">
-                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <FileText className="h-5 w-5 text-blue-600" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <h1 className="text-lg lg:text-xl font-bold">Détails DAO</h1>
-                  <p className="text-sm text-muted-foreground truncate">
-                    {dao.numeroListe} • {dao.reference}
-                  </p>
+        <div className="container mx-auto px-2 sm:px-4 py-3 sm:py-4">
+          {/* Mobile Layout */}
+          <div className="block sm:hidden">
+            {/* First Row: Back button and title */}
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center space-x-2 flex-1 min-w-0">
+                <Button variant="ghost" size="sm" asChild className="flex-shrink-0">
+                  <Link to="/">
+                    <ArrowLeft className="h-4 w-4" />
+                    <span className="ml-1 text-sm">Retour</span>
+                  </Link>
+                </Button>
+                <div className="flex items-center space-x-2 flex-1 min-w-0">
+                  <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <FileText className="h-4 w-4 text-blue-600" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h1 className="text-base font-bold truncate">Détails DAO</h1>
+                    <p className="text-xs text-muted-foreground truncate">
+                      {dao.numeroListe} • {dao.reference}
+                    </p>
+                  </div>
                 </div>
               </div>
+              <Badge
+                variant="secondary"
+                className="text-xs font-bold ml-2 flex-shrink-0"
+              >
+                {progress}%
+              </Badge>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full lg:w-auto">
+            {/* Second Row: Action buttons */}
+            <div className="flex gap-2">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="outline"
                     size="sm"
-                    className="w-full sm:w-auto"
+                    className="flex-1"
                   >
-                    <Download className="h-4 w-4 mr-2" />
-                    <span className="hidden sm:inline">Exporter ce DAO</span>
-                    <span className="sm:hidden">Exporter</span>
+                    <Download className="h-4 w-4 mr-1" />
+                    <span className="text-sm">Export</span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
@@ -649,14 +658,71 @@ ${dao?.tasks
                 size="sm"
                 onClick={handleDelete}
                 disabled={isDeleting}
-                className="w-full sm:w-auto"
+                className="flex-1"
+              >
+                <Trash2 className="h-4 w-4 mr-1" />
+                <span className="text-sm">{isDeleting ? "Suppression..." : "Supprimer"}</span>
+              </Button>
+            </div>
+          </div>
+
+          {/* Desktop Layout */}
+          <div className="hidden sm:flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Retour
+                </Link>
+              </Button>
+
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <FileText className="h-5 w-5 text-blue-600" />
+                </div>
+                <div>
+                  <h1 className="text-lg lg:text-xl font-bold">Détails DAO</h1>
+                  <p className="text-sm text-muted-foreground">
+                    {dao.numeroListe} • {dao.reference}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                  >
+                    <Download className="h-4 w-4 mr-2" />
+                    Exporter ce DAO
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem onClick={handleExportPDF}>
+                    <FileText className="h-4 w-4 mr-2" />
+                    Exporter en PDF
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleExportCSV}>
+                    <FileSpreadsheet className="h-4 w-4 mr-2" />
+                    Exporter en CSV
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={handleDelete}
+                disabled={isDeleting}
               >
                 <Trash2 className="h-4 w-4 mr-2" />
                 {isDeleting ? "Suppression..." : "Supprimer"}
               </Button>
               <Badge
                 variant="secondary"
-                className="text-sm font-bold justify-center"
+                className="text-sm font-bold"
               >
                 {progress}% terminé
               </Badge>

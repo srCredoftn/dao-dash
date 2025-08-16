@@ -248,6 +248,9 @@ export class AuthService {
       }
 
       user.password = newPassword;
+      // Remove temporary password status
+      (user as any).isTemporaryPassword = false;
+      (user as any).temporaryPasswordExpires = null;
       await user.save();
 
       console.log('🔑 Password changed for:', user.email);

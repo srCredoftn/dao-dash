@@ -332,7 +332,7 @@ export default function Index() {
 
       <main className="container mx-auto px-2 sm:px-4 py-4 sm:py-6">
         {/* Stats Overview */}
-        <div className="grid grid-cols-1 xs:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
+        <div className={cn(GRID_CLASSES.stats, "gap-3 sm:gap-4 mb-6 sm:mb-8")}>
           <StatsCard
             title="Total DAO"
             value={stats.total}

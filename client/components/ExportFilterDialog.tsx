@@ -62,6 +62,10 @@ export default function ExportFilterDialog({
     setOptions(prev => ({ ...prev, format }));
   };
 
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+  };
+
   const getSelectedTasksCount = () => {
     let count = 0;
     if (options.includeTodos) count += todoTasks.length;

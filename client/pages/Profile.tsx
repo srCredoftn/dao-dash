@@ -35,6 +35,7 @@ export default function Profile() {
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [hasTemporaryPassword, setHasTemporaryPassword] = useState(false);
 
   useEffect(() => {
     if (user) {

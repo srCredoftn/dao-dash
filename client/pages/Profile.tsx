@@ -122,6 +122,7 @@ export default function Profile() {
         newPassword: "",
         confirmPassword: "",
       });
+      setHasTemporaryPassword(false); // Remove temporary password flag
       toast({
         title: "Mot de passe modifié",
         description: "Votre mot de passe a été modifié avec succès.",

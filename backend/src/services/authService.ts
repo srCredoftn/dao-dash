@@ -175,7 +175,7 @@ export class AuthService {
       console.log('👤 New user created:', user.email, 'Temporary password:', temporaryPassword);
 
       // Send welcome email with temporary password
-      await this.sendWelcomeEmail(user.email, user.name, temporaryPassword);
+      await EmailService.sendWelcomeEmail(user.email, user.name, temporaryPassword);
 
       return {
         user: this.toUserFormat(user),

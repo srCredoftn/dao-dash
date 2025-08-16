@@ -720,14 +720,15 @@ export default function DaoDetail() {
     pdf.save(`${dao?.numeroListe}_export.pdf`);
   };
 
-  const handleExportCSV = () => {
+  const handleExportCSV = (tasks: DaoTask[]) => {
     const csvContent = [
-      ["Tâche", "Applicable", "Progression (%)", "Commentaire"],
-      ...dao!.tasks.map((task) => [
+      ["Tâche", "Applicable", "Progression (%)", "Commentaire", "Assigné à"],
+      ...tasks.map((task) => [
         task.name,
         task.isApplicable ? "Oui" : "Non",
         task.isApplicable ? (task.progress || 0).toString() : "N/A",
         task.comment || "",
+        task.assignedTo ? dao?.equipe.find(m => m.id === task.assignedTo)?.name || "Inconnu" : "Non assigné"
       ]),
     ]
       .map((row) => row.map((cell) => `"${cell}"`).join(","))

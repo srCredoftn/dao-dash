@@ -606,7 +606,7 @@ export default function Index() {
                 />
               </div>
               <div className="flex flex-col xs:flex-row md:flex-row items-stretch xs:items-center md:items-center gap-2 xs:gap-3 md:flex-shrink-0">
-                <div className="flex-1 xs:flex-none lg:flex-none">
+                <div className="flex-1 xs:flex-none md:flex-none">
                   <FilterDialog
                     filters={filters}
                     onFiltersChange={setFilters}

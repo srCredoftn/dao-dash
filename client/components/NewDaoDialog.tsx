@@ -658,7 +658,7 @@ export default function NewDaoDialog({
                         variant="ghost"
                         size="sm"
                         className="h-auto p-0 text-muted-foreground hover:text-foreground ml-1"
-                        onClick={() => removeTeamMember(member.id)}
+                        onClick={(e) => removeTeamMember(member.id, e)}
                       >
                         ×
                       </Button>

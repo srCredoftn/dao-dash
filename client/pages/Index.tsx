@@ -623,7 +623,7 @@ export default function Index() {
                   />
                 </div>
                 {user && isAdmin() && (
-                  <div className="flex-1 xs:flex-none lg:flex-none">
+                  <div className="flex-1 xs:flex-none md:flex-none">
                     <NewDaoDialog
                       existingDaos={daos}
                       onCreateDao={handleCreateDao}

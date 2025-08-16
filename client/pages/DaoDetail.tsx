@@ -923,24 +923,15 @@ export default function DaoDetail() {
             </div>
 
             <div className="flex items-center gap-3">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm">
-                    <Download className="h-4 w-4 mr-2" />
-                    Exporter ce DAO
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem onClick={handleExportPDF}>
-                    <FileText className="h-4 w-4 mr-2" />
-                    Exporter en PDF
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={handleExportCSV}>
-                    <FileSpreadsheet className="h-4 w-4 mr-2" />
-                    Exporter en CSV
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <ExportFilterDialog
+                tasks={dao.tasks}
+                onExport={handleExportWithOptions}
+              >
+                <Button variant="outline" size="sm">
+                  <Download className="h-4 w-4 mr-2" />
+                  Exporter ce DAO
+                </Button>
+              </ExportFilterDialog>
               <Button
                 variant="destructive"
                 size="sm"

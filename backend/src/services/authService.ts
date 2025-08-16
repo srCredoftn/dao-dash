@@ -159,10 +159,10 @@ export class AuthService {
   }): Promise<{ user: User; temporaryPassword: string }> {
     try {
       // Check if user already exists
-      const existingUser = await UserModel.findOne({ 
-        email: userData.email.toLowerCase() 
+      const existingUser = await UserModel.findOne({
+        email: userData.email.toLowerCase()
       });
-      
+
       if (existingUser) {
         throw new Error('User already exists');
       }
@@ -177,6 +177,10 @@ export class AuthService {
         role: userData.role,
         password: temporaryPassword,
       });
+
+      // Mark password as temporary (expires in 24 hours)
+      (user as any).markPasswordAsTemporary(24);
+      await user.save();
 
       console.log('👤 New user created:', user.email, 'Temporary password:', temporaryPassword);
 

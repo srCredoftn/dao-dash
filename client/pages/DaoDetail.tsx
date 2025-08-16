@@ -992,12 +992,20 @@ ${dao?.tasks
 
         {/* Tasks Detail */}
         <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle>Détail des tâches</CardTitle>
-              <span className="text-sm text-muted-foreground">
-                {applicableTasks} tâches applicables
-              </span>
+          <CardHeader className="pb-4">
+            <div className="space-y-2">
+              <CardTitle className="text-lg sm:text-xl font-bold">
+                Détail des tâches
+              </CardTitle>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground font-medium">
+                  {applicableTasks} tâches applicables
+                </span>
+                <div className="h-1 w-1 bg-gray-300 rounded-full"></div>
+                <span className="text-xs text-muted-foreground">
+                  {dao.tasks.length} total
+                </span>
+              </div>
             </div>
           </CardHeader>
           <CardContent className="px-3 sm:px-6">

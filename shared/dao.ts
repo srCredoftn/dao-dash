@@ -58,7 +58,7 @@ export interface DaoFilters {
 export type DaoStatus = "completed" | "urgent" | "safe" | "default";
 
 // User roles and authentication
-export type UserRole = "admin" | "user";
+export type UserRole = "admin" | "user" | "viewer";
 
 export interface User {
   id: string;
@@ -66,6 +66,7 @@ export interface User {
   email: string;
   role: UserRole;
   createdAt: string;
+  updatedAt: string;
   lastLogin?: string;
   isActive: boolean;
 }

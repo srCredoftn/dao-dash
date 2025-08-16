@@ -31,6 +31,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import { GRID_CLASSES } from "@/types/responsive";
 import { apiService } from "@/services/api";
 import { testProgressCalculations } from "@/utils/test-calculations";
 import { testGlobalStatistics } from "@/utils/test-global-stats";

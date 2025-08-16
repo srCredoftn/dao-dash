@@ -384,24 +384,36 @@ function TaskRow({
       )}
 
       {/* Progress Bar - Always at the bottom */}
-      {task.isApplicable && !isEditing && (
+      {task.isApplicable && (
         <div className="space-y-2 pt-3 border-t border-gray-100">
           <div className="flex items-center justify-between">
             <span className="text-xs text-muted-foreground font-medium">
               Progression
             </span>
-            <span className="text-sm font-bold text-primary">
-              {task.progress || 0}%
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-bold text-primary">
+                {isEditing ? tempProgress : task.progress || 0}%
+              </span>
+              {isAdmin() && (
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => setIsEditing(!isEditing)}
+                  className="h-6 w-6 p-0 flex-shrink-0"
+                >
+                  <Edit3 className="h-3 w-3" />
+                </Button>
+              )}
+            </div>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2.5">
             <div
               className={cn(
                 "h-2.5 rounded-full transition-all duration-300",
-                getProgressColor(task.progress || 0),
+                getProgressColor(isEditing ? tempProgress : task.progress || 0),
               )}
               style={{
-                width: `${task.progress || 0}%`,
+                width: `${isEditing ? tempProgress : task.progress || 0}%`,
               }}
             />
           </div>

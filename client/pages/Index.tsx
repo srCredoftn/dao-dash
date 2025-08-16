@@ -542,7 +542,7 @@ export default function Index() {
             )}
 
             {!loading && !error && (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+              <div className={cn(GRID_CLASSES.cards, "gap-3 sm:gap-4 md:gap-6")}>
                 {filteredDaos.length > 0 ? (
                   filteredDaos.map((dao) => <DaoCard key={dao.id} dao={dao} />)
                 ) : (

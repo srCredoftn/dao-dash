@@ -15,8 +15,15 @@ export function createServer() {
   // Connect to MongoDB
   const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/dao-management';
   mongoose.connect(mongoUri)
-    .then(() => console.log('📊 Connected to MongoDB'))
-    .catch(err => console.error('❌ MongoDB connection error:', err));
+    .then(async () => {
+      console.log('📊 Connected to MongoDB');
+      // Initialize admin user
+      await AuthServiceMongo.initializeAdminUser();
+    })
+    .catch(err => {
+      console.error('❌ MongoDB connection error:', err);
+      console.log('🔄 Falling back to in-memory authentication');
+    });
 
   // Middleware
   app.use(cors());

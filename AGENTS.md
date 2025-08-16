@@ -147,8 +147,8 @@ const data: MyRouteResponse = await response.json();
 ```
 
 ### New Page Route
-1. Create component in `client/pages/MyPage.tsx`
-2. Add route in `client/App.tsx`:
+1. Create component in `frontend/pages/MyPage.tsx`
+2. Add route in `frontend/App.tsx`:
 ```typescript
 <Route path="/my-page" element={<MyPage />} />
 ```

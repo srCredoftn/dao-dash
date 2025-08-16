@@ -50,12 +50,16 @@ export default function FilterDialog({
     setLocalFilters(filters);
   }, [filters]);
 
-  const handleApplyFilters = () => {
+  const handleApplyFilters = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     onFiltersChange(localFilters);
     setOpen(false);
   };
 
-  const handleClearFilters = () => {
+  const handleClearFilters = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     const emptyFilters: DaoFilters = {};
     setLocalFilters(emptyFilters);
     onFiltersChange(emptyFilters);

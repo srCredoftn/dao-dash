@@ -289,6 +289,94 @@ export default function UserManagement() {
                 </div>
               </div>
             </div>
+
+            {/* Second Row: Action button for mobile */}
+            <div className="flex justify-center">
+              <Dialog
+                open={isCreateDialogOpen}
+                onOpenChange={setIsCreateDialogOpen}
+              >
+                <DialogTrigger asChild>
+                  <Button className="w-full sm:w-auto">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Nouvel utilisateur
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>Créer un nouvel utilisateur</DialogTitle>
+                    <DialogDescription>
+                      Ajoutez un nouveau membre à l'équipe avec les informations
+                      ci-dessous.
+                    </DialogDescription>
+                  </DialogHeader>
+
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="name">Nom complet</Label>
+                      <Input
+                        id="name"
+                        value={newUser.name}
+                        onChange={(e) =>
+                          setNewUser((prev) => ({
+                            ...prev,
+                            name: e.target.value,
+                          }))
+                        }
+                        placeholder="Nom et prénom"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Email</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={newUser.email}
+                        onChange={(e) =>
+                          setNewUser((prev) => ({
+                            ...prev,
+                            email: e.target.value,
+                          }))
+                        }
+                        placeholder="email@example.com"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="role">Rôle</Label>
+                      <Select
+                        value={newUser.role}
+                        onValueChange={(value: UserRole) =>
+                          setNewUser((prev) => ({ ...prev, role: value }))
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Sélectionner un rôle" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="viewer">Visualiseur</SelectItem>
+                          <SelectItem value="user">Utilisateur</SelectItem>
+                          <SelectItem value="admin">Administrateur</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <DialogFooter>
+                    <Button
+                      variant="outline"
+                      onClick={() => setIsCreateDialogOpen(false)}
+                    >
+                      Annuler
+                    </Button>
+                    <Button onClick={handleCreateUser}>
+                      Créer l'utilisateur
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
 
           {/* Desktop Layout */}

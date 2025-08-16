@@ -43,12 +43,16 @@ export default function TeamEditDialog({ currentTeam, onTeamUpdate, type }: Team
   const [newMemberName, setNewMemberName] = useState('');
   const [newMemberEmail, setNewMemberEmail] = useState('');
 
-  const handleSave = () => {
+  const handleSave = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     onTeamUpdate(tempTeam);
     setOpen(false);
   };
 
-  const handleCancel = () => {
+  const handleCancel = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     setTempTeam(currentTeam);
     setOpen(false);
   };
@@ -66,7 +70,9 @@ export default function TeamEditDialog({ currentTeam, onTeamUpdate, type }: Team
     }
   };
 
-  const addNewMember = () => {
+  const addNewMember = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (newMemberName.trim()) {
       const newMember: TeamMember = {
         id: Date.now().toString(),
@@ -87,7 +93,11 @@ export default function TeamEditDialog({ currentTeam, onTeamUpdate, type }: Team
     }
   };
 
-  const removeMember = (memberId: string) => {
+  const removeMember = (memberId: string, e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     setTempTeam(tempTeam.filter(m => m.id !== memberId));
   };
 
@@ -140,7 +150,7 @@ export default function TeamEditDialog({ currentTeam, onTeamUpdate, type }: Team
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => removeMember(member.id)}
+                      onClick={(e) => removeMember(member.id, e)}
                       className="h-6 w-6 p-0 text-red-500 hover:text-red-700"
                     >
                       <X className="h-3 w-3" />
@@ -180,7 +190,7 @@ export default function TeamEditDialog({ currentTeam, onTeamUpdate, type }: Team
           {/* Add new member */}
           <div className="space-y-2">
             <Label className="text-sm font-medium">
-              {type === 'chef' ? 'Ou créer un nouveau chef' : 'Ou ajouter un nouveau membre'}
+              {type === 'chef' ? 'Ou cr��er un nouveau chef' : 'Ou ajouter un nouveau membre'}
             </Label>
             <div className="space-y-2">
               <Input

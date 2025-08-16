@@ -15,17 +15,22 @@ While the starter comes with a express server, only create endpoint when strictl
 ## Project Structure
 
 ```
-client/                   # React SPA frontend
+frontend/                 # React SPA frontend (renamed from client/)
 ├── pages/                # Route components (Index.tsx = home)
 ├── components/ui/        # Pre-built UI component library
-├── App.tsx                # App entry point and with SPA routing setup
+├── App.tsx               # App entry point and with SPA routing setup
 └── global.css            # TailwindCSS 3 theming and global styles
 
-server/                   # Express API backend
+backend-express/          # Express API backend (renamed from server/)
 ├── index.ts              # Main server setup (express config + routes)
 └── routes/               # API handlers
 
-shared/                   # Types used by both client & server
+backend-mongodb/          # Alternative MongoDB backend (standalone)
+├── src/                  # Source code
+├── models/               # Mongoose models
+└── routes/               # API routes with MongoDB
+
+shared/                   # Types used by both frontend & backend
 └── api.ts                # Example of how to share api interfaces
 ```
 
@@ -35,9 +40,9 @@ shared/                   # Types used by both client & server
 
 The routing system is powered by React Router 6:
 
-- `client/pages/Index.tsx` represents the home page.
-- Routes are defined in `client/App.tsx` using the `react-router-dom` import
-- Route files are located in the `client/pages/` directory
+- `frontend/pages/Index.tsx` represents the home page.
+- Routes are defined in `frontend/App.tsx` using the `react-router-dom` import
+- Route files are located in the `frontend/pages/` directory
 
 For example, routes can be defined with:
 
@@ -54,8 +59,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 ### Styling System
 
 - **Primary**: TailwindCSS 3 utility classes
-- **Theme and design tokens**: Configure in `client/global.css` 
-- **UI components**: Pre-built library in `client/components/ui/`
+- **Theme and design tokens**: Configure in `frontend/global.css`
+- **UI components**: Pre-built library in `frontend/components/ui/`
 - **Utility**: `cn()` function combines `clsx` + `tailwind-merge` for conditional classes
 
 ```typescript
@@ -74,18 +79,22 @@ className={cn(
 - **API endpoints**: Prefixed with `/api/`
 
 #### Example API Routes
+
 - `GET /api/ping` - Simple ping api
-- `GET /api/demo` - Demo endpoint  
+- `GET /api/demo` - Demo endpoint
 
 ### Shared Types
-Import consistent types in both client and server:
+
+Import consistent types in both frontend and backend:
+
 ```typescript
-import { DemoResponse } from '@shared/api';
+import { DemoResponse } from "@shared/api";
 ```
 
 Path aliases:
+
 - `@shared/*` - Shared folder
-- `@/*` - Client folder
+- `@/*` - Frontend folder
 
 ## Development Commands
 
@@ -101,10 +110,12 @@ pnpm test          # Run Vitest tests
 
 ### Add new colors to the theme
 
-Open `client/global.css` and `tailwind.config.ts` and add new tailwind colors.
+Open `frontend/global.css` and `tailwind.config.ts` and add new tailwind colors.
 
 ### New API Route
+
 1. **Optional**: Create a shared interface in `shared/api.ts`:
+
 ```typescript
 export interface MyRouteResponse {
   message: string;
@@ -112,20 +123,22 @@ export interface MyRouteResponse {
 }
 ```
 
-2. Create a new route handler in `server/routes/my-route.ts`:
+2. Create a new route handler in `backend-express/routes/my-route.ts`:
+
 ```typescript
 import { RequestHandler } from "express";
 import { MyRouteResponse } from "@shared/api"; // Optional: for type safety
 
 export const handleMyRoute: RequestHandler = (req, res) => {
   const response: MyRouteResponse = {
-    message: 'Hello from my endpoint!'
+    message: "Hello from my endpoint!",
   };
   res.json(response);
 };
 ```
 
-3. Register the route in `server/index.ts`:
+3. Register the route in `backend-express/index.ts`:
+
 ```typescript
 import { handleMyRoute } from "./routes/my-route";
 
@@ -134,16 +147,19 @@ app.get("/api/my-endpoint", handleMyRoute);
 ```
 
 4. Use in React components with type safety:
-```typescript
-import { MyRouteResponse } from '@shared/api'; // Optional: for type safety
 
-const response = await fetch('/api/my-endpoint');
+```typescript
+import { MyRouteResponse } from "@shared/api"; // Optional: for type safety
+
+const response = await fetch("/api/my-endpoint");
 const data: MyRouteResponse = await response.json();
 ```
 
 ### New Page Route
-1. Create component in `client/pages/MyPage.tsx`
-2. Add route in `client/App.tsx`:
+
+1. Create component in `frontend/pages/MyPage.tsx`
+2. Add route in `frontend/App.tsx`:
+
 ```typescript
 <Route path="/my-page" element={<MyPage />} />
 ```
@@ -157,8 +173,9 @@ const data: MyRouteResponse = await response.json();
 ## Architecture Notes
 
 - Single-port development with Vite + Express integration
-- TypeScript throughout (client, server, shared)
+- TypeScript throughout (frontend, backend, shared)
 - Full hot reload for rapid development
 - Production-ready with multiple deployment options
 - Comprehensive UI component library included
 - Type-safe API communication via shared interfaces
+- Clean separation: frontend/ + backend-express/ + shared/

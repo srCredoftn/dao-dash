@@ -37,12 +37,16 @@ export default function TaskAssignmentDialog({
   const [open, setOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState<string | undefined>(currentAssignedTo);
 
-  const handleSave = () => {
+  const handleSave = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     onAssignmentChange(selectedMember);
     setOpen(false);
   };
 
-  const handleCancel = () => {
+  const handleCancel = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     setSelectedMember(currentAssignedTo);
     setOpen(false);
   };

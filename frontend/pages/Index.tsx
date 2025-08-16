@@ -11,9 +11,11 @@ import {
   User,
   ChevronDown,
   ChevronUp,
+  Download,
 } from "lucide-react";
 import NewDaoDialog from "@/components/NewDaoDialog";
 import FilterDialog from "@/components/FilterDialog";
+import GlobalExportDialog from "@/components/GlobalExportDialog";
 import { AppHeader } from "@/components/AppHeader";
 import { StatsCard } from "@/components/StatsCard";
 import { useAuth } from "@/contexts/AuthContext";
@@ -77,7 +79,7 @@ function getStatusLabel(status: DaoStatus): string {
     case "completed":
       return "Terminé";
     case "urgent":
-      return "Urgent";
+      return "À risque";
     case "safe":
       return "En avance";
     case "default":
@@ -437,6 +439,14 @@ export default function Index() {
                       ),
                     ]}
                   />
+                </div>
+                <div className="flex-1 xs:flex-none md:flex-none">
+                  <GlobalExportDialog daos={daos}>
+                    <Button variant="outline" className="w-full">
+                      <Download className="h-4 w-4 mr-2" />
+                      Exporter
+                    </Button>
+                  </GlobalExportDialog>
                 </div>
                 {user && isAdmin() && (
                   <div className="flex-1 xs:flex-none md:flex-none">

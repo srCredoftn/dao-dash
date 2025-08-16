@@ -344,7 +344,11 @@ export default function NewDaoDialog({
     }
   };
 
-  const removeTeamMember = (memberId: string) => {
+  const removeTeamMember = (memberId: string, e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     const updatedMembers = formData.teamMembers.filter(
       (m) => m.id !== memberId,
     );
@@ -356,7 +360,11 @@ export default function NewDaoDialog({
     setTimeout(() => validateField("teamMembers", updatedMembers), 100);
   };
 
-  const addNewMember = () => {
+  const addNewMember = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     if (newMemberName.trim()) {
       const newMember: TeamMember = {
         id: Date.now().toString(),
@@ -496,12 +504,14 @@ export default function NewDaoDialog({
                         key={authority}
                         type="button"
                         className="w-full text-left px-3 py-2 hover:bg-gray-100 text-sm"
-                        onClick={() =>
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
                           setFormData((prev) => ({
                             ...prev,
                             autoriteContractante: authority,
-                          }))
-                        }
+                          }));
+                        }}
                       >
                         {authority}
                       </button>
@@ -650,7 +660,7 @@ export default function NewDaoDialog({
                         variant="ghost"
                         size="sm"
                         className="h-auto p-0 text-muted-foreground hover:text-foreground ml-1"
-                        onClick={() => removeTeamMember(member.id)}
+                        onClick={(e) => removeTeamMember(member.id, e)}
                       >
                         ×
                       </Button>
@@ -699,7 +709,7 @@ export default function NewDaoDialog({
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={addNewMember}
+                  onClick={(e) => addNewMember(e)}
                   disabled={!newMemberName.trim()}
                   className="flex-1"
                 >

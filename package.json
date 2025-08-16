@@ -24,6 +24,7 @@
     "@types/mongoose": "^5.11.97",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
+    "jspdf": "^3.0.1",
     "mongoose": "^8.17.1",
     "zod": "^3.25.76"
   },

@@ -5,7 +5,7 @@ import path from "path";
 export default defineConfig({
   build: {
     lib: {
-      entry: path.resolve(__dirname, "server/node-build.ts"),
+      entry: path.resolve(__dirname, "backend-express/node-build.ts"),
       name: "server",
       fileName: "production",
       formats: ["es"],
@@ -43,7 +43,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./client"),
+      "@": path.resolve(__dirname, "./frontend"),
       "@shared": path.resolve(__dirname, "./shared"),
     },
   },

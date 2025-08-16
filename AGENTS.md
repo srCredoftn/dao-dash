@@ -106,7 +106,7 @@ pnpm test          # Run Vitest tests
 
 ### Add new colors to the theme
 
-Open `client/global.css` and `tailwind.config.ts` and add new tailwind colors.
+Open `frontend/global.css` and `tailwind.config.ts` and add new tailwind colors.
 
 ### New API Route
 1. **Optional**: Create a shared interface in `shared/api.ts`:

@@ -605,7 +605,7 @@ export default function Index() {
                   className="pl-10 text-sm"
                 />
               </div>
-              <div className="flex flex-col xs:flex-row lg:flex-row items-stretch xs:items-center lg:items-center gap-2 xs:gap-3 lg:flex-shrink-0">
+              <div className="flex flex-col xs:flex-row md:flex-row items-stretch xs:items-center md:items-center gap-2 xs:gap-3 md:flex-shrink-0">
                 <div className="flex-1 xs:flex-none lg:flex-none">
                   <FilterDialog
                     filters={filters}

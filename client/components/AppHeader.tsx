@@ -201,6 +201,124 @@ export function AppHeader({ title, children }: AppHeaderProps) {
         </div>
 
       </div>
+
+      {/* Mobile Sidebar Overlay */}
+      {isMobileMenuOpen && (
+        <>
+          {/* Dark Overlay */}
+          <div
+            className="fixed inset-0 bg-black/50 z-40 sm:hidden transition-opacity duration-300"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+
+          {/* Sidebar */}
+          <div className={`fixed top-0 left-0 h-full w-80 max-w-[85vw] bg-white z-50 sm:hidden transform transition-transform duration-300 ease-out shadow-2xl ${
+            isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}>
+            {/* Sidebar Header */}
+            <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-blue-50 to-indigo-50">
+              <div className="flex items-center space-x-3">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2F376e9389c66d473f975258354bf70209%2F9d870cba39fd46d3bb0ed8d14c652440?format=webp&width=800"
+                  alt="2SND Technologies"
+                  className="w-8 h-8 object-contain"
+                />
+                <span className="font-semibold text-gray-900">Menu</span>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="h-8 w-8 p-0 hover:bg-white/50"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+
+            {/* User Profile Section */}
+            <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b">
+              <div className="flex items-center space-x-3">
+                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                  <User className="w-6 h-6 text-blue-600" />
+                </div>
+                <div className="flex-1">
+                  <div className="font-semibold text-gray-900">{user?.name}</div>
+                  <div className="text-sm text-gray-600">{user?.email}</div>
+                  <Badge
+                    variant={getRoleBadgeVariant(user?.role || "")}
+                    className="mt-1"
+                  >
+                    {getRoleLabel(user?.role || "")}
+                  </Badge>
+                </div>
+              </div>
+            </div>
+
+            {/* Navigation Menu */}
+            <div className="flex-1 p-4">
+              <nav className="space-y-2">
+                <button
+                  onClick={() => {
+                    handleProfileClick();
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="w-full flex items-center space-x-4 p-4 text-left hover:bg-gray-100 rounded-xl transition-colors group"
+                >
+                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                    <User className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <span className="font-medium text-gray-700">Mon profil</span>
+                </button>
+
+                {isAdmin() && (
+                  <>
+                    <button
+                      onClick={() => {
+                        handleUserManagementClick();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="w-full flex items-center space-x-4 p-4 text-left hover:bg-gray-100 rounded-xl transition-colors group"
+                    >
+                      <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center group-hover:bg-green-200 transition-colors">
+                        <Users className="w-5 h-5 text-green-600" />
+                      </div>
+                      <span className="font-medium text-gray-700">Gestion des utilisateurs</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleAdminClick();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="w-full flex items-center space-x-4 p-4 text-left hover:bg-gray-100 rounded-xl transition-colors group"
+                    >
+                      <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center group-hover:bg-purple-200 transition-colors">
+                        <Settings className="w-5 h-5 text-purple-600" />
+                      </div>
+                      <span className="font-medium text-gray-700">Administration</span>
+                    </button>
+                  </>
+                )}
+              </nav>
+            </div>
+
+            {/* Logout Button at Bottom */}
+            <div className="p-4 border-t bg-gray-50">
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setIsMobileMenuOpen(false);
+                }}
+                className="w-full flex items-center space-x-4 p-4 text-left hover:bg-red-50 text-red-600 rounded-xl transition-colors group"
+              >
+                <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center group-hover:bg-red-200 transition-colors">
+                  <LogOut className="w-5 h-5 text-red-600" />
+                </div>
+                <span className="font-medium">Se déconnecter</span>
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </header>
   );
 }

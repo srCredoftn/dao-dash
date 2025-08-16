@@ -499,7 +499,7 @@ export default function Index() {
         </Card>
 
         {/* DAO List */}
-        <div className="space-y-3 sm:space-y-4">
+        <div className="mt-8 sm:mt-12 space-y-3 sm:space-y-4">
           <div className="flex flex-col xs:flex-row xs:items-center xs:justify-between gap-2">
             <h2 className="text-base sm:text-lg font-semibold">
               Dossiers d'Appel d'Offres

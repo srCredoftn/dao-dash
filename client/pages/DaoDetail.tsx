@@ -556,7 +556,7 @@ export default function DaoDetail() {
 DAO: ${dao?.numeroListe}
 Objet: ${dao?.objetDossier}
 Référence: ${dao?.reference}
-Autorité: ${dao?.autoriteContractante}
+Autorit��: ${dao?.autoriteContractante}
 Date de dépôt: ${dao?.dateDepot}
 Progression: ${progress}%
 
@@ -990,12 +990,7 @@ ${dao?.tasks
         {/* Tasks Detail */}
         <Card>
           <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle>Détail des tâches</CardTitle>
-              <span className="text-sm text-muted-foreground">
-                {applicableTasks} tâches applicables
-              </span>
-            </div>
+            <CardTitle>Détail des tâches</CardTitle>
           </CardHeader>
           <CardContent className="px-3 sm:px-6">
             <div className="space-y-3 sm:space-y-4">
@@ -1013,6 +1008,18 @@ ${dao?.tasks
                   taskIndex={index + 1}
                 />
               ))}
+            </div>
+
+            {/* Total applicable tasks count */}
+            <div className="flex justify-center pt-4 mt-4 border-t border-gray-200">
+              <div className="flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-lg">
+                <span className="text-sm font-medium text-gray-700">
+                  Total :
+                </span>
+                <span className="text-sm font-bold text-primary">
+                  {applicableTasks} tâches applicables
+                </span>
+              </div>
             </div>
           </CardContent>
         </Card>

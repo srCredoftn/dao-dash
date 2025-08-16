@@ -150,7 +150,7 @@ export default function TeamEditDialog({ currentTeam, onTeamUpdate, type }: Team
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => removeMember(member.id)}
+                      onClick={(e) => removeMember(member.id, e)}
                       className="h-6 w-6 p-0 text-red-500 hover:text-red-700"
                     >
                       <X className="h-3 w-3" />
@@ -190,7 +190,7 @@ export default function TeamEditDialog({ currentTeam, onTeamUpdate, type }: Team
           {/* Add new member */}
           <div className="space-y-2">
             <Label className="text-sm font-medium">
-              {type === 'chef' ? 'Ou créer un nouveau chef' : 'Ou ajouter un nouveau membre'}
+              {type === 'chef' ? 'Ou cr��er un nouveau chef' : 'Ou ajouter un nouveau membre'}
             </Label>
             <div className="space-y-2">
               <Input

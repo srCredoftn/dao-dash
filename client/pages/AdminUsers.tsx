@@ -56,6 +56,12 @@ export default function AdminUsers() {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserType | null>(null);
+  const [createdUserInfo, setCreatedUserInfo] = useState<{
+    user: UserType;
+    temporaryPassword: string;
+    message: string;
+  } | null>(null);
+  const [showPasswordDialog, setShowPasswordDialog] = useState(false);
 
   // Form states
   const [newUser, setNewUser] = useState({

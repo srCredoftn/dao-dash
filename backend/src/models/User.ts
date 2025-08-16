@@ -134,7 +134,19 @@ userSchema.methods.comparePassword = async function (
 
 userSchema.methods.isPasswordDefault = function (): boolean {
   // Check if password is a default one (for new users)
-  return ["changeme123", "password123", "default123"].includes(this.password);
+  return this.isTemporaryPassword;
+};
+
+userSchema.methods.isTemporaryPasswordExpired = function (): boolean {
+  if (!this.isTemporaryPassword || !this.temporaryPasswordExpires) {
+    return false;
+  }
+  return new Date() > this.temporaryPasswordExpires;
+};
+
+userSchema.methods.markPasswordAsTemporary = function (expirationHours: number = 24): void {
+  this.isTemporaryPassword = true;
+  this.temporaryPasswordExpires = new Date(Date.now() + expirationHours * 60 * 60 * 1000);
 };
 
 // Static methods

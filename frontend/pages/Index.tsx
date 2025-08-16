@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import NewDaoDialog from "@/components/NewDaoDialog";
 import FilterDialog from "@/components/FilterDialog";
+import GlobalExportDialog from "@/components/GlobalExportDialog";
 import { AppHeader } from "@/components/AppHeader";
 import { StatsCard } from "@/components/StatsCard";
 import { useAuth } from "@/contexts/AuthContext";

@@ -162,8 +162,9 @@ const data: MyRouteResponse = await response.json();
 ## Architecture Notes
 
 - Single-port development with Vite + Express integration
-- TypeScript throughout (client, server, shared)
+- TypeScript throughout (frontend, backend, shared)
 - Full hot reload for rapid development
 - Production-ready with multiple deployment options
 - Comprehensive UI component library included
 - Type-safe API communication via shared interfaces
+- Clean separation: frontend/ + backend-express/ + shared/

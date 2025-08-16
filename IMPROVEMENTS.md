@@ -19,7 +19,7 @@
 
 - ✅ **"En avance" (safe)** : Plus de 5 jours avant la date de dépôt (badge bleu)
 - ✅ **"En cours" (default)** : Entre 4 et 5 jours avant la date de dépôt (badge bleu)
-- ✅ **"Urgent"** : 3 jours ou moins avant la date de dépôt (badge rouge)
+- ✅ **"À risque"** : 3 jours ou moins avant la date de dépôt (badge rouge)
 - ✅ **"Terminé"** : 100% de progression (badge gris)
 
 ### 4. **Responsivité complète**
@@ -36,7 +36,7 @@
 
 - **Avant** : Les boutons étaient dans l'en-tête (AppHeader)
 - **Après** : Les boutons sont maintenant dans la zone de recherche avec un design amélioré
-- **Bénéfice** : Interface plus logique et cohérente
+- **Bén��fice** : Interface plus logique et cohérente
 
 ### 2. Amélioration du système de recherche
 

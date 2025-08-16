@@ -42,14 +42,26 @@ export function createServer() {
   app.use("/api/dao", daoRoutes);
 
   // Use MongoDB authentication routes with fallback
-  app.use("/api/auth", async (req, res, next) => {
-    // Check if MongoDB is connected
-    if (mongoose.connection.readyState === 1) {
+  let useMongoAuth = false;
+
+  // Test MongoDB connection
+  mongoose.connection.on('connected', () => {
+    useMongoAuth = true;
+    console.log('🔗 MongoDB auth routes activated');
+  });
+
+  mongoose.connection.on('error', () => {
+    useMongoAuth = false;
+    console.log('🔗 Using in-memory auth routes (MongoDB not available)');
+  });
+
+  app.use("/api/auth", (req, res, next) => {
+    if (useMongoAuth && mongoose.connection.readyState === 1) {
       // MongoDB is connected, use MongoDB routes
-      return authMongoRoutes(req, res, next);
+      authMongoRoutes(req, res, next);
     } else {
       // MongoDB not connected, use in-memory routes
-      return authRoutes(req, res, next);
+      authRoutes(req, res, next);
     }
   });
 

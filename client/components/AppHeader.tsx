@@ -97,7 +97,7 @@ export function AppHeader({ title, children }: AppHeaderProps) {
                 <NotificationCenter />
 
                 {/* Desktop: User info + Role badge + Menu */}
-                <div className="hidden sm:flex items-center space-x-3">
+                <div className="hidden lg:flex items-center space-x-3">
                   {/* User info */}
                   <div className="hidden md:block text-right">
                     <div className="text-sm font-medium">{user.name}</div>

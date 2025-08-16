@@ -155,7 +155,9 @@ function TaskRow({
           </div>
 
           <div className="text-center py-2">
-            <span className="text-sm text-muted-foreground italic">Non applicable</span>
+            <span className="text-sm text-muted-foreground italic">
+              Non applicable
+            </span>
           </div>
         </div>
 
@@ -183,7 +185,9 @@ function TaskRow({
             </div>
           </div>
           <div className="mt-4 text-center">
-            <span className="text-sm text-muted-foreground">Non applicable</span>
+            <span className="text-sm text-muted-foreground">
+              Non applicable
+            </span>
           </div>
         </div>
       </div>
@@ -270,7 +274,6 @@ function TaskRow({
           </div>
         </div>
       </div>
-
 
       {/* Edit Mode with Slider */}
       {isEditing && (
@@ -366,7 +369,9 @@ function TaskRow({
         <div className="pt-3 border-t border-gray-100">
           {isAdmin() ? (
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-              <span className="text-xs font-medium text-muted-foreground">Assignation:</span>
+              <span className="text-xs font-medium text-muted-foreground">
+                Assignation:
+              </span>
               <TaskAssignmentDialog
                 currentAssignedTo={task.assignedTo}
                 availableMembers={availableMembers}
@@ -378,10 +383,13 @@ function TaskRow({
             </div>
           ) : (
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-              <span className="text-xs font-medium text-muted-foreground">Assigné à:</span>
+              <span className="text-xs font-medium text-muted-foreground">
+                Assigné à:
+              </span>
               <span className="text-xs font-medium">
                 {task.assignedTo
-                  ? availableMembers.find((m) => m.id === task.assignedTo)?.name || "Utilisateur inconnu"
+                  ? availableMembers.find((m) => m.id === task.assignedTo)
+                      ?.name || "Utilisateur inconnu"
                   : "Non assigné"}
               </span>
             </div>
@@ -393,7 +401,9 @@ function TaskRow({
       {task.isApplicable && !isEditing && (
         <div className="space-y-2 pt-3 border-t border-gray-100">
           <div className="flex items-center justify-between">
-            <span className="text-xs text-muted-foreground font-medium">Progression</span>
+            <span className="text-xs text-muted-foreground font-medium">
+              Progression
+            </span>
             <span className="text-sm font-bold text-primary">
               {task.progress || 0}%
             </span>

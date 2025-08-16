@@ -227,7 +227,12 @@ export default function AdminUsers() {
           <div className="block lg:hidden">
             {/* First Row: Back button and title */}
             <div className="flex items-center space-x-3 mb-4">
-              <Button variant="ghost" size="sm" asChild className="flex-shrink-0">
+              <Button
+                variant="ghost"
+                size="sm"
+                asChild
+                className="flex-shrink-0"
+              >
                 <Link to="/">
                   <ArrowLeft className="h-4 w-4" />
                   <span className="ml-1 text-sm">Retour</span>

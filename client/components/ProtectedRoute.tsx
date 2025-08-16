@@ -15,10 +15,14 @@ interface ProtectedRouteProps {
 export function ProtectedRoute({
   children,
   requireRoles,
+  requiredRoles,
   fallback,
 }: ProtectedRouteProps) {
   const { user, isLoading, isAuthenticated, hasRole } = useAuth();
   const location = useLocation();
+
+  // Use either prop name for role requirements
+  const roles = requireRoles || requiredRoles;
 
   // Show loading spinner while auth is being verified
   if (isLoading) {
@@ -42,7 +46,7 @@ export function ProtectedRoute({
   }
 
   // Check role requirements - silently redirect to home if insufficient permissions
-  if (requireRoles && !hasRole(requireRoles)) {
+  if (roles && !hasRole(roles)) {
     if (fallback) {
       return <>{fallback}</>;
     }

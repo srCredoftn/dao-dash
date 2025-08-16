@@ -87,6 +87,8 @@ const userSchema = new Schema<UserDocument>(
         delete ret.password;
         delete ret.resetPasswordToken;
         delete ret.resetPasswordExpires;
+        delete ret.isTemporaryPassword;
+        delete ret.temporaryPasswordExpires;
         return ret;
       },
     },

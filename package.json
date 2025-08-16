@@ -25,7 +25,10 @@
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "mongoose": "^8.17.1",
-    "zod": "^3.25.76"
+    "zod": "^3.25.76",
+    "jsonwebtoken": "^9.0.2",
+    "bcryptjs": "^2.4.3",
+    "nodemailer": "^6.9.8"
   },
   "devDependencies": {
     "@hookform/resolvers": "^5.2.1",

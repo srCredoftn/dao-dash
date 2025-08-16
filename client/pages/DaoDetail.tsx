@@ -36,6 +36,7 @@ import { apiService } from "@/services/api";
 import {
   calculateDaoStatus,
   calculateDaoProgress,
+  type Dao,
   type DaoTask,
   type DaoStatus,
   type TeamMember,
@@ -126,47 +127,90 @@ function TaskRow({
   // If not applicable, show simple layout
   if (!task.isApplicable) {
     return (
-      <div className="bg-white rounded-lg border p-4">
-        <div className="flex items-center justify-between">
-          <h4 className="font-medium text-sm">
-            <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full mr-2">
+      <div className="bg-white rounded-lg border p-3 sm:p-4">
+        {/* Mobile: Vertical layout */}
+        <div className="block sm:hidden space-y-3">
+          <div className="flex items-start gap-2">
+            <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full flex-shrink-0">
               {taskIndex}
             </span>
-            {task.name}
-          </h4>
-          <div className="flex items-center gap-2">
+            <h4 className="font-medium text-sm flex-1 min-w-0 break-words">
+              {task.name}
+            </h4>
+          </div>
+
+          <div className="flex items-center justify-between pt-2 border-t border-gray-100">
             <span className="text-xs text-muted-foreground">Applicable:</span>
-            {isAdmin() ? (
-              <Switch
-                checked={false}
-                onCheckedChange={(checked) =>
-                  onApplicableChange(task.id, checked)
-                }
-              />
-            ) : (
-              <span className="text-xs font-medium">Non</span>
-            )}
+            <div className="flex items-center gap-2">
+              {isAdmin() ? (
+                <Switch
+                  checked={false}
+                  onCheckedChange={(checked) =>
+                    onApplicableChange(task.id, checked)
+                  }
+                />
+              ) : (
+                <span className="text-xs font-medium">Non</span>
+              )}
+            </div>
+          </div>
+
+          <div className="text-center py-2">
+            <span className="text-sm text-muted-foreground italic">
+              Non applicable
+            </span>
           </div>
         </div>
-        <div className="mt-4 text-center">
-          <span className="text-sm text-muted-foreground">Non applicable</span>
+
+        {/* Desktop: Horizontal layout */}
+        <div className="hidden sm:block">
+          <div className="flex items-center justify-between">
+            <h4 className="font-medium text-sm">
+              <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full mr-2">
+                {taskIndex}
+              </span>
+              {task.name}
+            </h4>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground">Applicable:</span>
+              {isAdmin() ? (
+                <Switch
+                  checked={false}
+                  onCheckedChange={(checked) =>
+                    onApplicableChange(task.id, checked)
+                  }
+                />
+              ) : (
+                <span className="text-xs font-medium">Non</span>
+              )}
+            </div>
+          </div>
+          <div className="mt-4 text-center">
+            <span className="text-sm text-muted-foreground">
+              Non applicable
+            </span>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-lg border p-4 space-y-3">
-      <div className="flex items-center justify-between">
-        <h4 className="font-medium text-sm">
-          <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full mr-2">
+    <div className="bg-white rounded-lg border p-3 sm:p-4">
+      {/* Mobile: Vertical layout */}
+      <div className="block sm:hidden space-y-3">
+        <div className="flex items-start gap-2">
+          <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full flex-shrink-0">
             {taskIndex}
           </span>
-          {task.name}
-        </h4>
-        <div className="flex items-center gap-3">
+          <div className="flex-1 min-w-0">
+            <h4 className="font-medium text-sm break-words">{task.name}</h4>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+          <span className="text-xs text-muted-foreground">Applicable:</span>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground">Applicable:</span>
             {isAdmin() ? (
               <Switch
                 checked={task.isApplicable}
@@ -180,93 +224,128 @@ function TaskRow({
               </span>
             )}
           </div>
-          {isAdmin() && (
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => setIsEditing(!isEditing)}
-              className="h-6 w-6 p-0"
-            >
-              <Edit3 className="h-3 w-3" />
-            </Button>
-          )}
         </div>
       </div>
 
-      {/* Progress Bar */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <span className="text-xs text-muted-foreground">Progression</span>
-          <span className="text-sm font-medium">
-            {isEditing ? tempProgress : task.progress || 0}%
-          </span>
-        </div>
-        <div className="w-full bg-gray-200 rounded-full h-2">
-          <div
-            className={cn(
-              "h-2 rounded-full transition-all",
-              getProgressColor(isEditing ? tempProgress : task.progress || 0),
-            )}
-            style={{
-              width: `${isEditing ? tempProgress : task.progress || 0}%`,
-            }}
-          />
+      {/* Desktop: Horizontal layout */}
+      <div className="hidden sm:block">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex-1 min-w-0">
+            <h4 className="font-medium text-sm">
+              <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full mr-2">
+                {taskIndex}
+              </span>
+              {task.name}
+            </h4>
+          </div>
+
+          <div className="flex items-center gap-3 ml-4">
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground">Applicable:</span>
+              {isAdmin() ? (
+                <Switch
+                  checked={task.isApplicable}
+                  onCheckedChange={(checked) =>
+                    onApplicableChange(task.id, checked)
+                  }
+                />
+              ) : (
+                <span className="text-xs font-medium">
+                  {task.isApplicable ? "Oui" : "Non"}
+                </span>
+              )}
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Edit Mode with Slider */}
       {isEditing && (
-        <div className="space-y-4 pt-3 border-t">
-          <div className="space-y-2">
-            <label className="text-xs text-muted-foreground">
+        <div className="space-y-4 pt-4 border-t border-gray-200">
+          {/* Progress Slider Section */}
+          <div className="space-y-3">
+            <label className="text-xs font-medium text-muted-foreground block">
               Ajuster le pourcentage:
             </label>
-            <div className="px-3">
+            <div className="px-2 sm:px-4">
               <input
                 type="range"
                 min="0"
                 max="100"
                 value={tempProgress}
                 onChange={(e) => setTempProgress(Number(e.target.value))}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                className="w-full h-2.5 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
                 style={{
                   background: `linear-gradient(to right, ${getSliderColor(tempProgress)} 0%, ${getSliderColor(tempProgress)} ${tempProgress}%, #e5e7eb ${tempProgress}%, #e5e7eb 100%)`,
                 }}
               />
-              <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                <span>0%</span>
-                <span className="font-medium">{tempProgress}%</span>
-                <span>100%</span>
+              <div className="flex justify-between text-xs text-muted-foreground mt-2">
+                <span className="font-medium">0%</span>
+                <span className="font-bold text-primary">{tempProgress}%</span>
+                <span className="font-medium">100%</span>
               </div>
             </div>
           </div>
 
-          <div className="space-y-2">
-            <label className="text-xs text-muted-foreground">
+          {/* Comment Section */}
+          <div className="space-y-3">
+            <label className="text-xs font-medium text-muted-foreground block">
               Commentaire/Observation:
             </label>
             <Textarea
               value={tempComment}
               onChange={(e) => setTempComment(e.target.value)}
-              placeholder="Ajouter un commentaire..."
-              className="text-xs resize-none"
+              placeholder="Ajouter un commentaire ou une observation..."
+              className="text-sm resize-none min-h-[80px] border-gray-300 focus:border-primary"
               rows={3}
             />
           </div>
 
-          <div className="flex justify-end">
-            <Button
-              onClick={handleSave}
-              size="sm"
-              className="bg-green-600 hover:bg-green-700 text-white"
-            >
-              Sauvegarder
-            </Button>
-          </div>
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-3 pt-2">
+            <div className="flex gap-2 order-2 sm:order-1">
+              {/* Task Assignment - Admin only */}
+              {isAdmin() && (
+                <TaskAssignmentDialog
+                  currentAssignedTo={task.assignedTo}
+                  availableMembers={availableMembers}
+                  onAssignmentChange={(memberId) =>
+                    onAssignmentChange(task.id, memberId)
+                  }
+                  taskName={task.name}
+                />
+              )}
+            </div>
 
-          {/* Task Assignment - Admin only */}
-          {isAdmin() && (
-            <div className="flex justify-start">
+            <div className="flex gap-2 ml-auto order-1 sm:order-2">
+              <Button
+                variant="outline"
+                onClick={handleCancel}
+                size="sm"
+                className="flex-1 sm:flex-none"
+              >
+                Annuler
+              </Button>
+              <Button
+                onClick={handleSave}
+                size="sm"
+                className="bg-green-600 hover:bg-green-700 text-white flex-1 sm:flex-none"
+              >
+                Sauvegarder
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Assignment Section - Visible for applicable tasks (Admin can edit, others just view) */}
+      {task.isApplicable && !isEditing && (
+        <div className="pt-3 border-t border-gray-100">
+          {isAdmin() ? (
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+              <span className="text-xs font-medium text-muted-foreground">
+                Assignation:
+              </span>
               <TaskAssignmentDialog
                 currentAssignedTo={task.assignedTo}
                 availableMembers={availableMembers}
@@ -276,41 +355,68 @@ function TaskRow({
                 taskName={task.name}
               />
             </div>
+          ) : (
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+              <span className="text-xs font-medium text-muted-foreground">
+                Assigné à:
+              </span>
+              <span className="text-xs font-medium">
+                {task.assignedTo
+                  ? availableMembers.find((m) => m.id === task.assignedTo)
+                      ?.name || "Utilisateur inconnu"
+                  : "Non assigné"}
+              </span>
+            </div>
           )}
         </div>
       )}
 
-      {/* Comments section - always show when not editing */}
-      {!isEditing && (
-        <TaskComments
-          daoId={daoId}
-          taskId={task.id}
-          taskName={task.name}
-          availableMembers={availableMembers}
-        />
+      {/* Progress Bar - Always at the bottom */}
+      {task.isApplicable && (
+        <div className="space-y-2 pt-3 border-t border-gray-100">
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-muted-foreground font-medium">
+              Progression
+            </span>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-bold text-primary">
+                {isEditing ? tempProgress : task.progress || 0}%
+              </span>
+              {isAdmin() && (
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => setIsEditing(!isEditing)}
+                  className="h-6 w-6 p-0 flex-shrink-0"
+                >
+                  <Edit3 className="h-3 w-3" />
+                </Button>
+              )}
+            </div>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2.5">
+            <div
+              className={cn(
+                "h-2.5 rounded-full transition-all duration-300",
+                getProgressColor(isEditing ? tempProgress : task.progress || 0),
+              )}
+              style={{
+                width: `${isEditing ? tempProgress : task.progress || 0}%`,
+              }}
+            />
+          </div>
+        </div>
       )}
 
-      {/* Assignment Badge - Visible for applicable tasks (Admin can edit, others just view) */}
-      {task.isApplicable && !isEditing && (
-        <div className="flex justify-start">
-          {isAdmin() ? (
-            <TaskAssignmentDialog
-              currentAssignedTo={task.assignedTo}
-              availableMembers={availableMembers}
-              onAssignmentChange={(memberId) =>
-                onAssignmentChange(task.id, memberId)
-              }
-              taskName={task.name}
-            />
-          ) : task.assignedTo ? (
-            <div className="text-xs text-muted-foreground">
-              Assigné à:{" "}
-              {availableMembers.find((m) => m.id === task.assignedTo)?.name ||
-                "Utilisateur inconnu"}
-            </div>
-          ) : (
-            <div className="text-xs text-muted-foreground">Non assigné</div>
-          )}
+      {/* Comments section - always show when not editing, now after progress bar */}
+      {!isEditing && (
+        <div className="pt-3">
+          <TaskComments
+            daoId={daoId}
+            taskId={task.id}
+            taskName={task.name}
+            availableMembers={availableMembers}
+          />
         </div>
       )}
     </div>
@@ -344,7 +450,9 @@ export default function DaoDetail() {
         setDao(fetchedDao);
       } catch (err) {
         console.error("Error loading DAO:", err);
-        setError("Failed to load DAO");
+        const errorMessage =
+          err instanceof Error ? err.message : "Échec du chargement du DAO";
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }
@@ -461,7 +569,7 @@ export default function DaoDetail() {
 DAO: ${dao?.numeroListe}
 Objet: ${dao?.objetDossier}
 Référence: ${dao?.reference}
-Autorité: ${dao?.autoriteContractante}
+Autorit��: ${dao?.autoriteContractante}
 Date de dépôt: ${dao?.dateDepot}
 Progression: ${progress}%
 
@@ -895,15 +1003,10 @@ ${dao?.tasks
         {/* Tasks Detail */}
         <Card>
           <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle>Détail des tâches</CardTitle>
-              <span className="text-sm text-muted-foreground">
-                {applicableTasks} tâches applicables
-              </span>
-            </div>
+            <CardTitle>Détail des tâches</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
+          <CardContent className="px-3 sm:px-6">
+            <div className="space-y-3 sm:space-y-4">
               {dao.tasks.map((task, index) => (
                 <TaskRow
                   key={task.id}
@@ -918,6 +1021,18 @@ ${dao?.tasks
                   taskIndex={index + 1}
                 />
               ))}
+            </div>
+
+            {/* Total applicable tasks count */}
+            <div className="flex justify-center pt-4 mt-4 border-t border-gray-200">
+              <div className="flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-lg">
+                <span className="text-sm font-medium text-gray-700">
+                  Total :
+                </span>
+                <span className="text-sm font-bold text-primary">
+                  {applicableTasks} tâches applicables
+                </span>
+              </div>
             </div>
           </CardContent>
         </Card>

@@ -223,12 +223,136 @@ export default function AdminUsers() {
       {/* Header */}
       <header className="bg-white border-b">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
+          {/* Mobile Layout */}
+          <div className="block lg:hidden">
+            {/* First Row: Back button and title */}
+            <div className="flex items-center space-x-3 mb-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                asChild
+                className="flex-shrink-0"
+              >
+                <Link to="/">
+                  <ArrowLeft className="h-4 w-4" />
+                  <span className="ml-1 text-sm">Retour</span>
+                </Link>
+              </Button>
+
+              <div className="flex items-center space-x-3 flex-1 min-w-0">
+                <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Users className="h-4 w-4 text-red-600" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h1 className="text-base font-bold truncate">
+                    Gestion des utilisateurs
+                  </h1>
+                  <p className="text-xs text-muted-foreground truncate">
+                    Gérez les comptes utilisateurs de l'application
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Second Row: Action button */}
+            <div className="flex justify-center pt-1">
+              <Dialog
+                open={isCreateDialogOpen}
+                onOpenChange={setIsCreateDialogOpen}
+              >
+                <DialogTrigger asChild>
+                  <Button
+                    className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground font-medium px-6 py-2.5 h-auto shadow-md"
+                    size="default"
+                  >
+                    <Plus className="h-5 w-5 mr-2" />
+                    Nouvel utilisateur
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Créer un nouvel utilisateur</DialogTitle>
+                    <DialogDescription>
+                      Ajouter un nouvel utilisateur avec ses permissions. Un mot
+                      de passe par défaut sera généré automatiquement.
+                    </DialogDescription>
+                  </DialogHeader>
+
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="name">Nom complet *</Label>
+                      <Input
+                        id="name"
+                        value={newUser.name}
+                        onChange={(e) =>
+                          setNewUser((prev) => ({
+                            ...prev,
+                            name: e.target.value,
+                          }))
+                        }
+                        placeholder="Nom et prénom"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Email *</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={newUser.email}
+                        onChange={(e) =>
+                          setNewUser((prev) => ({
+                            ...prev,
+                            email: e.target.value,
+                          }))
+                        }
+                        placeholder="email@example.com"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="role">Rôle</Label>
+                      <Select
+                        value={newUser.role}
+                        onValueChange={(value: UserRole) =>
+                          setNewUser((prev) => ({ ...prev, role: value }))
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Sélectionner un rôle" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="viewer">Visualiseur</SelectItem>
+                          <SelectItem value="user">Utilisateur</SelectItem>
+                          <SelectItem value="admin">Administrateur</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <DialogFooter>
+                    <Button
+                      variant="outline"
+                      onClick={() => setIsCreateDialogOpen(false)}
+                    >
+                      Annuler
+                    </Button>
+                    <Button onClick={handleCreateUser}>
+                      Créer l'utilisateur
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </div>
+          </div>
+
+          {/* Desktop Layout */}
+          <div className="hidden lg:flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <Button variant="ghost" size="sm" asChild>
                 <Link to="/">
                   <ArrowLeft className="h-4 w-4 mr-2" />
-                  Retour
+                  Retour au tableau de bord
                 </Link>
               </Button>
 
@@ -238,10 +362,10 @@ export default function AdminUsers() {
                 </div>
                 <div>
                   <h1 className="text-xl font-bold">
-                    Administration des utilisateurs
+                    Gestion des utilisateurs
                   </h1>
                   <p className="text-sm text-muted-foreground">
-                    Gérer les utilisateurs et leurs permissions
+                    Gérez les comptes utilisateurs de l'application
                   </p>
                 </div>
               </div>
@@ -257,6 +381,79 @@ export default function AdminUsers() {
                   Nouvel utilisateur
                 </Button>
               </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Créer un nouvel utilisateur</DialogTitle>
+                  <DialogDescription>
+                    Ajouter un nouvel utilisateur avec ses permissions. Un mot
+                    de passe par défaut sera généré automatiquement.
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="name">Nom complet *</Label>
+                    <Input
+                      id="name"
+                      value={newUser.name}
+                      onChange={(e) =>
+                        setNewUser((prev) => ({
+                          ...prev,
+                          name: e.target.value,
+                        }))
+                      }
+                      placeholder="Nom et prénom"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email *</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={newUser.email}
+                      onChange={(e) =>
+                        setNewUser((prev) => ({
+                          ...prev,
+                          email: e.target.value,
+                        }))
+                      }
+                      placeholder="email@example.com"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="role">Rôle</Label>
+                    <Select
+                      value={newUser.role}
+                      onValueChange={(value: UserRole) =>
+                        setNewUser((prev) => ({ ...prev, role: value }))
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Sélectionner un rôle" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="viewer">Visualiseur</SelectItem>
+                        <SelectItem value="user">Utilisateur</SelectItem>
+                        <SelectItem value="admin">Administrateur</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <DialogFooter>
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsCreateDialogOpen(false)}
+                  >
+                    Annuler
+                  </Button>
+                  <Button onClick={handleCreateUser}>
+                    Créer l'utilisateur
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle>Créer un nouvel utilisateur</DialogTitle>

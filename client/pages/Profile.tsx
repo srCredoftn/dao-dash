@@ -180,7 +180,35 @@ export default function Profile() {
       {/* Header */}
       <header className="bg-white border-b">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center space-x-4">
+          {/* Mobile Layout */}
+          <div className="block lg:hidden">
+            <div className="flex items-center space-x-3 mb-3">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate("/")}
+                className="flex-shrink-0"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                <span className="ml-1 text-sm">Retour</span>
+              </Button>
+
+              <div className="flex items-center space-x-3 flex-1 min-w-0">
+                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <User className="h-4 w-4 text-blue-600" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h1 className="text-base font-bold truncate">Mon Profil</h1>
+                  <p className="text-xs text-muted-foreground truncate">
+                    Gérez vos informations personnelles
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop Layout */}
+          <div className="hidden lg:flex items-center space-x-4">
             <Button variant="ghost" size="sm" onClick={() => navigate("/")}>
               <ArrowLeft className="h-4 w-4 mr-2" />
               Retour au tableau de bord

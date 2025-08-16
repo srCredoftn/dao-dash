@@ -29,6 +29,20 @@ class ApiService {
       });
 
       if (!response.ok) {
+        // Handle authentication errors
+        if (response.status === 401) {
+          // Clear invalid token
+          localStorage.removeItem("auth_token");
+          localStorage.removeItem("auth_user");
+
+          // Redirect to login page if not already there
+          if (!window.location.pathname.includes("/login")) {
+            window.location.href = "/login";
+          }
+
+          throw new Error("Session expirée. Veuillez vous reconnecter.");
+        }
+
         const errorData = await response.json().catch(() => ({}));
         throw new Error(
           errorData.error || `HTTP error! status: ${response.status}`,
@@ -37,6 +51,13 @@ class ApiService {
 
       return await response.json();
     } catch (error) {
+      // Handle network errors
+      if (error instanceof TypeError && error.message === "Failed to fetch") {
+        throw new Error(
+          "Erreur de connexion. Vérifiez votre connexion internet.",
+        );
+      }
+
       console.error(`API request failed for ${endpoint}:`, error);
       throw error;
     }

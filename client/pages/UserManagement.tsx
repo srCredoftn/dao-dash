@@ -289,6 +289,17 @@ export default function UserManagement() {
                 </div>
               </div>
             </div>
+
+            {/* Second Row: Action button for mobile */}
+            <div className="flex justify-center">
+              <Button
+                className="w-full sm:w-auto"
+                onClick={() => setIsCreateDialogOpen(true)}
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Nouvel utilisateur
+              </Button>
+            </div>
           </div>
 
           {/* Desktop Layout */}
@@ -321,8 +332,7 @@ export default function UserManagement() {
               <DialogTrigger asChild>
                 <Button className="w-full sm:w-auto">
                   <Plus className="h-4 w-4 mr-2" />
-                  <span className="hidden sm:inline">Nouvel utilisateur</span>
-                  <span className="sm:hidden">Nouveau</span>
+                  Nouvel utilisateur
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-md">

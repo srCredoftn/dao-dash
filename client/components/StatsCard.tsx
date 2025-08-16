@@ -78,7 +78,7 @@ export function StatsCard({
         className,
       )}
     >
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 sm:pb-3 px-3 sm:px-4 pt-3 sm:pt-4">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 sm:pb-3 px-4 sm:px-6 pt-4 sm:pt-6">
         <CardTitle className={cn("text-xs sm:text-sm", styles.titleClass)}>
           {title}
         </CardTitle>
@@ -90,7 +90,7 @@ export function StatsCard({
           )}
         />
       </CardHeader>
-      <CardContent className="px-3 sm:px-4 pb-3 sm:pb-4">
+      <CardContent className="px-4 sm:px-6 pb-4 sm:pb-6">
         <div
           className={cn(
             "text-xl sm:text-2xl font-bold mb-0.5",

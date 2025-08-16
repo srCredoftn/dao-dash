@@ -527,7 +527,8 @@ export default function AdminUsers() {
                 Utilisateur créé avec succès !
               </DialogTitle>
               <DialogDescription>
-                L'utilisateur a été créé et un mot de passe temporaire a été généré.
+                L'utilisateur a été créé et un mot de passe temporaire a été
+                généré.
               </DialogDescription>
             </DialogHeader>
 
@@ -559,7 +560,9 @@ export default function AdminUsers() {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => copyToClipboard(createdUserInfo.temporaryPassword)}
+                      onClick={() =>
+                        copyToClipboard(createdUserInfo.temporaryPassword)
+                      }
                     >
                       <Copy className="h-4 w-4" />
                     </Button>
@@ -573,7 +576,10 @@ export default function AdminUsers() {
                       <p className="font-medium mb-1">Important :</p>
                       <ul className="list-disc list-inside space-y-1 text-xs">
                         <li>Ce mot de passe expire dans 24 heures</li>
-                        <li>L'utilisateur doit le changer lors de sa première connexion</li>
+                        <li>
+                          L'utilisateur doit le changer lors de sa première
+                          connexion
+                        </li>
                         <li>Un email a été envoyé avec ces informations</li>
                       </ul>
                     </div>
@@ -583,7 +589,10 @@ export default function AdminUsers() {
             )}
 
             <DialogFooter>
-              <Button onClick={() => setShowPasswordDialog(false)} className="w-full">
+              <Button
+                onClick={() => setShowPasswordDialog(false)}
+                className="w-full"
+              >
                 Compris
               </Button>
             </DialogFooter>

@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
-import mongoose from 'mongoose';
+import { Request, Response, NextFunction } from "express";
+import mongoose from "mongoose";
 
 interface ErrorWithStatus extends Error {
   status?: number;
@@ -10,26 +10,26 @@ export const errorHandler = (
   error: ErrorWithStatus,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): void => {
-  console.error('Error occurred:', {
+  console.error("Error occurred:", {
     message: error.message,
     stack: error.stack,
     url: req.url,
     method: req.method,
     ip: req.ip,
-    userAgent: req.get('User-Agent'),
+    userAgent: req.get("User-Agent"),
   });
 
   // Default error
   let status = error.status || error.statusCode || 500;
-  let message = error.message || 'Internal Server Error';
+  let message = error.message || "Internal Server Error";
 
   // Mongoose validation error
   if (error instanceof mongoose.Error.ValidationError) {
     status = 400;
     const messages = Object.values(error.errors).map((err) => err.message);
-    message = `Validation Error: ${messages.join(', ')}`;
+    message = `Validation Error: ${messages.join(", ")}`;
   }
 
   // Mongoose duplicate key error
@@ -46,24 +46,24 @@ export const errorHandler = (
   }
 
   // JWT errors
-  if (error.name === 'JsonWebTokenError') {
+  if (error.name === "JsonWebTokenError") {
     status = 401;
-    message = 'Invalid token';
+    message = "Invalid token";
   }
 
-  if (error.name === 'TokenExpiredError') {
+  if (error.name === "TokenExpiredError") {
     status = 401;
-    message = 'Token expired';
+    message = "Token expired";
   }
 
   // Don't leak error details in production
-  if (process.env.NODE_ENV === 'production' && status === 500) {
-    message = 'Something went wrong';
+  if (process.env.NODE_ENV === "production" && status === 500) {
+    message = "Something went wrong";
   }
 
   res.status(status).json({
     error: message,
-    ...(process.env.NODE_ENV === 'development' && {
+    ...(process.env.NODE_ENV === "development" && {
       stack: error.stack,
       details: error,
     }),

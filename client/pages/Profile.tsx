@@ -211,7 +211,10 @@ export default function Profile() {
             <Alert className="border-yellow-200 bg-yellow-50">
               <AlertCircle className="h-4 w-4 text-yellow-600" />
               <AlertDescription className="text-yellow-800">
-                <strong>Mot de passe temporaire :</strong> Vous utilisez actuellement un mot de passe temporaire qui expire dans 24 heures. Nous vous recommandons fortement de le changer dès maintenant pour sécuriser votre compte.
+                <strong>Mot de passe temporaire :</strong> Vous utilisez
+                actuellement un mot de passe temporaire qui expire dans 24
+                heures. Nous vous recommandons fortement de le changer dès
+                maintenant pour sécuriser votre compte.
               </AlertDescription>
             </Alert>
           )}

@@ -13,7 +13,8 @@ export function createServer() {
   const app = express();
 
   // Connect to MongoDB with timeout
-  const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/dao-management';
+  const mongoUri =
+    process.env.MONGODB_URI || "mongodb://localhost:27017/dao-management";
 
   // Set connection options
   const mongoOptions = {
@@ -21,20 +22,21 @@ export function createServer() {
     connectTimeoutMS: 5000,
   };
 
-  console.log('🔄 Attempting MongoDB connection...');
-  mongoose.connect(mongoUri, mongoOptions)
+  console.log("🔄 Attempting MongoDB connection...");
+  mongoose
+    .connect(mongoUri, mongoOptions)
     .then(async () => {
-      console.log('📊 Connected to MongoDB at', mongoUri);
+      console.log("📊 Connected to MongoDB at", mongoUri);
       try {
         // Initialize admin user
         await AuthServiceMongo.initializeAdminUser();
       } catch (error) {
-        console.error('❌ Error initializing admin user:', error);
+        console.error("❌ Error initializing admin user:", error);
       }
     })
-    .catch(err => {
-      console.error('❌ MongoDB connection failed:', err.message);
-      console.log('🔄 Continuing with in-memory authentication');
+    .catch((err) => {
+      console.error("❌ MongoDB connection failed:", err.message);
+      console.log("🔄 Continuing with in-memory authentication");
     });
 
   // Middleware
@@ -51,9 +53,10 @@ export function createServer() {
   app.get("/api/status", (_req, res) => {
     res.json({
       status: "OK",
-      mongodb: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+      mongodb:
+        mongoose.connection.readyState === 1 ? "connected" : "disconnected",
       auth: mongoose.connection.readyState === 1 ? "mongodb" : "in-memory",
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   });
 
@@ -66,14 +69,14 @@ export function createServer() {
   let useMongoAuth = false;
 
   // Test MongoDB connection
-  mongoose.connection.on('connected', () => {
+  mongoose.connection.on("connected", () => {
     useMongoAuth = true;
-    console.log('🔗 MongoDB auth routes activated');
+    console.log("🔗 MongoDB auth routes activated");
   });
 
-  mongoose.connection.on('error', () => {
+  mongoose.connection.on("error", () => {
     useMongoAuth = false;
-    console.log('🔗 Using in-memory auth routes (MongoDB not available)');
+    console.log("🔗 Using in-memory auth routes (MongoDB not available)");
   });
 
   app.use("/api/auth", (req, res, next) => {

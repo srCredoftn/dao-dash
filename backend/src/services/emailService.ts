@@ -1,5 +1,5 @@
-import nodemailer from 'nodemailer';
-import type { Transporter } from 'nodemailer';
+import nodemailer from "nodemailer";
+import type { Transporter } from "nodemailer";
 
 interface EmailConfig {
   host: string;
@@ -25,8 +25,8 @@ export class EmailService {
   // Initialize email service
   static initialize(): void {
     const config: EmailConfig = {
-      host: process.env.SMTP_HOST || 'smtp.gmail.com',
-      port: parseInt(process.env.SMTP_PORT || '587'),
+      host: process.env.SMTP_HOST || "smtp.gmail.com",
+      port: parseInt(process.env.SMTP_PORT || "587"),
       secure: false, // true for 465, false for other ports
       auth: {
         user: process.env.SMTP_USER,
@@ -36,7 +36,9 @@ export class EmailService {
 
     // Check if email is configured
     if (!config.auth.user || !config.auth.pass) {
-      console.log('📧 Email service not configured - emails will be logged to console');
+      console.log(
+        "📧 Email service not configured - emails will be logged to console",
+      );
       this.isConfigured = false;
       return;
     }
@@ -44,12 +46,12 @@ export class EmailService {
     try {
       this.transporter = nodemailer.createTransporter(config);
       this.isConfigured = true;
-      console.log('📧 Email service initialized successfully');
-      
+      console.log("📧 Email service initialized successfully");
+
       // Verify connection
       this.verifyConnection();
     } catch (error) {
-      console.error('📧 Failed to initialize email service:', error);
+      console.error("📧 Failed to initialize email service:", error);
       this.isConfigured = false;
     }
   }
@@ -60,9 +62,9 @@ export class EmailService {
 
     try {
       await this.transporter.verify();
-      console.log('📧 Email connection verified successfully');
+      console.log("📧 Email connection verified successfully");
     } catch (error) {
-      console.error('📧 Email connection verification failed:', error);
+      console.error("📧 Email connection verification failed:", error);
       this.isConfigured = false;
     }
   }
@@ -71,17 +73,17 @@ export class EmailService {
   static async sendEmail(options: EmailOptions): Promise<boolean> {
     try {
       if (!this.isConfigured || !this.transporter) {
-        console.log('📧 Email not configured - logging email content:');
-        console.log('To:', options.to);
-        console.log('Subject:', options.subject);
-        console.log('Content:', options.html.replace(/<[^>]*>/g, ''));
+        console.log("📧 Email not configured - logging email content:");
+        console.log("To:", options.to);
+        console.log("Subject:", options.subject);
+        console.log("Content:", options.html.replace(/<[^>]*>/g, ""));
         return false;
       }
 
       const mailOptions = {
         from: {
-          name: process.env.FROM_EMAIL_NAME || 'DAO Management System',
-          address: process.env.SMTP_USER || 'noreply@example.com',
+          name: process.env.FROM_EMAIL_NAME || "DAO Management System",
+          address: process.env.SMTP_USER || "noreply@example.com",
         },
         to: options.to,
         subject: options.subject,
@@ -90,10 +92,10 @@ export class EmailService {
       };
 
       const result = await this.transporter.sendMail(mailOptions);
-      console.log('📧 Email sent successfully:', result.messageId);
+      console.log("📧 Email sent successfully:", result.messageId);
       return true;
     } catch (error) {
-      console.error('📧 Failed to send email:', error);
+      console.error("📧 Failed to send email:", error);
       return false;
     }
   }
@@ -102,9 +104,9 @@ export class EmailService {
   static async sendWelcomeEmail(
     email: string,
     name: string,
-    temporaryPassword: string
+    temporaryPassword: string,
   ): Promise<boolean> {
-    const subject = 'Bienvenue ! Votre compte a été créé';
+    const subject = "Bienvenue ! Votre compte a été créé";
     const html = this.getWelcomeEmailTemplate(name, email, temporaryPassword);
 
     return await this.sendEmail({
@@ -118,9 +120,9 @@ export class EmailService {
   static async sendPasswordResetEmail(
     email: string,
     name: string,
-    token: string
+    token: string,
   ): Promise<boolean> {
-    const subject = 'Code de réinitialisation de mot de passe';
+    const subject = "Code de réinitialisation de mot de passe";
     const html = this.getPasswordResetEmailTemplate(name, token);
 
     return await this.sendEmail({
@@ -133,9 +135,9 @@ export class EmailService {
   // Password change confirmation email
   static async sendPasswordChangeConfirmation(
     email: string,
-    name: string
+    name: string,
   ): Promise<boolean> {
-    const subject = 'Confirmation de changement de mot de passe';
+    const subject = "Confirmation de changement de mot de passe";
     const html = this.getPasswordChangeConfirmationTemplate(name);
 
     return await this.sendEmail({
@@ -149,7 +151,7 @@ export class EmailService {
   private static getWelcomeEmailTemplate(
     name: string,
     email: string,
-    temporaryPassword: string
+    temporaryPassword: string,
   ): string {
     return `
       <!DOCTYPE html>
@@ -207,7 +209,10 @@ export class EmailService {
   }
 
   // Password reset email template
-  private static getPasswordResetEmailTemplate(name: string, token: string): string {
+  private static getPasswordResetEmailTemplate(
+    name: string,
+    token: string,
+  ): string {
     return `
       <!DOCTYPE html>
       <html>
@@ -285,7 +290,7 @@ export class EmailService {
           
           <div class="success">
             <p><strong>✅ Votre mot de passe a été modifié avec succès !</strong></p>
-            <p>Cette modification a eu lieu le ${new Date().toLocaleString('fr-FR')}.</p>
+            <p>Cette modification a eu lieu le ${new Date().toLocaleString("fr-FR")}.</p>
           </div>
           
           <p>Si vous n'êtes pas à l'origine de cette modification, contactez immédiatement l'administrateur système.</p>

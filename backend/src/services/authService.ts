@@ -1,19 +1,26 @@
-import jwt from 'jsonwebtoken';
-import crypto from 'crypto';
-import { UserModel, UserDocument } from '../models/User.js';
-import { EmailService } from './emailService.js';
-import type { User, AuthUser, LoginCredentials, AuthResponse, UserRole } from '../../../shared/dao.js';
+import jwt from "jsonwebtoken";
+import crypto from "crypto";
+import { UserModel, UserDocument } from "../models/User.js";
+import { EmailService } from "./emailService.js";
+import type {
+  User,
+  AuthUser,
+  LoginCredentials,
+  AuthResponse,
+  UserRole,
+} from "../../../shared/dao.js";
 
 // JWT Secret - in production, this should be in environment variables
-const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production';
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
-
+const JWT_SECRET =
+  process.env.JWT_SECRET || "your-super-secret-jwt-key-change-in-production";
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "7d";
 
 export class AuthService {
   // Generate a random password
   static generateRandomPassword(): string {
-    const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let password = '';
+    const charset =
+      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let password = "";
     for (let i = 0; i < 12; i++) {
       password += charset.charAt(Math.floor(Math.random() * charset.length));
     }
@@ -60,29 +67,33 @@ export class AuthService {
   }
 
   // Login user
-  static async login(credentials: LoginCredentials): Promise<AuthResponse | null> {
+  static async login(
+    credentials: LoginCredentials,
+  ): Promise<AuthResponse | null> {
     try {
       const { email, password } = credentials;
 
       // Find user by email
       const user = await UserModel.findOne({
         email: email.toLowerCase(),
-        isActive: true
+        isActive: true,
       });
 
       if (!user) {
-        throw new Error('Invalid credentials');
+        throw new Error("Invalid credentials");
       }
 
       // Check if temporary password has expired
       if ((user as any).isTemporaryPasswordExpired()) {
-        throw new Error('Temporary password has expired. Please request a password reset.');
+        throw new Error(
+          "Temporary password has expired. Please request a password reset.",
+        );
       }
 
       // Check password
       const isValidPassword = await user.comparePassword(password);
       if (!isValidPassword) {
-        throw new Error('Invalid credentials');
+        throw new Error("Invalid credentials");
       }
 
       // Update last login
@@ -96,16 +107,16 @@ export class AuthService {
         user: this.toAuthUserFormat(user),
         token,
         // Include information about temporary password
-        ...(((user as any).isTemporaryPassword) && {
+        ...((user as any).isTemporaryPassword && {
           requiresPasswordChange: true,
-          message: 'Please change your temporary password'
-        })
+          message: "Please change your temporary password",
+        }),
       };
 
-      console.log('🔐 User logged in:', user.email, 'Role:', user.role);
+      console.log("🔐 User logged in:", user.email, "Role:", user.role);
       return authResponse;
     } catch (error) {
-      console.error('Login error:', error);
+      console.error("Login error:", error);
       throw error;
     }
   }
@@ -125,7 +136,7 @@ export class AuthService {
 
       return this.toAuthUserFormat(user);
     } catch (error) {
-      console.error('Get user by token error:', error);
+      console.error("Get user by token error:", error);
       return null;
     }
   }
@@ -133,10 +144,12 @@ export class AuthService {
   // Get all users (admin only)
   static async getAllUsers(): Promise<User[]> {
     try {
-      const users = await UserModel.find({ isActive: true }).sort({ createdAt: -1 });
+      const users = await UserModel.find({ isActive: true }).sort({
+        createdAt: -1,
+      });
       return users.map(this.toUserFormat);
     } catch (error) {
-      console.error('Get all users error:', error);
+      console.error("Get all users error:", error);
       throw error;
     }
   }
@@ -150,11 +163,11 @@ export class AuthService {
     try {
       // Check if user already exists
       const existingUser = await UserModel.findOne({
-        email: userData.email.toLowerCase()
+        email: userData.email.toLowerCase(),
       });
 
       if (existingUser) {
-        throw new Error('User already exists');
+        throw new Error("User already exists");
       }
 
       // Generate temporary password
@@ -172,38 +185,50 @@ export class AuthService {
       (user as any).markPasswordAsTemporary(24);
       await user.save();
 
-      console.log('👤 New user created:', user.email, 'Temporary password:', temporaryPassword);
+      console.log(
+        "👤 New user created:",
+        user.email,
+        "Temporary password:",
+        temporaryPassword,
+      );
 
       // Send welcome email with temporary password
-      await EmailService.sendWelcomeEmail(user.email, user.name, temporaryPassword);
+      await EmailService.sendWelcomeEmail(
+        user.email,
+        user.name,
+        temporaryPassword,
+      );
 
       return {
         user: this.toUserFormat(user),
         temporaryPassword,
       };
     } catch (error) {
-      console.error('Create user error:', error);
+      console.error("Create user error:", error);
       throw error;
     }
   }
 
   // Update user role (admin only)
-  static async updateUserRole(userId: string, role: UserRole): Promise<User | null> {
+  static async updateUserRole(
+    userId: string,
+    role: UserRole,
+  ): Promise<User | null> {
     try {
       const user = await UserModel.findByIdAndUpdate(
         userId,
         { role, updatedAt: new Date().toISOString() },
-        { new: true }
+        { new: true },
       );
 
       if (!user) {
         return null;
       }
 
-      console.log('🔄 User role updated:', user.email, 'New role:', role);
+      console.log("🔄 User role updated:", user.email, "New role:", role);
       return this.toUserFormat(user);
     } catch (error) {
-      console.error('Update user role error:', error);
+      console.error("Update user role error:", error);
       throw error;
     }
   }
@@ -214,23 +239,26 @@ export class AuthService {
       const user = await UserModel.findByIdAndUpdate(
         userId,
         { isActive: false, updatedAt: new Date().toISOString() },
-        { new: true }
+        { new: true },
       );
 
       if (!user) {
         return false;
       }
 
-      console.log('🚫 User deactivated:', user.email);
+      console.log("🚫 User deactivated:", user.email);
       return true;
     } catch (error) {
-      console.error('Deactivate user error:', error);
+      console.error("Deactivate user error:", error);
       throw error;
     }
   }
 
   // Change password
-  static async changePassword(userId: string, newPassword: string): Promise<boolean> {
+  static async changePassword(
+    userId: string,
+    newPassword: string,
+  ): Promise<boolean> {
     try {
       const user = await UserModel.findById(userId);
       if (!user) {
@@ -246,10 +274,10 @@ export class AuthService {
       // Send confirmation email
       await EmailService.sendPasswordChangeConfirmation(user.email, user.name);
 
-      console.log('🔑 Password changed for:', user.email);
+      console.log("🔑 Password changed for:", user.email);
       return true;
     } catch (error) {
-      console.error('Change password error:', error);
+      console.error("Change password error:", error);
       throw error;
     }
   }
@@ -257,7 +285,7 @@ export class AuthService {
   // Update user profile
   static async updateProfile(
     userId: string,
-    profileData: { name: string; email: string }
+    profileData: { name: string; email: string },
   ): Promise<User | null> {
     try {
       // Check if new email already exists (only if different from current)
@@ -272,7 +300,7 @@ export class AuthService {
           _id: { $ne: userId },
         });
         if (existingUser) {
-          throw new Error('Email already exists');
+          throw new Error("Email already exists");
         }
       }
 
@@ -283,17 +311,17 @@ export class AuthService {
           email: profileData.email.toLowerCase(),
           updatedAt: new Date().toISOString(),
         },
-        { new: true }
+        { new: true },
       );
 
       if (!user) {
         return null;
       }
 
-      console.log('👤 Profile updated for:', user.email);
+      console.log("👤 Profile updated for:", user.email);
       return this.toUserFormat(user);
     } catch (error) {
-      console.error('Update profile error:', error);
+      console.error("Update profile error:", error);
       throw error;
     }
   }
@@ -301,9 +329,9 @@ export class AuthService {
   // Generate password reset token
   static async generateResetToken(email: string): Promise<string | null> {
     try {
-      const user = await UserModel.findOne({ 
-        email: email.toLowerCase(), 
-        isActive: true 
+      const user = await UserModel.findOne({
+        email: email.toLowerCase(),
+        isActive: true,
       });
 
       if (!user) {
@@ -323,16 +351,19 @@ export class AuthService {
       // Send reset email
       await EmailService.sendPasswordResetEmail(user.email, user.name, token);
 
-      console.log('🔑 Password reset token generated for:', email);
+      console.log("🔑 Password reset token generated for:", email);
       return token;
     } catch (error) {
-      console.error('Generate reset token error:', error);
+      console.error("Generate reset token error:", error);
       throw error;
     }
   }
 
   // Verify reset token
-  static async verifyResetToken(token: string, email: string): Promise<boolean> {
+  static async verifyResetToken(
+    token: string,
+    email: string,
+  ): Promise<boolean> {
     try {
       const user = await UserModel.findOne({
         email: email.toLowerCase(),
@@ -343,7 +374,7 @@ export class AuthService {
 
       return !!user;
     } catch (error) {
-      console.error('Verify reset token error:', error);
+      console.error("Verify reset token error:", error);
       return false;
     }
   }
@@ -352,7 +383,7 @@ export class AuthService {
   static async resetPasswordWithToken(
     token: string,
     email: string,
-    newPassword: string
+    newPassword: string,
   ): Promise<boolean> {
     try {
       const user = await UserModel.findOne({
@@ -372,12 +403,11 @@ export class AuthService {
       user.resetPasswordExpires = null;
       await user.save();
 
-      console.log('🔑 Password reset successful for:', email);
+      console.log("🔑 Password reset successful for:", email);
       return true;
     } catch (error) {
-      console.error('Reset password error:', error);
+      console.error("Reset password error:", error);
       return false;
     }
   }
-
 }

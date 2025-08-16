@@ -146,9 +146,13 @@ userSchema.methods.isTemporaryPasswordExpired = function (): boolean {
   return new Date() > this.temporaryPasswordExpires;
 };
 
-userSchema.methods.markPasswordAsTemporary = function (expirationHours: number = 24): void {
+userSchema.methods.markPasswordAsTemporary = function (
+  expirationHours: number = 24,
+): void {
   this.isTemporaryPassword = true;
-  this.temporaryPasswordExpires = new Date(Date.now() + expirationHours * 60 * 60 * 1000);
+  this.temporaryPasswordExpires = new Date(
+    Date.now() + expirationHours * 60 * 60 * 1000,
+  );
 };
 
 // Static methods

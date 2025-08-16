@@ -40,9 +40,9 @@ shared/                   # Types used by both frontend & backend
 
 The routing system is powered by React Router 6:
 
-- `client/pages/Index.tsx` represents the home page.
-- Routes are defined in `client/App.tsx` using the `react-router-dom` import
-- Route files are located in the `client/pages/` directory
+- `frontend/pages/Index.tsx` represents the home page.
+- Routes are defined in `frontend/App.tsx` using the `react-router-dom` import
+- Route files are located in the `frontend/pages/` directory
 
 For example, routes can be defined with:
 

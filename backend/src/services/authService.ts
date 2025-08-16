@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
-import nodemailer from 'nodemailer';
 import { UserModel, UserDocument } from '../models/User.js';
+import { EmailService } from './emailService.js';
 import type { User, AuthUser, LoginCredentials, AuthResponse, UserRole } from '../../../shared/dao.js';
 
 // JWT Secret - in production, this should be in environment variables

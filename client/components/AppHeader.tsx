@@ -202,17 +202,17 @@ export function AppHeader({ title, children }: AppHeaderProps) {
 
       </div>
 
-      {/* Mobile Sidebar Overlay */}
+      {/* Mobile & Tablet Sidebar Overlay */}
       {isMobileMenuOpen && (
         <>
           {/* Dark Overlay */}
           <div
-            className="fixed inset-0 bg-black/50 z-40 sm:hidden transition-opacity duration-300"
+            className="fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity duration-300"
             onClick={() => setIsMobileMenuOpen(false)}
           />
 
           {/* Sidebar */}
-          <div className={`fixed top-0 left-0 h-full w-80 max-w-[85vw] bg-white z-50 sm:hidden transform transition-transform duration-300 ease-out shadow-2xl ${
+          <div className={`fixed top-0 left-0 h-full w-80 max-w-[85vw] bg-white z-50 lg:hidden transform transition-transform duration-300 ease-out shadow-2xl ${
             isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
           }`}>
             {/* Sidebar Header */}

@@ -338,40 +338,7 @@ function TaskRow({
         </div>
       )}
 
-      {/* Assignment Section - Visible for applicable tasks (Admin can edit, others just view) */}
-      {task.isApplicable && !isEditing && (
-        <div className="pt-3 border-t border-gray-100">
-          {isAdmin() ? (
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-              <span className="text-xs font-medium text-muted-foreground">
-                Assignation:
-              </span>
-              <TaskAssignmentDialog
-                currentAssignedTo={task.assignedTo}
-                availableMembers={availableMembers}
-                onAssignmentChange={(memberId) =>
-                  onAssignmentChange(task.id, memberId)
-                }
-                taskName={task.name}
-              />
-            </div>
-          ) : (
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-              <span className="text-xs font-medium text-muted-foreground">
-                Assigné à:
-              </span>
-              <span className="text-xs font-medium">
-                {task.assignedTo
-                  ? availableMembers.find((m) => m.id === task.assignedTo)
-                      ?.name || "Utilisateur inconnu"
-                  : "Non assigné"}
-              </span>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Progress Bar - Always at the bottom */}
+      {/* Progress Bar - Now comes first */}
       {task.isApplicable && (
         <div className="space-y-2 pt-3 border-t border-gray-100">
           <div className="flex items-center justify-between">
@@ -405,6 +372,39 @@ function TaskRow({
               }}
             />
           </div>
+        </div>
+      )}
+
+      {/* Assignment Section - Now comes after progression */}
+      {task.isApplicable && !isEditing && (
+        <div className="pt-3 border-t border-gray-100">
+          {isAdmin() ? (
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+              <span className="text-xs font-medium text-muted-foreground">
+                Assignation:
+              </span>
+              <TaskAssignmentDialog
+                currentAssignedTo={task.assignedTo}
+                availableMembers={availableMembers}
+                onAssignmentChange={(memberId) =>
+                  onAssignmentChange(task.id, memberId)
+                }
+                taskName={task.name}
+              />
+            </div>
+          ) : (
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+              <span className="text-xs font-medium text-muted-foreground">
+                Assigné à:
+              </span>
+              <span className="text-xs font-medium">
+                {task.assignedTo
+                  ? availableMembers.find((m) => m.id === task.assignedTo)
+                      ?.name || "Utilisateur inconnu"
+                  : "Non assigné"}
+              </span>
+            </div>
+          )}
         </div>
       )}
 

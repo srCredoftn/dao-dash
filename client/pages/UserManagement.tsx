@@ -321,8 +321,7 @@ export default function UserManagement() {
               <DialogTrigger asChild>
                 <Button className="w-full sm:w-auto">
                   <Plus className="h-4 w-4 mr-2" />
-                  <span className="hidden sm:inline">Nouvel utilisateur</span>
-                  <span className="sm:hidden">Nouveau</span>
+                  Nouvel utilisateur
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-md">

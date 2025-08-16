@@ -32,16 +32,17 @@ export function createServer() {
 
   // API routes
   app.use("/api/dao", daoRoutes);
-  // app.use("/api/auth", authRoutes); // Using in-memory routes for now
-  app.use("/api/comments", commentRoutes);
 
-  // Proxy to MongoDB backend for auth routes
-  app.use("/api/auth", (req, res, next) => {
-    // For now, we'll use a simple proxy or you can set up a proper proxy
-    // This is a placeholder - you might want to use http-proxy-middleware
-    console.log('Auth route proxied:', req.method, req.path);
-    next();
-  });
+  // Use MongoDB authentication routes if available, fallback to in-memory
+  try {
+    app.use("/api/auth", authMongoRoutes);
+    console.log('📊 Using MongoDB authentication routes');
+  } catch (error) {
+    console.warn('⚠️ MongoDB routes failed, falling back to in-memory auth:', error.message);
+    app.use("/api/auth", authRoutes);
+  }
+
+  app.use("/api/comments", commentRoutes);
 
   return app;
 }

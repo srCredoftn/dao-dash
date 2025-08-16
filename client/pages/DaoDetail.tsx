@@ -159,7 +159,7 @@ function TaskRow({
     <div className="bg-white rounded-lg border p-4 space-y-3">
       <div className="flex items-center justify-between">
         <h4 className="font-medium text-sm">
-          <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full mr-2">
+          <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full mr-2 ml-2">
             {taskIndex}
           </span>
           {task.name}

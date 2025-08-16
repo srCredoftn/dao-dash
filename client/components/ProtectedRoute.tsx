@@ -40,37 +40,14 @@ export function ProtectedRoute({
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // Check role requirements
+  // Check role requirements - silently redirect to home if insufficient permissions
   if (requireRoles && !hasRole(requireRoles)) {
     if (fallback) {
       return <>{fallback}</>;
     }
 
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardContent className="text-center p-6">
-            <div className="text-red-600 mb-4">⛔ Accès refusé</div>
-            <h3 className="text-lg font-semibold mb-2">
-              Permissions insuffisantes
-            </h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Vous n'avez pas les permissions nécessaires pour accéder à cette
-              page.
-            </p>
-            <div className="text-xs text-muted-foreground">
-              <div>
-                Votre rôle: <span className="font-medium">{user.role}</span>
-              </div>
-              <div>
-                Rôles requis:{" "}
-                <span className="font-medium">{requireRoles.join(", ")}</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    );
+    // Silently redirect to home page instead of showing error
+    return <Navigate to="/" replace />;
   }
 
   return <>{children}</>;

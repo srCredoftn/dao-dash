@@ -622,21 +622,13 @@ export default function Index() {
                     ]}
                   />
                 </div>
-                {user && isAdmin() ? (
+                {user && isAdmin() && (
                   <div className="flex-1 xs:flex-none lg:flex-none">
                     <NewDaoDialog
                       existingDaos={daos}
                       onCreateDao={handleCreateDao}
                     />
                   </div>
-                ) : (
-                  user && (
-                    <div className="flex-1 xs:flex-none lg:flex-none">
-                      <div className="text-xs text-muted-foreground text-center py-2 border rounded">
-                        Accès admin requis
-                      </div>
-                    </div>
-                  )
                 )}
               </div>
             </div>

@@ -12,6 +12,10 @@ import Index from "./pages/Index";
 import DaoDetail from "./pages/DaoDetail";
 import Login from "./pages/Login";
 import AdminUsers from "./pages/AdminUsers";
+import Profile from "./pages/Profile";
+import UserManagement from "./pages/UserManagement";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,6 +29,8 @@ const App = () => (
           <Sonner />
           <Routes>
             <Route path="/login" element={<Login />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route
               path="/"
               element={
@@ -46,6 +52,22 @@ const App = () => (
               element={
                 <AuthenticatedRoute requiredRoles={["admin"]}>
                   <AdminUsers />
+                </AuthenticatedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <AuthenticatedRoute>
+                  <Profile />
+                </AuthenticatedRoute>
+              }
+            />
+            <Route
+              path="/user-management"
+              element={
+                <AuthenticatedRoute requiredRoles={["admin"]}>
+                  <UserManagement />
                 </AuthenticatedRoute>
               }
             />

@@ -101,11 +101,15 @@ export default function AdminUsers() {
         return;
       }
 
-      await authService.createUser({
+      const response = await authService.createUser({
         name: newUser.name.trim(),
         email: newUser.email.trim(),
         role: newUser.role,
       });
+
+      // Store the created user info including temporary password
+      setCreatedUserInfo(response);
+      setShowPasswordDialog(true);
 
       // Reset form
       setNewUser({

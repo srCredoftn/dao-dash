@@ -565,33 +565,159 @@ export default function DaoDetail() {
     );
   };
 
-  const handleExportPDF = () => {
-    // Create a simple PDF export simulation
-    const content = `
-DAO: ${dao?.numeroListe}
-Objet: ${dao?.objetDossier}
-Référence: ${dao?.reference}
-Autorit��: ${dao?.autoriteContractante}
-Date de dépôt: ${dao?.dateDepot}
-Progression: ${progress}%
+  const handleExportWithOptions = (options: ExportOptions) => {
+    if (!dao) return;
 
-Équipe:
-${dao?.equipe.map((m) => `- ${m.name} (${m.role === "chef_equipe" ? "Chef" : "Membre"})`).join("\n")}
+    // Filtrer les tâches selon les options
+    const filteredTasks = dao.tasks.filter(task => {
+      if (!task.isApplicable && !options.includeNotApplicable) return false;
+      if (task.isApplicable) {
+        const progress = task.progress || 0;
+        if (progress === 0 && !options.includeTodos) return false;
+        if (progress > 0 && progress < 100 && !options.includeInProgress) return false;
+        if (progress >= 100 && !options.includeCompleted) return false;
+      }
+      return true;
+    });
 
-Tâches:
-${dao?.tasks
-  .filter((t) => t.isApplicable)
-  .map((t) => `- ${t.name}: ${t.progress || 0}%`)
-  .join("\n")}
-    `;
+    if (options.format === "PDF") {
+      handleExportPDF(filteredTasks);
+    } else {
+      handleExportCSV(filteredTasks);
+    }
+  };
 
-    const blob = new Blob([content], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${dao?.numeroListe}_export.txt`;
-    a.click();
-    URL.revokeObjectURL(url);
+  const handleExportPDF = (tasks: DaoTask[]) => {
+    const pdf = new jsPDF();
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const margin = 20;
+    let yPosition = margin;
+
+    // Configuration des polices
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(16);
+
+    // Titre principal
+    pdf.text("Rapport DAO", margin, yPosition);
+    yPosition += 15;
+
+    // Informations générales
+    pdf.setFontSize(12);
+    pdf.setFont("helvetica", "normal");
+
+    const infoLines = [
+      `DAO: ${dao?.numeroListe}`,
+      `Objet: ${dao?.objetDossier}`,
+      `Référence: ${dao?.reference}`,
+      `Autorité: ${dao?.autoriteContractante}`,
+      `Date de dépôt: ${dao?.dateDepot}`,
+      `Progression globale: ${progress}%`
+    ];
+
+    infoLines.forEach(line => {
+      // Gérer les lignes trop longues
+      const splitLines = pdf.splitTextToSize(line, pageWidth - 2 * margin);
+      splitLines.forEach((splitLine: string) => {
+        if (yPosition > 250) {
+          pdf.addPage();
+          yPosition = margin;
+        }
+        pdf.text(splitLine, margin, yPosition);
+        yPosition += 7;
+      });
+    });
+
+    yPosition += 10;
+
+    // Section Équipe
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Équipe:", margin, yPosition);
+    yPosition += 8;
+
+    pdf.setFont("helvetica", "normal");
+    dao?.equipe.forEach(member => {
+      if (yPosition > 250) {
+        pdf.addPage();
+        yPosition = margin;
+      }
+      const role = member.role === "chef_equipe" ? "Chef d'équipe" : "Membre";
+      pdf.text(`• ${member.name} (${role})`, margin + 5, yPosition);
+      yPosition += 7;
+    });
+
+    yPosition += 10;
+
+    // Section Tâches
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Tâches:", margin, yPosition);
+    yPosition += 8;
+
+    pdf.setFont("helvetica", "normal");
+    tasks.forEach((task, index) => {
+      if (yPosition > 240) {
+        pdf.addPage();
+        yPosition = margin;
+      }
+
+      const taskProgress = task.isApplicable ? `${task.progress || 0}%` : "Non applicable";
+      const taskText = `${index + 1}. ${task.name}: ${taskProgress}`;
+
+      const splitLines = pdf.splitTextToSize(taskText, pageWidth - 2 * margin - 10);
+      splitLines.forEach((line: string) => {
+        if (yPosition > 250) {
+          pdf.addPage();
+          yPosition = margin;
+        }
+        pdf.text(line, margin + 5, yPosition);
+        yPosition += 7;
+      });
+
+      // Ajouter le commentaire s'il existe
+      if (task.comment && task.comment.trim()) {
+        pdf.setFontSize(10);
+        pdf.setTextColor(100, 100, 100);
+        const commentLines = pdf.splitTextToSize(`   Commentaire: ${task.comment}`, pageWidth - 2 * margin - 15);
+        commentLines.forEach((line: string) => {
+          if (yPosition > 250) {
+            pdf.addPage();
+            yPosition = margin;
+          }
+          pdf.text(line, margin + 10, yPosition);
+          yPosition += 6;
+        });
+        pdf.setFontSize(12);
+        pdf.setTextColor(0, 0, 0);
+      }
+
+      yPosition += 5;
+    });
+
+    // Statistiques en bas
+    yPosition += 10;
+    if (yPosition > 230) {
+      pdf.addPage();
+      yPosition = margin;
+    }
+
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Statistiques:", margin, yPosition);
+    yPosition += 8;
+
+    pdf.setFont("helvetica", "normal");
+    const stats = [
+      `• Tâches exportées: ${tasks.length}`,
+      `• Tâches terminées: ${tasks.filter(t => t.isApplicable && (t.progress || 0) >= 100).length}`,
+      `• Tâches en cours: ${tasks.filter(t => t.isApplicable && (t.progress || 0) > 0 && (t.progress || 0) < 100).length}`,
+      `• Tâches à faire: ${tasks.filter(t => t.isApplicable && (t.progress || 0) === 0).length}`
+    ];
+
+    stats.forEach(stat => {
+      pdf.text(stat, margin + 5, yPosition);
+      yPosition += 7;
+    });
+
+    // Sauvegarder le PDF
+    pdf.save(`${dao?.numeroListe}_export.pdf`);
   };
 
   const handleExportCSV = () => {

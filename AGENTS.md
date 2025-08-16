@@ -117,7 +117,7 @@ export interface MyRouteResponse {
 }
 ```
 
-2. Create a new route handler in `server/routes/my-route.ts`:
+2. Create a new route handler in `backend-express/routes/my-route.ts`:
 ```typescript
 import { RequestHandler } from "express";
 import { MyRouteResponse } from "@shared/api"; // Optional: for type safety

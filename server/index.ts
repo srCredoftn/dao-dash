@@ -44,8 +44,17 @@ export function createServer() {
 
   // Example API routes
   app.get("/api/ping", (_req, res) => {
-    const ping = process.env.PING_MESSAGE ?? "ping";
+    const ping = process.env.PING_MESSAGE ?? "ping pong";
     res.json({ message: ping });
+  });
+
+  app.get("/api/status", (_req, res) => {
+    res.json({
+      status: "OK",
+      mongodb: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+      auth: mongoose.connection.readyState === 1 ? "mongodb" : "in-memory",
+      timestamp: new Date().toISOString()
+    });
   });
 
   app.get("/api/demo", handleDemo);

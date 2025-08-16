@@ -84,7 +84,7 @@ export function AppHeader({ title, children }: AppHeaderProps) {
 
           {/* Center - Custom content (Desktop only) */}
           {children && (
-            <div className="hidden lg:flex flex-1 justify-center">
+            <div className="hidden xl:flex flex-1 justify-center">
               {children}
             </div>
           )}
@@ -97,9 +97,9 @@ export function AppHeader({ title, children }: AppHeaderProps) {
                 <NotificationCenter />
 
                 {/* Desktop: User info + Role badge + Menu */}
-                <div className="hidden sm:flex items-center space-x-3">
+                <div className="hidden lg:flex items-center space-x-3">
                   {/* User info */}
-                  <div className="hidden md:block text-right">
+                  <div className="hidden xl:block text-right">
                     <div className="text-sm font-medium">{user.name}</div>
                     <div className="text-xs text-muted-foreground">
                       {user.email}
@@ -166,8 +166,8 @@ export function AppHeader({ title, children }: AppHeaderProps) {
                   </DropdownMenu>
                 </div>
 
-                {/* Mobile: Hamburger Menu */}
-                <div className="sm:hidden">
+                {/* Mobile & Tablet: Hamburger Menu */}
+                <div className="lg:hidden">
                   <Button
                     variant="outline"
                     size="sm"
@@ -199,22 +199,23 @@ export function AppHeader({ title, children }: AppHeaderProps) {
             )}
           </div>
         </div>
-
       </div>
 
-      {/* Mobile Sidebar Overlay */}
+      {/* Mobile & Tablet Sidebar Overlay */}
       {isMobileMenuOpen && (
         <>
           {/* Dark Overlay */}
           <div
-            className="fixed inset-0 bg-black/50 z-40 sm:hidden transition-opacity duration-300"
+            className="fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity duration-300"
             onClick={() => setIsMobileMenuOpen(false)}
           />
 
           {/* Sidebar */}
-          <div className={`fixed top-0 left-0 h-full w-80 max-w-[85vw] bg-white z-50 sm:hidden transform transition-transform duration-300 ease-out shadow-2xl ${
-            isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
-          }`}>
+          <div
+            className={`fixed top-0 left-0 h-full w-80 max-w-[85vw] bg-white z-50 lg:hidden transform transition-transform duration-300 ease-out shadow-2xl ${
+              isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+            }`}
+          >
             {/* Sidebar Header */}
             <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-blue-50 to-indigo-50">
               <div className="flex items-center space-x-3">
@@ -242,7 +243,9 @@ export function AppHeader({ title, children }: AppHeaderProps) {
                   <User className="w-6 h-6 text-blue-600" />
                 </div>
                 <div className="flex-1">
-                  <div className="font-semibold text-gray-900">{user?.name}</div>
+                  <div className="font-semibold text-gray-900">
+                    {user?.name}
+                  </div>
                   <div className="text-sm text-gray-600">{user?.email}</div>
                   <Badge
                     variant={getRoleBadgeVariant(user?.role || "")}
@@ -282,7 +285,9 @@ export function AppHeader({ title, children }: AppHeaderProps) {
                       <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center group-hover:bg-green-200 transition-colors">
                         <Users className="w-5 h-5 text-green-600" />
                       </div>
-                      <span className="font-medium text-gray-700">Gestion des utilisateurs</span>
+                      <span className="font-medium text-gray-700">
+                        Gestion des utilisateurs
+                      </span>
                     </button>
                     <button
                       onClick={() => {
@@ -294,7 +299,9 @@ export function AppHeader({ title, children }: AppHeaderProps) {
                       <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center group-hover:bg-purple-200 transition-colors">
                         <Settings className="w-5 h-5 text-purple-600" />
                       </div>
-                      <span className="font-medium text-gray-700">Administration</span>
+                      <span className="font-medium text-gray-700">
+                        Administration
+                      </span>
                     </button>
                   </>
                 )}

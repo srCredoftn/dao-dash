@@ -1,8 +1,6 @@
-import { useState, useMemo, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
-  Plus,
-  Filter,
   Search,
   Calendar,
   Users,
@@ -10,7 +8,6 @@ import {
   Clock,
   CheckCircle2,
   AlertTriangle,
-  ExternalLink,
   User,
   ChevronDown,
   ChevronUp,
@@ -18,7 +15,10 @@ import {
 import NewDaoDialog from "@/components/NewDaoDialog";
 import FilterDialog from "@/components/FilterDialog";
 import { AppHeader } from "@/components/AppHeader";
+import { StatsCard } from "@/components/StatsCard";
 import { useAuth } from "@/contexts/AuthContext";
+import { useDaoStats } from "@/hooks/use-dao-stats";
+import { useDaoFilters } from "@/hooks/use-dao-filters";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -31,6 +31,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import { GRID_CLASSES } from "@/types/responsive";
 import { apiService } from "@/services/api";
 import { testProgressCalculations } from "@/utils/test-calculations";
 import { testGlobalStatistics } from "@/utils/test-global-stats";
@@ -260,103 +261,6 @@ function DaoCard({ dao }: { dao: Dao }) {
   );
 }
 
-function StatsCard({
-  title,
-  value,
-  description,
-  icon: Icon,
-  variant = "default",
-}: {
-  title: string;
-  value: string | number;
-  description: string;
-  icon: any;
-  variant?: "total" | "active" | "completed" | "urgent" | "default";
-}) {
-  const getVariantStyles = () => {
-    switch (variant) {
-      case "total":
-        return {
-          cardClass: "bg-green-50/80 border-green-200/60 backdrop-blur-sm",
-          titleClass: "text-green-700 font-medium text-sm",
-          valueClass: "text-green-800",
-          descriptionClass: "text-green-600/80 text-xs",
-          iconClass:
-            "h-7 w-7 bg-green-500 text-white rounded-lg p-1.5 shadow-sm",
-        };
-      case "active":
-        return {
-          cardClass: "bg-orange-50/80 border-orange-200/60 backdrop-blur-sm",
-          titleClass: "text-orange-700 font-medium text-sm",
-          valueClass: "text-orange-800",
-          descriptionClass: "text-orange-600/80 text-xs",
-          iconClass:
-            "h-7 w-7 bg-orange-500 text-white rounded-lg p-1.5 shadow-sm",
-        };
-      case "completed":
-        return {
-          cardClass: "bg-gray-50/80 border-gray-200/60 backdrop-blur-sm",
-          titleClass: "text-gray-700 font-medium text-sm",
-          valueClass: "text-gray-800",
-          descriptionClass: "text-gray-600/80 text-xs",
-          iconClass:
-            "h-7 w-7 bg-gray-500 text-white rounded-lg p-1.5 shadow-sm",
-        };
-      case "urgent":
-        return {
-          cardClass: "bg-red-50/80 border-red-200/60 backdrop-blur-sm",
-          titleClass: "text-red-700 font-medium text-sm",
-          valueClass: "text-red-800",
-          descriptionClass: "text-red-600/80 text-xs",
-          iconClass: "h-7 w-7 bg-red-500 text-white rounded-lg p-1.5 shadow-sm",
-        };
-      default:
-        return {
-          cardClass: "",
-          titleClass: "text-sm font-medium",
-          valueClass: "text-2xl font-bold",
-          descriptionClass: "text-xs text-muted-foreground",
-          iconClass: "h-4 w-4 text-muted-foreground",
-        };
-    }
-  };
-
-  const styles = getVariantStyles();
-
-  return (
-    <Card
-      className={cn(
-        "hover:shadow-lg transition-all duration-200 border-0 shadow-sm hover:-translate-y-0.5",
-        styles.cardClass,
-      )}
-    >
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 sm:pb-3 px-3 sm:px-4 pt-3 sm:pt-4">
-        <CardTitle className={cn("text-xs sm:text-sm", styles.titleClass)}>
-          {title}
-        </CardTitle>
-        <Icon
-          className={cn(
-            "h-5 w-5 sm:h-6 sm:w-6 lg:h-7 lg:w-7",
-            styles.iconClass.replace("h-7 w-7", ""),
-            variant === "urgent" ? "blink-attention" : "",
-          )}
-        />
-      </CardHeader>
-      <CardContent className="px-3 sm:px-4 pb-3 sm:pb-4">
-        <div
-          className={cn(
-            "text-xl sm:text-2xl font-bold mb-0.5",
-            styles.valueClass,
-          )}
-        >
-          {value}
-        </div>
-        <p className={cn("text-xs", styles.descriptionClass)}>{description}</p>
-      </CardContent>
-    </Card>
-  );
-}
-
 export default function Index() {
   const [searchTerm, setSearchTerm] = useState("");
   const [daos, setDaos] = useState<Dao[]>([]);
@@ -417,103 +321,9 @@ export default function Index() {
     }
   };
 
-  const filteredDaos = useMemo(() => {
-    let filtered = daos;
+  const filteredDaos = useDaoFilters(daos, searchTerm, filters);
 
-    // Apply search term filter with comprehensive search
-    if (searchTerm.trim()) {
-      const searchLower = searchTerm.toLowerCase().trim();
-      filtered = filtered.filter((dao) => {
-        const searchableFields = [
-          dao.numeroListe,
-          dao.objetDossier,
-          dao.reference,
-          dao.autoriteContractante,
-          ...dao.equipe.map((member) => member.name),
-        ];
-
-        return searchableFields.some(
-          (field) => field && field.toLowerCase().includes(searchLower),
-        );
-      });
-    }
-
-    // Apply filters
-    if (filters.dateRange?.start && filters.dateRange?.end) {
-      filtered = filtered.filter((dao) => {
-        const daoDate = new Date(dao.dateDepot);
-        const startDate = new Date(filters.dateRange!.start);
-        const endDate = new Date(filters.dateRange!.end);
-        return daoDate >= startDate && daoDate <= endDate;
-      });
-    }
-
-    if (filters.autoriteContractante) {
-      filtered = filtered.filter(
-        (dao) => dao.autoriteContractante === filters.autoriteContractante,
-      );
-    }
-
-    if (filters.statut) {
-      filtered = filtered.filter((dao) => {
-        const progress = calculateDaoProgress(dao.tasks);
-        const status = calculateDaoStatus(dao.dateDepot, progress);
-
-        switch (filters.statut) {
-          case "en_cours":
-            return progress < 100;
-          case "termine":
-            return progress >= 100;
-          case "a_risque":
-            return status === "urgent";
-          default:
-            return true;
-        }
-      });
-    }
-
-    if (filters.equipe) {
-      filtered = filtered.filter((dao) =>
-        dao.equipe.some((member) => member.name === filters.equipe),
-      );
-    }
-
-    return filtered;
-  }, [searchTerm, daos, filters]);
-
-  const stats = useMemo(() => {
-    const activeDaos = daos.filter(
-      (dao) => calculateDaoProgress(dao.tasks) < 100,
-    );
-    const completedDaos = daos.filter(
-      (dao) => calculateDaoProgress(dao.tasks) >= 100,
-    );
-    const urgentDaos = daos.filter((dao) => {
-      const status = calculateDaoStatus(
-        dao.dateDepot,
-        calculateDaoProgress(dao.tasks),
-      );
-      return status === "urgent";
-    });
-
-    const globalProgress =
-      activeDaos.length > 0
-        ? Math.round(
-            activeDaos.reduce(
-              (sum, dao) => sum + calculateDaoProgress(dao.tasks),
-              0,
-            ) / activeDaos.length,
-          )
-        : 0;
-
-    return {
-      total: daos.length,
-      active: activeDaos.length,
-      completed: completedDaos.length,
-      urgent: urgentDaos.length,
-      globalProgress,
-    };
-  }, [daos]);
+  const stats = useDaoStats(daos);
 
   return (
     <div className="min-h-screen bg-background">
@@ -521,7 +331,7 @@ export default function Index() {
 
       <main className="container mx-auto px-2 sm:px-4 py-4 sm:py-6">
         {/* Stats Overview */}
-        <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
+        <div className={cn(GRID_CLASSES.stats, "gap-3 sm:gap-4 mb-6 sm:mb-8")}>
           <StatsCard
             title="Total DAO"
             value={stats.total}
@@ -595,7 +405,7 @@ export default function Index() {
             </CardDescription>
           </CardHeader>
           <CardContent className="pt-0">
-            <div className="flex flex-col lg:flex-row gap-3 lg:gap-4 lg:items-center">
+            <div className="flex flex-col md:flex-row gap-3 md:gap-4 md:items-center">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -605,8 +415,8 @@ export default function Index() {
                   className="pl-10 text-sm"
                 />
               </div>
-              <div className="flex flex-col xs:flex-row lg:flex-row items-stretch xs:items-center lg:items-center gap-2 xs:gap-3 lg:flex-shrink-0">
-                <div className="flex-1 xs:flex-none lg:flex-none">
+              <div className="flex flex-col xs:flex-row md:flex-row items-stretch xs:items-center md:items-center gap-2 xs:gap-3 md:flex-shrink-0">
+                <div className="flex-1 xs:flex-none md:flex-none">
                   <FilterDialog
                     filters={filters}
                     onFiltersChange={setFilters}
@@ -623,7 +433,7 @@ export default function Index() {
                   />
                 </div>
                 {user && isAdmin() && (
-                  <div className="flex-1 xs:flex-none lg:flex-none">
+                  <div className="flex-1 xs:flex-none md:flex-none">
                     <NewDaoDialog
                       existingDaos={daos}
                       onCreateDao={handleCreateDao}
@@ -719,7 +529,9 @@ export default function Index() {
           {/* Conteneur avec scroll pour éviter la pagination */}
           <div className="max-h-[60vh] overflow-y-auto pr-2 space-y-3 sm:space-y-4">
             {loading && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+              <div
+                className={cn(GRID_CLASSES.loading, "gap-3 sm:gap-4 md:gap-6")}
+              >
                 {[1, 2, 3].map((i) => (
                   <Card key={i} className="p-4 sm:p-6 animate-pulse">
                     <div className="h-5 sm:h-6 bg-gray-200 rounded mb-3 sm:mb-4"></div>
@@ -731,7 +543,9 @@ export default function Index() {
             )}
 
             {!loading && !error && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+              <div
+                className={cn(GRID_CLASSES.cards, "gap-3 sm:gap-4 md:gap-6")}
+              >
                 {filteredDaos.length > 0 ? (
                   filteredDaos.map((dao) => <DaoCard key={dao.id} dao={dao} />)
                 ) : (

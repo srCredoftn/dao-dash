@@ -43,12 +43,16 @@ export default function TeamEditDialog({ currentTeam, onTeamUpdate, type }: Team
   const [newMemberName, setNewMemberName] = useState('');
   const [newMemberEmail, setNewMemberEmail] = useState('');
 
-  const handleSave = () => {
+  const handleSave = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     onTeamUpdate(tempTeam);
     setOpen(false);
   };
 
-  const handleCancel = () => {
+  const handleCancel = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     setTempTeam(currentTeam);
     setOpen(false);
   };
@@ -66,7 +70,9 @@ export default function TeamEditDialog({ currentTeam, onTeamUpdate, type }: Team
     }
   };
 
-  const addNewMember = () => {
+  const addNewMember = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (newMemberName.trim()) {
       const newMember: TeamMember = {
         id: Date.now().toString(),
@@ -87,7 +93,11 @@ export default function TeamEditDialog({ currentTeam, onTeamUpdate, type }: Team
     }
   };
 
-  const removeMember = (memberId: string) => {
+  const removeMember = (memberId: string, e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     setTempTeam(tempTeam.filter(m => m.id !== memberId));
   };
 

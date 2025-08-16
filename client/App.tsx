@@ -7,7 +7,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { NotificationProvider } from "./contexts/NotificationContext";
-import { AuthenticatedRoute } from "./components/ProtectedRoute";
+import { AuthenticatedRoute, AdminRoute } from "./components/ProtectedRoute";
 import Index from "./pages/Index";
 import DaoDetail from "./pages/DaoDetail";
 import Login from "./pages/Login";
@@ -50,9 +50,9 @@ const App = () => (
             <Route
               path="/admin/users"
               element={
-                <AuthenticatedRoute requiredRoles={["admin"]}>
+                <AdminRoute>
                   <AdminUsers />
-                </AuthenticatedRoute>
+                </AdminRoute>
               }
             />
             <Route
@@ -66,9 +66,9 @@ const App = () => (
             <Route
               path="/user-management"
               element={
-                <AuthenticatedRoute requiredRoles={["admin"]}>
+                <AdminRoute>
                   <UserManagement />
-                </AuthenticatedRoute>
+                </AdminRoute>
               }
             />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

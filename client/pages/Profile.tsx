@@ -232,7 +232,7 @@ export default function Profile() {
                 <div>
                   <Label className="text-sm font-medium">Rôle actuel</Label>
                   <p className="text-sm text-muted-foreground">
-                    Votre niveau d'accès dans l'application
+                    Votre niveau d'acc��s dans l'application
                   </p>
                 </div>
                 <Badge className={getRoleBadgeColor(user.role)}>
@@ -310,26 +310,28 @@ export default function Profile() {
               </Alert>
 
               <form onSubmit={handlePasswordChange} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="currentPassword">Mot de passe actuel</Label>
-                  <Input
-                    id="currentPassword"
-                    type="password"
-                    value={passwordData.currentPassword}
-                    onChange={(e) =>
-                      setPasswordData({
-                        ...passwordData,
-                        currentPassword: e.target.value,
-                      })
-                    }
-                    className={errors.currentPassword ? "border-red-500" : ""}
-                  />
-                  {errors.currentPassword && (
-                    <p className="text-sm text-red-600">
-                      {errors.currentPassword}
-                    </p>
-                  )}
-                </div>
+                {!hasTemporaryPassword && (
+                  <div className="space-y-2">
+                    <Label htmlFor="currentPassword">Mot de passe actuel</Label>
+                    <Input
+                      id="currentPassword"
+                      type="password"
+                      value={passwordData.currentPassword}
+                      onChange={(e) =>
+                        setPasswordData({
+                          ...passwordData,
+                          currentPassword: e.target.value,
+                        })
+                      }
+                      className={errors.currentPassword ? "border-red-500" : ""}
+                    />
+                    {errors.currentPassword && (
+                      <p className="text-sm text-red-600">
+                        {errors.currentPassword}
+                      </p>
+                    )}
+                  </div>
+                )}
 
                 <div className="space-y-2">
                   <Label htmlFor="newPassword">Nouveau mot de passe</Label>

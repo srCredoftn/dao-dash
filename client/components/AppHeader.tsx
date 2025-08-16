@@ -166,8 +166,8 @@ export function AppHeader({ title, children }: AppHeaderProps) {
                   </DropdownMenu>
                 </div>
 
-                {/* Mobile: Hamburger Menu */}
-                <div className="sm:hidden">
+                {/* Mobile & Tablet: Hamburger Menu */}
+                <div className="lg:hidden">
                   <Button
                     variant="outline"
                     size="sm"

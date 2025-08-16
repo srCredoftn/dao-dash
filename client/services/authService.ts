@@ -135,8 +135,16 @@ class AuthApiService {
     name: string;
     email: string;
     role: string;
-  }): Promise<User> {
-    return this.request<User>("/users", {
+  }): Promise<{
+    user: User;
+    temporaryPassword: string;
+    message: string;
+  }> {
+    return this.request<{
+      user: User;
+      temporaryPassword: string;
+      message: string;
+    }>("/users", {
       method: "POST",
       body: JSON.stringify(userData),
     });

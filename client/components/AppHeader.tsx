@@ -199,7 +199,6 @@ export function AppHeader({ title, children }: AppHeaderProps) {
             )}
           </div>
         </div>
-
       </div>
 
       {/* Mobile & Tablet Sidebar Overlay */}
@@ -212,9 +211,11 @@ export function AppHeader({ title, children }: AppHeaderProps) {
           />
 
           {/* Sidebar */}
-          <div className={`fixed top-0 left-0 h-full w-80 max-w-[85vw] bg-white z-50 lg:hidden transform transition-transform duration-300 ease-out shadow-2xl ${
-            isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
-          }`}>
+          <div
+            className={`fixed top-0 left-0 h-full w-80 max-w-[85vw] bg-white z-50 lg:hidden transform transition-transform duration-300 ease-out shadow-2xl ${
+              isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+            }`}
+          >
             {/* Sidebar Header */}
             <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-blue-50 to-indigo-50">
               <div className="flex items-center space-x-3">
@@ -242,7 +243,9 @@ export function AppHeader({ title, children }: AppHeaderProps) {
                   <User className="w-6 h-6 text-blue-600" />
                 </div>
                 <div className="flex-1">
-                  <div className="font-semibold text-gray-900">{user?.name}</div>
+                  <div className="font-semibold text-gray-900">
+                    {user?.name}
+                  </div>
                   <div className="text-sm text-gray-600">{user?.email}</div>
                   <Badge
                     variant={getRoleBadgeVariant(user?.role || "")}
@@ -282,7 +285,9 @@ export function AppHeader({ title, children }: AppHeaderProps) {
                       <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center group-hover:bg-green-200 transition-colors">
                         <Users className="w-5 h-5 text-green-600" />
                       </div>
-                      <span className="font-medium text-gray-700">Gestion des utilisateurs</span>
+                      <span className="font-medium text-gray-700">
+                        Gestion des utilisateurs
+                      </span>
                     </button>
                     <button
                       onClick={() => {
@@ -294,7 +299,9 @@ export function AppHeader({ title, children }: AppHeaderProps) {
                       <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center group-hover:bg-purple-200 transition-colors">
                         <Settings className="w-5 h-5 text-purple-600" />
                       </div>
-                      <span className="font-medium text-gray-700">Administration</span>
+                      <span className="font-medium text-gray-700">
+                        Administration
+                      </span>
                     </button>
                   </>
                 )}

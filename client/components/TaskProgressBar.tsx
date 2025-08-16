@@ -7,11 +7,11 @@ interface TaskProgressBarProps {
   tempProgress?: number;
 }
 
-export function TaskProgressBar({ 
-  progress, 
-  daysDiff, 
-  isEditing = false, 
-  tempProgress 
+export function TaskProgressBar({
+  progress,
+  daysDiff,
+  isEditing = false,
+  tempProgress,
 }: TaskProgressBarProps) {
   const getProgressColor = (progressValue: number): string => {
     // Logique conditionnelle prioritaire :

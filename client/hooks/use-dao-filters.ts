@@ -1,7 +1,16 @@
 import { useMemo } from "react";
-import { Dao, DaoFilters, calculateDaoProgress, calculateDaoStatus } from "@shared/dao";
+import {
+  Dao,
+  DaoFilters,
+  calculateDaoProgress,
+  calculateDaoStatus,
+} from "@shared/dao";
 
-export function useDaoFilters(daos: Dao[], searchTerm: string, filters: DaoFilters) {
+export function useDaoFilters(
+  daos: Dao[],
+  searchTerm: string,
+  filters: DaoFilters,
+) {
   return useMemo(() => {
     let filtered = daos;
 

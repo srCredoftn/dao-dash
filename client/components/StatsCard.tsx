@@ -13,13 +13,16 @@ interface StatsCardProps {
   className?: string;
 }
 
-const VARIANT_STYLES: Record<StatsVariant, {
-  cardClass: string;
-  titleClass: string;
-  valueClass: string;
-  descriptionClass: string;
-  iconClass: string;
-}> = {
+const VARIANT_STYLES: Record<
+  StatsVariant,
+  {
+    cardClass: string;
+    titleClass: string;
+    valueClass: string;
+    descriptionClass: string;
+    iconClass: string;
+  }
+> = {
   total: {
     cardClass: "bg-green-50/80 border-green-200/60 backdrop-blur-sm",
     titleClass: "text-green-700 font-medium text-sm",

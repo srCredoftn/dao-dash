@@ -7,10 +7,10 @@ interface UseTaskEditingProps {
   onCommentChange: (taskId: number, comment: string) => void;
 }
 
-export function useTaskEditing({ 
-  task, 
-  onProgressChange, 
-  onCommentChange 
+export function useTaskEditing({
+  task,
+  onProgressChange,
+  onCommentChange,
 }: UseTaskEditingProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [tempProgress, setTempProgress] = useState(task.progress || 0);

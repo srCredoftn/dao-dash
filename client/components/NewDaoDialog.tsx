@@ -504,12 +504,14 @@ export default function NewDaoDialog({
                         key={authority}
                         type="button"
                         className="w-full text-left px-3 py-2 hover:bg-gray-100 text-sm"
-                        onClick={() =>
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
                           setFormData((prev) => ({
                             ...prev,
                             autoriteContractante: authority,
-                          }))
-                        }
+                          }));
+                        }}
                       >
                         {authority}
                       </button>

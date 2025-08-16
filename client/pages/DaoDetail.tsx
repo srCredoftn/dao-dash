@@ -36,6 +36,7 @@ import { apiService } from "@/services/api";
 import {
   calculateDaoStatus,
   calculateDaoProgress,
+  type Dao,
   type DaoTask,
   type DaoStatus,
   type TeamMember,

@@ -84,7 +84,7 @@ export function AppHeader({ title, children }: AppHeaderProps) {
 
           {/* Center - Custom content (Desktop only) */}
           {children && (
-            <div className="hidden lg:flex flex-1 justify-center">
+            <div className="hidden xl:flex flex-1 justify-center">
               {children}
             </div>
           )}
@@ -99,7 +99,7 @@ export function AppHeader({ title, children }: AppHeaderProps) {
                 {/* Desktop: User info + Role badge + Menu */}
                 <div className="hidden lg:flex items-center space-x-3">
                   {/* User info */}
-                  <div className="hidden md:block text-right">
+                  <div className="hidden xl:block text-right">
                     <div className="text-sm font-medium">{user.name}</div>
                     <div className="text-xs text-muted-foreground">
                       {user.email}
